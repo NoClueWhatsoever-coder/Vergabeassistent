@@ -1,0 +1,112 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VergabeAssist - Ihre KI-gestützte Vergabeplattform</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.2.0/docx.browser.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">🏛️ VergabeAssist</div>
+      <div class="tagline">Ihre KI-gestützte Plattform für öffentliche Beschaffung und Vergaberecht</div>
+    </div>
+
+    <!-- Startseite -->
+    <div id="homepage">
+      <!-- Hero Section mit Reichstag -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <div class="hero-title">🏛️ VergabeAssist</div>
+          <div class="hero-subtitle">Ihre KI-gestützte Plattform für öffentliche Beschaffung und Vergaberecht</div>
+        </div>
+      </div>
+
+      <!-- Schneller Einstieg -->
+      <div class="quick-start-section">
+        <h2 class="quick-start-title">Jetzt kostenlos starten</h2>
+        <div id="emailStep">
+          <form class="email-form" onsubmit="nextStep(event)">
+            <input type="email" class="email-input" id="startEmail" placeholder="Ihre dienstliche E-Mail-Adresse" required>
+            <button type="submit" class="start-btn">Kostenlos registrieren</button>
+          </form>
+          <div class="login-link">
+            Bereits registriert? <a href="#" onclick="showLogin()">Hier anmelden</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <div class="features-section">
+        <h2 class="features-title">Ihre Vorteile mit VergabeAssist</h2>
+        <div class="features-grid" id="featuresGrid"></div>
+      </div>
+
+      <!-- Benefits Section -->
+      <div class="benefits-section">
+        <h2 class="benefits-title">Warum VergabeAssist?</h2>
+        <div class="benefits-grid">
+          <div class="benefit-item">
+            <div class="benefit-number">70%</div>
+            <div class="benefit-text">Weniger Zeitaufwand pro Vergabeverfahren</div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-number">100</div>
+            <div class="benefit-text">Kostenlose Credits zum Testen</div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-number">24/7</div>
+            <div class="benefit-text">Verfügbarkeit der KI-Assistenz</div>
+          </div>
+          <div class="benefit-item">
+            <div class="benefit-number">16</div>
+            <div class="benefit-text">Bundesländer mit spezifischen Regelungen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Authentifizierung -->
+  <div id="authContainer" class="auth-container" style="display: none;"></div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" style="display:none"></div>
+
+  <!-- KI-Chat Modal -->
+  <div id="chatModal" class="modal"></div>
+
+  <!-- Modals -->
+  <div id="lvModal" class="modal"></div>
+  <div id="lvResult" style="margin-top: 20px; display: none;">
+    <h3>Generiertes Leistungsverzeichnis:</h3>
+    <div id="lvContent" style="border: 1px solid #ddd; padding: 15px; background: #f9f9f9; border-radius: 5px; margin-top: 10px;"></div>
+    <button class="btn-secondary btn" onclick="downloadLV()" style="margin-top: 10px;">Als PDF herunterladen</button>
+    <button class="btn-secondary btn" onclick="exportDocxLV()" style="margin-top: 10px;">Als Word herunterladen</button>
+    <button class="btn" onclick="searchRechtsprechung()">In Rechtsprechung suchen</button>
+</div>
+
+  <div id="gesetzeModal" class="modal"></div>
+  <div id="rechtsprechungModal" class="modal"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.3.2/docx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/lv-generator.js"></script>
+  <script src="js/rechtsprechung.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/docx-export.js"></script>
+</body>
+</html>
