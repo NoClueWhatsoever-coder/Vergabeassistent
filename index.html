@@ -50,6 +50,27 @@
         <div class="features-grid" id="featuresGrid"></div>
       </div>
 
+      <!-- KI-Chat Demo auf Startseite -->
+<div class="chat-demo-section" style="max-width:600px;margin:40px auto 0;background:#fff;border-radius:18px;box-shadow:0 6px 18px #0001;padding:28px;">
+  <h2 style="color:#667eea;text-align:center;margin-bottom:18px;">💬 Testen Sie jetzt den KI-Vergabe-Chat!</h2>
+  <p style="text-align:center;color:#444;margin-bottom:18px;">Sie können bis zu <strong>5 Fragen täglich</strong> stellen – kostenlos und ohne Registrierung.</p>
+  <div class="chat-container" id="guestChatContainer">
+    <div class="chat-messages" id="chatMessages">
+      <div class="message ai"><strong>VergabeAssist KI:</strong> Willkommen! Stellen Sie mir Ihre vergaberechtliche Frage. Zum Beispiel: <em>„Was sind die aktuellen Schwellenwerte?“</em></div>
+    </div>
+    <div class="chat-input-container">
+      <input type="text" class="chat-input" id="chatInput" placeholder="Ihre Frage zum Vergaberecht..." onkeypress="handleChatEnter(event)">
+      <button class="chat-send" onclick="sendChatMessage()">Senden</button>
+    </div>
+    <div id="guestChatCounter" style="margin-top:8px;text-align:right;font-size:0.95em;color:#888;"></div>
+  </div>
+</div>
+<!-- Registrierung-CallToAction -->
+<div class="register-promo" style="text-align:center;margin:30px 0 0;">
+  <p style="margin-bottom:8px;">Mehr Funktionen? Jetzt registrieren:</p>
+  <button class="btn" onclick="showLogin()">Kostenlos anmelden</button>
+</div>
+
       <!-- Benefits Section -->
       <div class="benefits-section">
         <h2 class="benefits-title">Warum VergabeAssist?</h2>

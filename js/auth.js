@@ -1,9 +1,5 @@
 // auth.js
 
-let currentUser = null;
-let userCredits = 100;
-let tempEmail = '';
-
 function showHomepage() {
   document.getElementById('homepage').style.display = 'block';
   document.getElementById('authContainer').style.display = 'none';
@@ -11,21 +7,18 @@ function showHomepage() {
 }
 
 function nextStep(event) {
-    event.preventDefault();
-    const email = document.getElementById('startEmail').value;
+  event.preventDefault();
+  const email = document.getElementById('startEmail').value;
 
-    if (!email) {
-        alert('Bitte geben Sie Ihre E-Mail-Adresse ein.');
-        return;
-    }
-
-    if (!istGueltigeEmail(email)) {
-        alert('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
-        return;
-    }
+  if (!email) {
+    alert('Bitte geben Sie Ihre E-Mail-Adresse ein.');
+    return;
+  }
 
   tempEmail = email;
   document.getElementById('regEmailDisplay').textContent = email;
+
+  // Zur Registrierung wechseln
   document.getElementById('homepage').style.display = 'none';
   document.getElementById('authContainer').style.display = 'block';
   switchTab('register');
@@ -56,19 +49,20 @@ function switchTab(tab) {
 }
 
 function login() {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
 
-    if (!email || !password) {
-        alert('Bitte füllen Sie alle Felder aus.');
-        return;
-    }
+  if (!email || !password) {
+    alert('Bitte füllen Sie alle Felder aus.');
+    return;
+  }
 
-    if (!istGueltigeEmail(email)) {
-        alert('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
-        return;
-    }
+  // --- HIER: Reset des Demo-Limits (5-Fragen-Limit)
+  localStorage.removeItem("guestChatCount");
+  localStorage.removeItem("guestChatDate");
+  // ------------------------------
 
+  // Simulation des Logins
   currentUser = {
     email: email,
     name: 'Max Mustermann',
@@ -96,6 +90,12 @@ function register() {
     return;
   }
 
+  // --- HIER: Reset des Demo-Limits (5-Fragen-Limit)
+  localStorage.removeItem("guestChatCount");
+  localStorage.removeItem("guestChatDate");
+  // ------------------------------
+
+  // Simulation der Registrierung
   currentUser = {
     email: tempEmail,
     name: vorname + ' ' + nachname,
@@ -107,10 +107,19 @@ function register() {
   showDashboard();
 }
 
+function showDashboard() {
+  document.getElementById('homepage').style.display = 'none';
+  document.getElementById('authContainer').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('userCredits').textContent = userCredits;
+}
+
 function logout() {
   currentUser = null;
   tempEmail = '';
   showHomepage();
+  // Formulare zurücksetzen
   document.getElementById('loginEmail').value = '';
   document.getElementById('loginPassword').value = '';
   document.getElementById('startEmail').value = '';
