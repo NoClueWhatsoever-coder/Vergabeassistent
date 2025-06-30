@@ -78,7 +78,7 @@ async function sendChatMessage() {
     // KI-Aufruf
     const response = await callAI(
       message,
-      "mistralai/mistral-7b-instruct",
+      "mistralai/mistral-7b-instruct:free",
       "Du bist ein rechtlicher Assistent für deutsches Vergaberecht. Antworte sachlich, juristisch fundiert und möglichst aktuell unter Berücksichtigung der Rechtsprechung und Entscheidungen von Vergabekammern und Oberlandesgerichten."
     );
     aiMsg.innerHTML = `<strong>VergabeAssist KI:</strong> ${response}`;
