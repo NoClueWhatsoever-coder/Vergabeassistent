@@ -82,5 +82,6 @@ async function callAI(prompt, model = "openai/gpt-3.5-turbo", systemPrompt = nul
   });
   if (!response.ok) throw new Error('Fehler bei der KI-Anfrage');
   const data = await response.json();
+  if (!data.result) throw new Error("Keine Antwort erhalten.");
   return data.result;
 }
