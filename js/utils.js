@@ -70,11 +70,11 @@ function istGueltigeEmail(email) {
 /**
  * Universal-Call an OpenRouter KI
  * @param {string} prompt - Benutzerfrage
- * @param {string} model - z.B. "openai/gpt-3.5-turbo"
+ * @param {string} model - z.B. "mistralai/mistral-7b-instruct"
  * @param {string|null} systemPrompt - Optionale Systemanweisung
  * @returns {Promise<string>} Antworttext der KI
  */
-async function callAI(prompt, model = "openai/gpt-3.5-turbo", systemPrompt = null) {
+async function callAI(prompt, model = "mistralai/mistral-7b-instruct", systemPrompt = null) {
   const response = await fetch('/api/ai', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

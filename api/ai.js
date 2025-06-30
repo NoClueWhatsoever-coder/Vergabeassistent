@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     }
 
     const payload = {
-      model: model || "openai/gpt-3.5-turbo",
+      model: model || "mistralai/mistral-7b-instruct",
       messages: [
         ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
         { role: 'user', content: prompt }

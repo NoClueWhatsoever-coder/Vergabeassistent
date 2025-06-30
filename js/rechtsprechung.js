@@ -25,7 +25,7 @@ async function searchRechtsprechung() {
   Bitte mit Fundstellen, Leitsätzen und – falls möglich – Link/Quelle angeben.`;
 
   try {
-    const response = await callAI(prompt, "openai/gpt-3.5-turbo", systemPrompt);
+    const response = await callAI(prompt, "mistralai/mistral-7b-instruct", systemPrompt);
     resultsDiv.innerHTML = response;
     verwendeCredits(3);
     alert(`Suche abgeschlossen. 3 Credits verwendet.`);

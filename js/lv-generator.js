@@ -32,7 +32,7 @@ async function generateLV() {
   Bitte strukturiert, klar, in gut lesbarem HTML (mit <h3>, <ul>, <li> etc.) – KEINE Einleitung, direkt das LV!`;
 
   try {
-    const response = await callAI(userPrompt, "openai/gpt-3.5-turbo", systemPrompt);
+    const response = await callAI(userPrompt, "mistralai/mistral-7b-instruct", systemPrompt);
     contentDiv.innerHTML = response;
     verwendeCredits(10);
     alert('Leistungsverzeichnis erfolgreich generiert! 10 Credits verwendet.');
