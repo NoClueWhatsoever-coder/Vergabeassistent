@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VergabeAssist - Ihre KI-gestützte Vergabeplattform</title>
   <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/auth.js"></script>
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -70,6 +73,63 @@
   <p style="margin-bottom:8px;">Mehr Funktionen? Jetzt registrieren:</p>
   <button class="btn" onclick="showLogin()">Kostenlos anmelden</button>
 </div>
+
+<div id="registerForm" style="display:none;">
+  <h3 style="margin-bottom:20px; color:#667eea;">Registrierung abschließen</h3>
+  <div class="form-group">
+    <label>Anrede</label>
+    <select id="regAnrede" required>
+      <option value="">Bitte wählen</option>
+      <option value="Frau">Frau</option>
+      <option value="Herr">Herr</option>
+      <option value="Divers">Divers</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Vorname</label>
+    <input type="text" id="regVorname" placeholder="Ihr Vorname" required>
+  </div>
+  <div class="form-group">
+    <label>Nachname</label>
+    <input type="text" id="regNachname" placeholder="Ihr Nachname" required>
+  </div>
+  <div class="form-group">
+    <label>Organisation/Behörde</label>
+    <input type="text" id="regOrganisation" placeholder="z.B. Stadt Köln" required>
+  </div>
+  <div class="form-group">
+    <label>E-Mail-Adresse</label>
+    <input type="email" id="regEmail" placeholder="Ihre dienstliche E-Mail-Adresse" required>
+  </div>
+  <div class="form-group">
+    <label>Passwort</label>
+    <input type="password" id="regPassword" placeholder="Mindestens 8 Zeichen" required>
+  </div>
+  <div class="form-group">
+    <label>Bundesland</label>
+    <select id="regBundesland" required>
+      <option value="">Bitte auswählen</option>
+      <option value="bw">Baden-Württemberg</option>
+      <option value="by">Bayern</option>
+      <option value="be">Berlin</option>
+      <option value="bb">Brandenburg</option>
+      <option value="hb">Bremen</option>
+      <option value="hh">Hamburg</option>
+      <option value="he">Hessen</option>
+      <option value="mv">Mecklenburg-Vorpommern</option>
+      <option value="ni">Niedersachsen</option>
+      <option value="nw">Nordrhein-Westfalen</option>
+      <option value="rp">Rheinland-Pfalz</option>
+      <option value="sl">Saarland</option>
+      <option value="sn">Sachsen</option>
+      <option value="st">Sachsen-Anhalt</option>
+      <option value="sh">Schleswig-Holstein</option>
+      <option value="th">Thüringen</option>
+    </select>
+  </div>
+  <button class="btn" onclick="register()">Registrierung abschließen</button>
+</div>
+
 
       <!-- Benefits Section -->
       <div class="benefits-section">
