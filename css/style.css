@@ -33,11 +33,12 @@ header nav a:hover {
   color: #0077B6;
 }
 
-/* HERO-BEREICH MIT VIDEO UND TEXT */
+/* HERO-BEREICH MIT VIDEO UND TEXT UND CHAT */
 .hero-video-bg {
   position: relative;
   width: 100vw;
-  height: 400px;
+  height: 600px;
+  min-height: 400px;
   overflow: hidden;
   background: #0077b6;
   display: flex;
@@ -47,6 +48,7 @@ header nav a:hover {
 .hero-video {
   width: 100vw;
   height: 100%;
+  min-height: 400px;
   object-fit: cover;
   position: absolute;
   left: 0;
@@ -63,8 +65,16 @@ header nav a:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100%;
+  padding-top: 40px;
+}
+.hero-overlay-column {
+  justify-content: flex-start;
+  gap: 2.2rem;
+}
+.hero-textblock {
+  margin-bottom: 0.7em;
 }
 .hero-overlay h1 {
   font-size: 2.8rem;
@@ -89,6 +99,35 @@ header nav a:hover {
   display: inline-block;
 }
 
+/* Chat-Box im Video-Overlay */
+.hero-chatbox {
+  background: rgba(255,255,255,0.93);
+  border-radius: 20px;
+  box-shadow: 0 6px 32px #0002;
+  padding: 2em 2em 1.5em 2em;
+  max-width: 430px;
+  margin: 0 auto;
+  color: #222b38;
+}
+.hero-chatbox h2 {
+  color: #0077b6;
+  margin-top: 0;
+  margin-bottom: 0.4em;
+}
+.hero-chatbox p {
+  margin: 0 0 1em 0;
+}
+.chat-messages {
+  min-height: 68px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #f5f7fb;
+  border-radius: 8px;
+  padding: 0.7em 0.9em;
+  font-size: 1rem;
+  margin-bottom: 0.6em;
+}
+
 /* VORTEILE-BEREICH AUF TRANSPARENTEM BILD MIT KACHELN */
 .vorteile-bildsektion {
   width: 100vw;
@@ -106,7 +145,8 @@ header nav a:hover {
 }
 .vorteile-bg-img {
   width: 100vw;
-  max-height: 420px;
+  max-height: 600px; /* jetzt viel höher */
+  min-height: 420px;
   object-fit: cover;
   filter: brightness(0.45) blur(0.5px);
   opacity: 0.7;
@@ -162,18 +202,15 @@ header nav a:hover {
   background: white;
   text-align: center;
 }
-
 .features h2 {
   margin-bottom: 2rem;
   font-size: 2rem;
 }
-
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 2rem;
 }
-
 .feature-item {
   background: #f9fafb;
   padding: 1.5rem;
@@ -200,30 +237,31 @@ footer {
   margin-top: 4rem;
 }
 
-@media (max-width: 900px) {
-  .vorteile-kacheln-container {
-    flex-direction: column;
-    gap: 2em;
-    padding: 0 2vw;
-  }
-  .vorteile-bg-img {
-    max-height: 600px;
-  }
+/* Responsive Breakpoints */
+@media (max-width: 1100px) {
+  .hero-video-bg, .hero-video { height: 400px; min-height: 300px; }
+  .vorteile-bg-img { max-height: 400px; min-height: 220px; }
 }
-
-@media (max-width: 600px) {
+@media (max-width: 900px) {
+  .hero-video-bg, .hero-video { height: 320px; min-height: 200px; }
   .hero-overlay h1 { font-size: 2rem; }
-  .hero-headline { font-size: 1.1rem; padding: 0.2em 1em; }
-  .hero-subline { font-size: 0.98rem; }
-  .vorteil-kachel { padding: 1.1em 1em 1em 1em; min-width: 120px; }
-  .vorteile-kacheln-container { gap: 1em; }
+  .hero-chatbox { max-width: 98vw; padding: 1em 0.5em; }
+  .vorteile-kacheln-container { flex-direction: column; gap: 2em; padding: 0 2vw; }
   .vorteile-bg-img { max-height: 350px; }
+}
+@media (max-width: 600px) {
+  .hero-video-bg, .hero-video { height: 220px; min-height: 110px; }
+  .hero-overlay h1 { font-size: 1.2rem; }
+  .hero-headline { font-size: 1rem; }
+  .hero-subline { font-size: 0.85rem; }
+  .hero-chatbox { font-size: 0.93rem; padding: 1em 0.2em; }
+  .vorteile-kacheln-container { gap: 1em; }
+  .vorteile-bg-img { max-height: 220px; min-height: 80px; }
 }
 
 .cta {
   margin-top: 2rem;
 }
-
 .cta input[type="email"] {
   padding: 0.75rem;
   width: 250px;
@@ -231,7 +269,6 @@ footer {
   border: none;
   border-radius: 6px 0 0 6px;
 }
-
 .cta button {
   padding: 0.75rem 1.5rem;
   background: #1f2937;
@@ -240,10 +277,8 @@ footer {
   border-radius: 0 6px 6px 0;
   cursor: pointer;
 }
-
 @media (max-width: 600px) {
-  .cta input[type="email"],
-  .cta button {
+  .cta input[type="email"], .cta button {
     width: 100%;
     display: block;
     border-radius: 6px;

@@ -18,16 +18,30 @@
   </header>
 
   <main>
-    <!-- HERO-BEREICH MIT VIDEO UND TEXT -->
+    <!-- HERO-BEREICH MIT VIDEO UND TEXT UND CHAT -->
     <section class="hero-video-bg">
       <video autoplay loop muted playsinline class="hero-video">
         <source src="videos/Startseitenvideo.mp4" type="video/mp4">
         Ihr Browser unterstützt kein HTML5-Video.
       </video>
-      <div class="hero-overlay">
-        <h1>VergabeAssistent</h1>
-        <div class="hero-headline">So effizient wie ein ganzes Team</div>
-        <div class="hero-subline">KI-gestützt: Produktneutrale Leistungsbeschreibungen &amp; Leistungsverzeichnisse erstellen</div>
+      <div class="hero-overlay hero-overlay-column">
+        <div class="hero-textblock">
+          <h1>VergabeAssistent</h1>
+          <div class="hero-headline">So effizient wie ein ganzes Team</div>
+          <div class="hero-subline">KI-gestützt: Produktneutrale Leistungsbeschreibungen &amp; Leistungsverzeichnisse erstellen</div>
+        </div>
+        <div class="hero-chatbox" id="chat">
+          <h2 style="color:#0077B6;">💬 Testen Sie den KI-Vergabe-Chat</h2>
+          <p style="color:#444;margin-bottom:18px;">Stellen Sie bis zu <strong>5 Fragen täglich</strong> – kostenlos und ohne Registrierung.</p>
+          <div id="guestChatContainer">
+            <div id="chatMessages" class="chat-messages"></div>
+            <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+              <input id="chatInput" type="text" placeholder="Frage eingeben …" onkeypress="handleChatEnter(event)" style="flex:1;padding:0.5rem;border:1px solid #ccc;border-radius:6px;">
+              <button onclick="sendChatMessage()">Senden</button>
+            </div>
+            <p id="guestChatCounter" style="margin-top:0.5rem;font-size:0.9rem;color:#666;"></p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -53,29 +67,6 @@
               <p>Hosting &amp; Datenspeicherung ausschließlich in Europa, geprüft für den Einsatz in der Verwaltung.</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- ALTER FEATURE-BEREICH (optional, kannst du auskommentieren oder entfernen, da jetzt die Vorteile oben im neuen Stil sind)
-      <section class="features" id="features">
-        <h2>Ihre Vorteile mit VergabeAssist</h2>
-        <div class="features-grid" id="featuresGrid">
-          <div class="feature-item">✅ Zeitersparnis durch automatische Leistungsverzeichnisse</div>
-          <div class="feature-item">✅ Rechtssichere KI-Antworten auf vergaberechtliche Fragen</div>
-          <div class="feature-item">✅ Digitale Markterkundung direkt im Browser</div>
-        </div>
-      </section>-->
-
-      <section class="chat-demo" id="chat">
-        <h2 style="text-align:center;color:#0077B6;">💬 Testen Sie den KI-Vergabe-Chat</h2>
-        <p style="text-align:center;color:#444;margin-bottom:18px;">Stellen Sie bis zu <strong>5 Fragen täglich</strong> – kostenlos und ohne Registrierung.</p>
-        <div id="guestChatContainer">
-          <div id="chatMessages" class="chat-messages"></div>
-          <div style="display:flex;gap:0.5rem;margin-top:1rem;">
-            <input id="chatInput" type="text" placeholder="Frage eingeben …" onkeypress="handleChatEnter(event)" style="flex:1;padding:0.5rem;border:1px solid #ccc;border-radius:6px;">
-            <button onclick="sendChatMessage()">Senden</button>
-          </div>
-          <p id="guestChatCounter" style="margin-top:0.5rem;font-size:0.9rem;color:#666;"></p>
         </div>
       </section>
     </div>
