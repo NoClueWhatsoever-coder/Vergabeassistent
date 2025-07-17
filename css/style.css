@@ -51,7 +51,6 @@ header nav a:hover {
   top: 0;
   z-index: 1;
   background: #0077b6;
-  transform: scale(0.8);   /* NEU: 80% der ursprünglichen Größe, mehr Rand sichtbar */
 }
 .hero-overlay {
   position: relative;
