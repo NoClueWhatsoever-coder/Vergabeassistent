@@ -6,93 +6,6 @@
   <title>VergabeAssist – Ihre KI-Unterstützung für die öffentliche Beschaffung</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #f4f6f9;
-      color: #1f2937;
-    }
-    header {
-      background: white;
-      padding: 1.5rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: #0077B6;
-    }
-    .hero {
-      padding: 4rem 2rem;
-      text-align: center;
-      background: linear-gradient(to right, #0077B6, #00B4D8);
-      color: white;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .cta {
-      margin-top: 2rem;
-    }
-    .cta input {
-      padding: 0.75rem;
-      width: 250px;
-      max-width: 80%;
-      border: none;
-      border-radius: 6px 0 0 6px;
-    }
-    .cta button {
-      padding: 0.75rem 1.5rem;
-      background: #1f2937;
-      color: white;
-      border: none;
-      border-radius: 0 6px 6px 0;
-      cursor: pointer;
-    }
-    .features {
-      padding: 4rem 2rem;
-      background: white;
-      text-align: center;
-    }
-    .features h2 {
-      margin-bottom: 2rem;
-    }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 2rem;
-    }
-    .feature-item {
-      background: #f9fafb;
-      padding: 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px #0000000b;
-    }
-    .chat-demo {
-      max-width: 700px;
-      margin: 4rem auto;
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 2rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    }
-    footer {
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
-      color: #6b7280;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -104,38 +17,83 @@
     </nav>
   </header>
 
-  <section class="hero">
-    <h1>Digitale Unterstützung für die öffentliche Beschaffung</h1>
-    <p>Mit KI-gestützter Hilfe zu mehr Effizienz bei Markterkundung, Leistungsverzeichnissen und vergaberechtlichen Fragen.</p>
-    <div class="cta">
-      <form onsubmit="nextStep(event)">
-        <input type="email" placeholder="Ihre dienstliche E-Mail-Adresse" required>
-        <button type="submit">Jetzt starten</button>
-      </form>
-    </div>
-  </section>
+  <main>
+    <section class="hero">
+      <h1>Digitale Unterstützung für die öffentliche Beschaffung</h1>
+      <p>Mit KI-gestützter Hilfe zu mehr Effizienz bei Markterkundung, Leistungsverzeichnissen und vergaberechtlichen Fragen.</p>
+      <div class="cta">
+        <form onsubmit="nextStep(event)">
+          <input id="startEmail" type="email" placeholder="Ihre dienstliche E-Mail-Adresse" required>
+          <button type="submit">Jetzt starten</button>
+        </form>
+        <div class="login-link">
+          Bereits registriert? <a href="#" onclick="showLogin()">Hier anmelden</a>
+        </div>
+      </div>
+    </section>
 
-  <section class="features" id="features">
-    <h2>Ihre Vorteile mit VergabeAssist</h2>
-    <div class="features-grid">
-      <div class="feature-item">✅ Zeitersparnis durch automatische Leistungsverzeichnisse</div>
-      <div class="feature-item">✅ Rechtssichere KI-Antworten auf vergaberechtliche Fragen</div>
-      <div class="feature-item">✅ Digitale Markterkundung direkt im Browser</div>
-    </div>
-  </section>
+    <div id="homepage">
+      <section class="features" id="features">
+        <h2>Ihre Vorteile mit VergabeAssist</h2>
+        <div class="features-grid" id="featuresGrid">
+          <div class="feature-item">✅ Zeitersparnis durch automatische Leistungsverzeichnisse</div>
+          <div class="feature-item">✅ Rechtssichere KI-Antworten auf vergaberechtliche Fragen</div>
+          <div class="feature-item">✅ Digitale Markterkundung direkt im Browser</div>
+        </div>
+      </section>
 
-  <section class="chat-demo" id="chat">
-    <h2 style="text-align:center;color:#0077B6;">💬 Testen Sie den KI-Vergabe-Chat</h2>
-    <p style="text-align:center;color:#444;margin-bottom:18px;">Stellen Sie bis zu <strong>5 Fragen täglich</strong> – kostenlos und ohne Registrierung.</p>
-    <div id="guestChatContainer"></div>
-  </section>
+      <section class="chat-demo" id="chat">
+        <h2 style="text-align:center;color:#0077B6;">💬 Testen Sie den KI-Vergabe-Chat</h2>
+        <p style="text-align:center;color:#444;margin-bottom:18px;">Stellen Sie bis zu <strong>5 Fragen täglich</strong> – kostenlos und ohne Registrierung.</p>
+        <div id="guestChatContainer">
+          <div id="chatMessages" class="chat-messages"></div>
+          <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+            <input id="chatInput" type="text" placeholder="Frage eingeben …" onkeypress="handleChatEnter(event)" style="flex:1;padding:0.5rem;border:1px solid #ccc;border-radius:6px;">
+            <button onclick="sendChatMessage()">Senden</button>
+          </div>
+          <p id="guestChatCounter" style="margin-top:0.5rem;font-size:0.9rem;color:#666;"></p>
+        </div>
+      </section>
+    </div>
+
+    <div id="authContainer" style="display:none;padding:2rem;max-width:600px;margin:auto;">
+      <div class="auth-tabs" style="display:flex;gap:1rem;margin-bottom:1rem;">
+        <button class="auth-tab active" onclick="switchTab('login')">Login</button>
+        <button class="auth-tab" onclick="switchTab('register')">Registrieren</button>
+      </div>
+
+      <div id="loginForm">
+        <input id="loginEmail" type="email" placeholder="E-Mail">
+        <input id="loginPassword" type="password" placeholder="Passwort">
+        <button onclick="login()">Anmelden</button>
+      </div>
+
+      <div id="registerForm" style="display:none;">
+        <input id="regAnrede" placeholder="Anrede">
+        <input id="regVorname" placeholder="Vorname">
+        <input id="regNachname" placeholder="Nachname">
+        <input id="regOrganisation" placeholder="Organisation">
+        <input id="regBundesland" placeholder="Bundesland">
+        <input id="regEmail" type="email" placeholder="E-Mail">
+        <input id="regPassword" type="password" placeholder="Passwort">
+        <button onclick="register()">Registrieren</button>
+      </div>
+    </div>
+
+    <div id="dashboard" style="display:none;">
+      <h2>Willkommen bei VergabeAssist!</h2>
+      <p>Sie sind eingeloggt als <span id="userEmail"></span>.</p>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </main>
 
   <footer id="kontakt">
     &copy; 2025 VergabeAssist | Impressum | Datenschutz
   </footer>
 
-  <!-- Bestehende Skripte -->
-  <script src="js/supabaseClient.js"></script>
+  <!-- Skripte -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/chat.js"></script>
 </body>
