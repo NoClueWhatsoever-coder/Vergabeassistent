@@ -5,7 +5,6 @@ body {
   color: #1f2937;
   line-height: 1.6;
 }
-
 header {
   background: white;
   padding: 1.5rem 2rem;
@@ -14,7 +13,6 @@ header {
   justify-content: space-between;
   align-items: center;
 }
-
 header nav a {
   margin-left: 1rem;
   text-decoration: none;
@@ -30,7 +28,6 @@ header nav a:hover {
   font-size: 1.5rem;
   color: #0077B6;
 }
-
 /* HERO-BEREICH MIT VIDEO, TEXT (3 Zeilen) UND CHAT */
 .hero-video-bg {
   position: relative;
@@ -133,7 +130,16 @@ header nav a:hover {
   font-size: 1rem;
   margin-bottom: 0.6em;
 }
-
+/* ABSTAND/FARBE ZWISCHEN VIDEO UND BILD */
+.section-gap-alt {
+  width: 100vw;
+  min-height: 52px;
+  height: 8vw;
+  background: #f0f4f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* VORTEILE-BILDSEKTION: Banner, volle Breite, angemessene Höhe */
 .vorteile-bildsektion {
   width: 100vw;
@@ -142,6 +148,7 @@ header nav a:hover {
   justify-content: center;
   align-items: stretch;
   margin-top: 0;
+  margin-bottom: 2.7rem;
   min-height: 340px;
   height: 390px;
 }
@@ -225,7 +232,6 @@ header nav a:hover {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   font-weight: 500;
 }
-
 .chat-demo {
   max-width: 700px;
   margin: 4rem auto;
@@ -234,7 +240,6 @@ header nav a:hover {
   padding: 2rem;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
-
 footer {
   text-align: center;
   padding: 2rem;
@@ -243,7 +248,6 @@ footer {
   background-color: #ffffff;
   margin-top: 4rem;
 }
-
 /* Responsive Breakpoints */
 @media (max-width: 1100px) {
   .hero-video-bg, .hero-video { height: 520px; min-height: 300px; }
@@ -269,7 +273,6 @@ footer {
   .vorteile-kacheln-container { gap: 1em; }
   .vorteil-kachel { font-size: 0.98rem; padding: 0.6em 0.3em 0.6em 0.3em; min-width: 96vw; }
 }
-
 /* CTA-Formular auf der Hero */
 .cta {
   margin-top: 2rem;

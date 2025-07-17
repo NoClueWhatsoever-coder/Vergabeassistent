@@ -16,9 +16,8 @@
       <a href="#kontakt">Kontakt</a>
     </nav>
   </header>
-
   <main>
-    <!-- HERO-BEREICH MIT VIDEO UND TEXT UND CHAT -->
+    <!-- HERO-BEREICH MIT VIDEO UND CHAT -->
     <section class="hero-video-bg">
       <video autoplay loop muted playsinline class="hero-video">
         <source src="videos/Startseitenvideo.mp4" type="video/mp4">
@@ -28,7 +27,7 @@
         <div class="hero-textblock">
           <h1>VergabeAssistent</h1>
           <div class="hero-headline">So effizient wie ein ganzes Team</div>
-          <div class="hero-subline">KI-gestützt: Produktneutrale Leistungsbeschreibungen &amp; Leistungsverzeichnisse erstellen</div>
+          <div class="hero-subline">KI-gestützt: Produktneutrale Leistungsbeschreibungen und Leistungsverzeichnisse erstellen</div>
         </div>
         <div class="hero-chatbox" id="chat">
           <h2 style="color:#0077B6;">💬 Testen Sie den KI-Vergabe-Chat</h2>
@@ -45,8 +44,11 @@
       </div>
     </section>
 
+    <!-- WEIßRAUM/FARBFLÄCHE ZWISCHEN VIDEO UND BILD -->
+    <div class="section-gap-alt"></div>
+
     <div id="homepage">
-      <!-- VORTEILE-BEREICH AUF TRANSPARENTEM BILD MIT KACHELN -->
+      <!-- VORTEILE-BEREICH AUF BILD-BANNER MIT KACHELN -->
       <section class="vorteile-bildsektion">
         <div class="vorteile-img-wrapper">
           <img src="img/Startseitenfoto.jpg" alt="Öffentliche Vergabe" class="vorteile-bg-img">
@@ -76,13 +78,11 @@
         <button class="auth-tab active" onclick="switchTab('login')">Login</button>
         <button class="auth-tab" onclick="switchTab('register')">Registrieren</button>
       </div>
-
       <div id="loginForm">
         <input id="loginEmail" type="email" placeholder="E-Mail">
         <input id="loginPassword" type="password" placeholder="Passwort">
         <button onclick="login()">Anmelden</button>
       </div>
-
       <div id="registerForm" style="display:none;">
         <input id="regAnrede" placeholder="Anrede">
         <input id="regVorname" placeholder="Vorname">
@@ -101,11 +101,9 @@
       <button onclick="logout()">Logout</button>
     </div>
   </main>
-
   <footer id="kontakt">
     &copy; 2025 VergabeAssist | Impressum | Datenschutz
   </footer>
-
   <!-- Skripte -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/utils.js"></script>
