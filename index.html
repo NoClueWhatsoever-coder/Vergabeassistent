@@ -18,21 +18,45 @@
   </header>
 
   <main>
-    <section class="hero">
-      <h1>Digitale Unterstützung für die öffentliche Beschaffung</h1>
-      <p>Mit KI-gestützter Hilfe zu mehr Effizienz bei Markterkundung, Leistungsverzeichnissen und vergaberechtlichen Fragen.</p>
-      <div class="cta">
-        <form onsubmit="nextStep(event)">
-          <input id="startEmail" type="email" placeholder="Ihre dienstliche E-Mail-Adresse" required>
-          <button type="submit">Jetzt starten</button>
-        </form>
-        <div class="login-link">
-          Bereits registriert? <a href="#" onclick="showLogin()">Hier anmelden</a>
-        </div>
+    <!-- HERO-BEREICH MIT VIDEO UND TEXT -->
+    <section class="hero-video-bg">
+      <video autoplay loop muted playsinline class="hero-video">
+        <source src="videos/Startseitenvideo.mp4" type="video/mp4">
+        Ihr Browser unterstützt kein HTML5-Video.
+      </video>
+      <div class="hero-overlay">
+        <h1>VergabeAssistent</h1>
+        <div class="hero-headline">So effizient wie ein ganzes Team</div>
+        <div class="hero-subline">KI-gestützt: Produktneutrale Leistungsbeschreibungen &amp; Leistungsverzeichnisse erstellen</div>
       </div>
     </section>
 
     <div id="homepage">
+      <!-- VORTEILE-BEREICH AUF TRANSPARENTEM BILD MIT KACHELN -->
+      <section class="vorteile-bildsektion">
+        <div class="vorteile-img-wrapper">
+          <img src="img/Startseitenfoto.jpg" alt="Öffentliche Vergabe" class="vorteile-bg-img">
+          <div class="vorteile-kacheln-container">
+            <div class="vorteil-kachel">
+              <span class="vorteil-icon">⚡️</span>
+              <h3>Enorme Zeitersparnis</h3>
+              <p>Leistungsverzeichnisse sekundenschnell generieren – Routine wird automatisiert, Sie konzentrieren sich aufs Wesentliche.</p>
+            </div>
+            <div class="vorteil-kachel">
+              <span class="vorteil-icon">🧠</span>
+              <h3>KI-gestützte Expertise</h3>
+              <p>Immer rechtssichere, aktuelle Antworten auf vergaberechtliche Fragen. Praxisnah, verständlich, individuell.</p>
+            </div>
+            <div class="vorteil-kachel">
+              <span class="vorteil-icon">🔒</span>
+              <h3>DSGVO-konform &amp; sicher</h3>
+              <p>Hosting &amp; Datenspeicherung ausschließlich in Europa, geprüft für den Einsatz in der Verwaltung.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ALTER FEATURE-BEREICH (optional, kannst du auskommentieren oder entfernen, da jetzt die Vorteile oben im neuen Stil sind)
       <section class="features" id="features">
         <h2>Ihre Vorteile mit VergabeAssist</h2>
         <div class="features-grid" id="featuresGrid">
@@ -40,7 +64,7 @@
           <div class="feature-item">✅ Rechtssichere KI-Antworten auf vergaberechtliche Fragen</div>
           <div class="feature-item">✅ Digitale Markterkundung direkt im Browser</div>
         </div>
-      </section>
+      </section>-->
 
       <section class="chat-demo" id="chat">
         <h2 style="text-align:center;color:#0077B6;">💬 Testen Sie den KI-Vergabe-Chat</h2>

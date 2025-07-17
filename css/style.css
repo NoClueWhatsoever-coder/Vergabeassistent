@@ -1,5 +1,3 @@
-/* style.css – modernisiertes Basis-Design für VergabeAssist */
-
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -35,43 +33,128 @@ header nav a:hover {
   color: #0077B6;
 }
 
-.hero {
-  padding: 4rem 2rem;
+/* HERO-BEREICH MIT VIDEO UND TEXT */
+.hero-video-bg {
+  position: relative;
+  width: 100vw;
+  height: 400px;
+  overflow: hidden;
+  background: #0077b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-video {
+  width: 100vw;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+.hero-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
   text-align: center;
-  background: linear-gradient(to right, #0077B6, #00B4D8);
-  color: white;
+  color: #fff;
+  text-shadow: 0 2px 18px #0a162366;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.hero-overlay h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.4em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.hero-headline {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.6em;
+  background: rgba(0,119,182,0.67);
+  border-radius: 32px;
+  padding: 0.3em 1.7em;
+  display: inline-block;
+}
+.hero-subline {
+  font-size: 1.15rem;
+  background: rgba(0,0,0,0.24);
+  border-radius: 20px;
+  padding: 0.3em 1.2em;
+  display: inline-block;
 }
 
-.hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+/* VORTEILE-BEREICH AUF TRANSPARENTEM BILD MIT KACHELN */
+.vorteile-bildsektion {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  margin-top: 0;
 }
-
-.hero p {
-  font-size: 1.2rem;
-  max-width: 600px;
-  margin: 0 auto;
+.vorteile-img-wrapper {
+  width: 100vw;
+  max-width: 100vw;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-.cta {
-  margin-top: 2rem;
+.vorteile-bg-img {
+  width: 100vw;
+  max-height: 420px;
+  object-fit: cover;
+  filter: brightness(0.45) blur(0.5px);
+  opacity: 0.7;
+  border-radius: 0;
+  display: block;
 }
-
-.cta input[type="email"] {
-  padding: 0.75rem;
-  width: 250px;
-  max-width: 80%;
-  border: none;
-  border-radius: 6px 0 0 6px;
+.vorteile-kacheln-container {
+  position: absolute;
+  top: 0; left: 0; width: 100vw; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5vw;
+  padding: 0 4vw;
+  z-index: 2;
 }
-
-.cta button {
-  padding: 0.75rem 1.5rem;
-  background: #1f2937;
-  color: white;
-  border: none;
-  border-radius: 0 6px 6px 0;
-  cursor: pointer;
+.vorteil-kachel {
+  background: rgba(240, 240, 240, 0.96);
+  border-radius: 24px;
+  box-shadow: 0 4px 32px #0002;
+  padding: 2.2em 2em 1.4em 2em;
+  max-width: 330px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.18s;
+  border: 1px solid #e6e6e6;
+}
+.vorteil-kachel:hover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 8px 38px #0077b633;
+}
+.vorteil-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.5em;
+}
+.vorteil-kachel h3 {
+  margin: 0 0 0.4em 0;
+  font-size: 1.18rem;
+  color: #0077b6;
+  font-weight: 700;
+}
+.vorteil-kachel p {
+  margin: 0;
+  color: #222b38;
+  font-size: 1rem;
+  text-align: center;
 }
 
 .features {
@@ -117,6 +200,47 @@ footer {
   margin-top: 4rem;
 }
 
+@media (max-width: 900px) {
+  .vorteile-kacheln-container {
+    flex-direction: column;
+    gap: 2em;
+    padding: 0 2vw;
+  }
+  .vorteile-bg-img {
+    max-height: 600px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-overlay h1 { font-size: 2rem; }
+  .hero-headline { font-size: 1.1rem; padding: 0.2em 1em; }
+  .hero-subline { font-size: 0.98rem; }
+  .vorteil-kachel { padding: 1.1em 1em 1em 1em; min-width: 120px; }
+  .vorteile-kacheln-container { gap: 1em; }
+  .vorteile-bg-img { max-height: 350px; }
+}
+
+.cta {
+  margin-top: 2rem;
+}
+
+.cta input[type="email"] {
+  padding: 0.75rem;
+  width: 250px;
+  max-width: 80%;
+  border: none;
+  border-radius: 6px 0 0 6px;
+}
+
+.cta button {
+  padding: 0.75rem 1.5rem;
+  background: #1f2937;
+  color: white;
+  border: none;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+}
+
 @media (max-width: 600px) {
   .cta input[type="email"],
   .cta button {
@@ -125,7 +249,6 @@ footer {
     border-radius: 6px;
     margin-bottom: 0.5rem;
   }
-
   .cta button {
     border-radius: 6px;
   }
