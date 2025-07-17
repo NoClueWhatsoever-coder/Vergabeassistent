@@ -4,41 +4,48 @@ function showDashboard() {
   document.getElementById('homepage').style.display = 'none';
   document.getElementById('authContainer').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
-  document.getElementById('userName').textContent = currentUser.name;
-  document.getElementById('userCredits').textContent = userCredits;
+  if(window.currentUser && document.getElementById('userEmail'))
+    document.getElementById('userEmail').textContent = currentUser.email || '';
 }
 
-function logout() {
-  currentUser = null;
-  tempEmail = '';
-  showHomepage();
-  document.getElementById('loginEmail').value = '';
-  document.getElementById('loginPassword').value = '';
-  document.getElementById('startEmail').value = '';
-}
+// Beispiel-Daten für die Tabelle
+let beschaffungsdaten = [];
 
-function neueBeschaffung() {
+window.neueBeschaffung = function() {
   const titel = prompt('Titel der Beschaffung:');
   if (titel) {
-    const wert = prompt('Geschätzter Auftragswert (€):');
-    if (wert) {
-      const liste = document.getElementById('beschaffungenListe');
-      const newCard = document.createElement('div');
-      newCard.className = 'beschaffung-card';
-      newCard.innerHTML = `
-        <h4>${titel}</h4>
-        <p><strong>Status:</strong> Neu angelegt</p>
-        <p><strong>Geschätzter Auftragswert:</strong> ${parseInt(wert).toLocaleString('de-DE')} €</p>
-        <p><strong>Erstellt:</strong> ${new Date().toLocaleDateString('de-DE')}</p>
-        <div class="beschaffung-actions">
-          <button class="action-btn" onclick="useCredits(5, 'Markterkundung für ${titel}')">Markterkundung durchführen</button>
-          <button class="action-btn" onclick="useCredits(3, 'Unterlagen für ${titel}')">Unterlagen vorbereiten</button>
-          <button class="action-btn" onclick="useCredits(2, 'Vergabe für ${titel}')">Vergabe durchführen</button>
-          <button class="action-btn" onclick="openModal('chatModal')">Fragen stellen</button>
-          <button class="action-btn" onclick="useCredits(1, 'Rechtliche Hinweise für ${titel}')">Rechtliche Hinweise</button>
-        </div>
-      `;
-      liste.appendChild(newCard);
-    }
+    const art = prompt('Art der Leistung:');
+    const status = 'Neu angelegt';
+    const erstellt = new Date().toLocaleDateString('de-DE');
+    const aktualisiert = erstellt;
+    beschaffungsdaten.push({ titel, art, status, erstellt, aktualisiert });
+    updateBeschaffungstabelle();
   }
+};
+
+function updateBeschaffungstabelle() {
+  const tbody = document.getElementById('dashboardTableBody');
+  tbody.innerHTML = '';
+  if(beschaffungsdaten.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="padding:2.3em 0;text-align:center;color:#777;font-size:1.1em;">Noch keine Beschaffungsvorhaben angelegt.</td></tr>`;
+    return;
+  }
+  beschaffungsdaten.forEach(eintrag => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${eintrag.titel}</td>
+      <td>${eintrag.art}</td>
+      <td>${eintrag.status}</td>
+      <td>${eintrag.erstellt}</td>
+      <td>${eintrag.aktualisiert}</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
+
+// Button EventHandler setzen
+window.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('addProjectBtn');
+  if(btn) btn.onclick = neueBeschaffung;
+  updateBeschaffungstabelle();
+});

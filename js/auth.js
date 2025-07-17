@@ -5,13 +5,42 @@ const supabaseUrl = 'https://jjkuvuywbwnvsgpbqlwo.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqa3V2dXl3YndudnNncGJxbHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzMDU3MjMsImV4cCI6MjA2Njg4MTcyM30.BeMfBKtYECSy8Sx_yH6Qh1Pwgd7KhNIA3jiBliE2DMM';
 const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-// Hilfsfunktion für E-Mail-Prüfung (falls noch nicht in utils.js)
+// Hilfsfunktion für E-Mail-Prüfung
 function istGueltigeEmail(email) {
   const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return regex.test(email);
 }
 
-// REGISTRIERUNG
+// Registrierung direkt von der Startseite/aus dem Hero-Bereich
+window.registerFromHero = async function() {
+  const email = document.getElementById('heroRegEmail')?.value?.trim();
+  if (!email) {
+    alert("Bitte geben Sie Ihre dienstliche E-Mail-Adresse ein.");
+    return;
+  }
+  if (!istGueltigeEmail(email)) {
+    alert("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
+    return;
+  }
+  try {
+    // Registrierung mit Redirect zur Willkommensseite oder Dashboard
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      options: { emailRedirectTo: window.location.origin + "/?registered=1" }
+    });
+    if (error) {
+      alert("Fehler bei der Registrierung: " + error.message);
+      return;
+    }
+    alert("Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox!");
+    document.getElementById('heroRegEmail').value = '';
+    showLogin('register', email);  // Login/Registrierungsdialog öffnen und E-Mail übernehmen
+  } catch (err) {
+    alert("Fehler bei der Registrierung: " + err.message);
+  }
+};
+
+// REGISTRIERUNG (im Dialog)
 async function register() {
   const anrede = document.getElementById('regAnrede')?.value;
   const vorname = document.getElementById('regVorname')?.value;
@@ -34,12 +63,13 @@ async function register() {
     return;
   }
 
-  // Supabase Signup (Double Opt-In)
+  // Supabase Signup (Double Opt-In mit Weiterleitung nach Registrierung)
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { anrede, vorname, nachname, organisation, bundesland }
+      data: { anrede, vorname, nachname, organisation, bundesland },
+      emailRedirectTo: window.location.origin + "/?registered=1"
     }
   });
 
@@ -116,10 +146,18 @@ function showHomepage() {
   document.getElementById('dashboard').style.display = 'none';
 }
 
-function showLogin() {
+function showLogin(tab = "login", email = "") {
   document.getElementById('homepage').style.display = 'none';
   document.getElementById('authContainer').style.display = 'block';
-  switchTab('login');
+  switchTab(tab);
+
+  // E-Mail ggf. vorbefüllen
+  if (tab === "register" && email) {
+    document.getElementById("regEmail").value = email;
+  }
+  if (tab === "login" && email) {
+    document.getElementById("loginEmail").value = email;
+  }
 }
 
 function switchTab(tab) {
@@ -139,6 +177,19 @@ function switchTab(tab) {
     tabs[1].classList.add('active');
   }
 }
+
+// Optional: Weiterleitung abfangen
+function handleRegisteredRedirect() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('registered')) {
+    // Zeige Willkommensdialog oder leite ins Dashboard weiter
+    alert("Registrierung erfolgreich! Sie können sich jetzt anmelden und alle Funktionen nutzen.");
+    showLogin('login');
+    // Optional: Entferne den Parameter aus der URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+}
+document.addEventListener('DOMContentLoaded', handleRegisteredRedirect);
 
 // Für HTML-Events global sichtbar machen
 window.register = register;
