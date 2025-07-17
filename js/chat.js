@@ -2,17 +2,14 @@
 
 // Limit-Konstanten
 const guestChatLimit = 5;
-
 // localStorage-Keys
 const STORAGE_KEY_COUNT = "guestChatCount";
 const STORAGE_KEY_DATE = "guestChatDate";
 
-// Beim Laden: Zähler und Tagesdatum prüfen/setzen
 function getGuestChatCount() {
   const today = new Date().toISOString().split("T")[0];
   const lastDate = localStorage.getItem(STORAGE_KEY_DATE);
   if (lastDate !== today) {
-    // Tag hat gewechselt: zurücksetzen
     localStorage.setItem(STORAGE_KEY_DATE, today);
     localStorage.setItem(STORAGE_KEY_COUNT, "0");
     return 0;
@@ -38,7 +35,7 @@ function isLoggedIn() {
   return typeof currentUser === "object" && currentUser !== null;
 }
 
-// Optimierter System-Prompt (inkl. Bundesland + Verwaltungspraxis)
+// System-Prompt bleibt gleich
 const systemPrompt = `
 Du bist eine hochspezialisierte KI für deutsches und europäisches Vergaberecht.
 
@@ -62,14 +59,54 @@ Es fragt ein öffentlicher Auftraggeber oder Fördermittelempfänger aus Deutsch
 - Praxis-Tipp oder nächster Schritt für den Fragesteller.
 - Falls Rechtsprechung relevant: Kurzfassung mit Gericht, Beschlussdatum/Aktenzeichen.
 
-**Wichtig:**  
-Antworte verständlich und strukturiert. Erfinde keine Vorschriften oder Gerichtsentscheidungen.
+**WICHTIGSTE GRUNDSÄTZE:**
+- Antworte **niemals** mit erfundenen, nicht existierenden oder halluzinierten Gesetzesvorschriften, Paragraphen, Richtlinien oder Gerichtsurteilen!
+- Wenn du unsicher bist oder es zu einem Thema keine klare, existierende Vorschrift oder Rechtsprechung gibt, schreibe explizit: 
+  "Zu diesem Thema kenne ich keine eindeutige gesetzliche Regelung. Bitte wende dich im Zweifel an eine Rechtsberatung oder die zuständige Vergabestelle."
+- Gib nur echte, nachprüfbare Gesetze, Verordnungen und Vorschriften an (wie GWB, VgV, VOB/A, UVgO, SektVO, VergStatVO, relevante EU-Richtlinien etc.).
+- Niemals Paragraphen erfinden, keine Fantasie-Verordnungen, keine falschen Kurzbezeichnungen!
+- Rechtsgrundlagen nur nennen, wenn du dir absolut sicher bist, dass es sie gibt.
+
+**Antwort-Format:**
+- Prägnante Zusammenfassung der wichtigsten Punkte.
+- Hinweise zu den Gesetzen/Verordnungen/Paragraphen (ggf. mit §-Angabe, aber nur echte!).
+- Praxis-Tipp oder nächster Schritt für den Fragesteller.
+- Falls Rechtsprechung relevant: Kurzfassung mit Gericht, Beschlussdatum/Aktenzeichen (nur wenn sicher und nachprüfbar).
+
+**NOCH EINMAL:**
+- Wenn keine gesicherte, reale Rechtslage vorliegt, verweise explizit auf diesen Umstand und rate ggf. zur Nachfrage bei einer Rechtsberatung.
+- **Erfinde niemals Quellen, Paragrafen oder Rechtsprechung!**
 `;
+
+// Optional: Markdown-Parser (marked.js via CDN einbinden!)
+function parseMarkdown(text) {
+  if (window.marked) {
+    return marked.parse(text);
+  } else {
+    // Simple Ersatzformatierung (nur Zeilenumbrüche)
+    return text.replace(/\n/g, '<br>');
+  }
+}
+
+function appendMessage(text, sender = 'ai') {
+  const chatMessages = document.getElementById('chatMessages');
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble ' + sender;
+
+  // Avatar-Icon (🤖 für KI, 👤 für User)
+  let avatarHtml = '';
+  if (sender === 'ai') avatarHtml = '<span class="chat-avatar">🤖</span>';
+  if (sender === 'user') avatarHtml = '<span class="chat-avatar">👤</span>';
+
+  // Text als HTML (Markdown falls möglich)
+  bubble.innerHTML = avatarHtml + `<span>${parseMarkdown(text)}</span>`;
+  chatMessages.appendChild(bubble);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
 
 async function sendChatMessage() {
   const input = document.getElementById('chatInput');
   const message = input.value.trim();
-
   if (!message) return;
 
   // Limit für Gäste prüfen
@@ -81,35 +118,27 @@ async function sendChatMessage() {
       return;
     }
   }
-
-  // Optional: Für eingeloggte Nutzer mit Credits weiterprüfen
   if (isLoggedIn() && typeof pruefeCredits === "function" && !pruefeCredits(2)) return;
 
-  const messagesContainer = document.getElementById('chatMessages');
-
-  // User Message anzeigen
-  const userMsg = document.createElement('div');
-  userMsg.className = 'message user';
-  userMsg.innerHTML = `<strong>Sie:</strong> ${message}`;
-  messagesContainer.appendChild(userMsg);
-
+  // User-Message anzeigen
+  appendMessage(message, 'user');
   input.value = '';
 
   // KI antwortet asynchron
-  const aiMsg = document.createElement('div');
-  aiMsg.className = 'message ai';
-  aiMsg.innerHTML = `<strong>VergabeAssist KI:</strong> <span style="opacity:0.7">Antwort wird geladen ...</span>`;
-  messagesContainer.appendChild(aiMsg);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  appendMessage('<span style="opacity:0.7">Antwort wird geladen ...</span>', 'ai');
 
   try {
-    // KI-Aufruf
+    const chatMessages = document.getElementById('chatMessages');
+    // callAI aufrufen
     const response = await callAI(
       message,
       "mistralai/mistral-7b-instruct:free",
       systemPrompt
     );
-    aiMsg.innerHTML = `<strong>VergabeAssist KI:</strong> ${response}`;
+    // Ladeanzeige entfernen
+    chatMessages.removeChild(chatMessages.lastChild);
+    // KI-Antwort anzeigen (mit Markdown)
+    appendMessage(response, 'ai');
 
     if (!isLoggedIn()) {
       incrementGuestChatCount();
@@ -118,9 +147,11 @@ async function sendChatMessage() {
       verwendeCredits(2);
     }
   } catch (err) {
-    aiMsg.innerHTML = `<strong>Fehler:</strong> ${err.message}`;
+    // Ladeanzeige entfernen
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.removeChild(chatMessages.lastChild);
+    appendMessage(`<strong>Fehler:</strong> ${err.message}`, 'ai');
   }
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
 function handleChatEnter(event) {
@@ -129,7 +160,6 @@ function handleChatEnter(event) {
   }
 }
 
-// Counter initialisieren beim Laden
 document.addEventListener('DOMContentLoaded', function() {
   updateGuestChatCounter();
 });

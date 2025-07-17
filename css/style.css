@@ -32,8 +32,8 @@ header nav a:hover {
 .hero-video-bg {
   position: relative;
   width: 100vw;
-  height: 820px;      /* Viel Höhe für Video, Chat und Text */
-  min-height: 540px;
+  height: 1500px;  /* noch mehr Höhe! */
+  min-height: 1200px;
   overflow: hidden;
   background: #0077b6;
   display: flex;
@@ -43,8 +43,9 @@ header nav a:hover {
 .hero-video {
   width: 100vw;
   height: 100%;
-  min-height: 540px;
+  min-height: 1200px;
   object-fit: cover;
+  object-position: center 30%;  /* Zeigt den Mittelpunkt etwas weiter oben: weniger Zoom auf Köpfe! */
   position: absolute;
   left: 0;
   top: 0;
@@ -121,15 +122,100 @@ header nav a:hover {
   margin: 0 0 1em 0;
 }
 .chat-messages {
-  min-height: 68px;
-  max-height: 200px;
+  min-height: 80px;
+  max-height: 360px;
   overflow-y: auto;
-  background: #f5f7fb;
-  border-radius: 8px;
-  padding: 0.7em 0.9em;
-  font-size: 1rem;
-  margin-bottom: 0.6em;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1.2em 1em;
+  font-size: 1.07rem;
+  margin-bottom: 0.7em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  box-shadow: 0 1px 6px #e4e8f2b7;
 }
+.chat-bubble {
+  display: inline-block;
+  max-width: 93%;
+  padding: 0.95em 1.1em;
+  border-radius: 16px 18px 16px 5px;
+  margin-bottom: 2px;
+  white-space: pre-line;
+  line-height: 1.72;
+  box-shadow: 0 1px 6px #e3ecfa36;
+  word-break: break-word;
+}
+.chat-bubble.user {
+  align-self: flex-end;
+  background: linear-gradient(90deg,#d1e9ff,#b6e0fe 70%,#e0ecf8);
+  color: #084466;
+  border-bottom-right-radius: 10px;
+}
+.chat-bubble.ai {
+  align-self: flex-start;
+  background: linear-gradient(90deg,#f5f7fb,#e6f1ff 70%,#eef3f8);
+  color: #1a2540;
+  border-bottom-left-radius: 10px;
+}
+/* Markdown-Style im Chat */
+.chat-bubble pre {
+  background: #eef6fa;
+  color: #17202a;
+  border-radius: 7px;
+  font-family: "Fira Mono","Consolas",monospace;
+  font-size: 0.98em;
+  padding: 0.6em 0.9em;
+  margin: 0.6em 0;
+  overflow-x: auto;
+}
+.chat-bubble code {
+  background: #f0f3fa;
+  color: #204080;
+  font-family: "Fira Mono","Consolas",monospace;
+  border-radius: 5px;
+  font-size: 0.98em;
+  padding: 0.2em 0.5em;
+}
+.chat-bubble ul, .chat-bubble ol {
+  padding-left: 1.3em;
+  margin: 0.7em 0 0.7em 0;
+}
+.chat-bubble li { margin-bottom: 0.35em; }
+.chat-bubble strong {
+  font-weight: 700;
+  color: #0077b6;
+}
+.chat-bubble em {
+  color: #176fa6;
+}
+.chat-bubble a {
+  color: #1576d2;
+  text-decoration: underline;
+  word-break: break-all;
+}
+.chat-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #eaf3fb;
+  color: #0077b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-right: 0.55em;
+  margin-top: 1px;
+  float: left;
+}
+.chat-bubble.user .chat-avatar {
+  background: #cbeafc;
+  color: #084466;
+  float: right;
+  margin-right: 0;
+  margin-left: 0.55em;
+}
+
 /* ABSTAND/FARBE ZWISCHEN VIDEO UND BILD */
 .section-gap-alt {
   width: 100vw;
