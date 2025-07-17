@@ -22,38 +22,37 @@ header nav a {
   font-weight: 500;
   transition: color 0.2s;
 }
-
 header nav a:hover {
   color: #0077B6;
 }
-
 .logo {
   font-weight: 700;
   font-size: 1.5rem;
   color: #0077B6;
 }
 
-/* HERO-BEREICH MIT VIDEO UND TEXT UND CHAT */
+/* HERO-BEREICH MIT VIDEO, TEXT (3 Zeilen) UND CHAT */
 .hero-video-bg {
   position: relative;
   width: 100vw;
-  height: 600px;
-  min-height: 400px;
+  height: 820px;      /* Viel Höhe für Video, Chat und Text */
+  min-height: 540px;
   overflow: hidden;
   background: #0077b6;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 .hero-video {
   width: 100vw;
   height: 100%;
-  min-height: 400px;
+  min-height: 540px;
   object-fit: cover;
   position: absolute;
   left: 0;
   top: 0;
   z-index: 1;
+  background: #0077b6;
 }
 .hero-overlay {
   position: relative;
@@ -67,46 +66,53 @@ header nav a:hover {
   align-items: center;
   justify-content: flex-start;
   height: 100%;
-  padding-top: 40px;
-}
-.hero-overlay-column {
-  justify-content: flex-start;
-  gap: 2.2rem;
+  padding-top: 48px;
+  gap: 1.4rem;
 }
 .hero-textblock {
-  margin-bottom: 0.7em;
+  margin-bottom: 0.4em;
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .hero-overlay h1 {
-  font-size: 2.8rem;
-  margin-bottom: 0.4em;
+  font-size: 3.2rem;
+  margin-bottom: 0.28em;
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 .hero-headline {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 600;
-  margin-bottom: 0.6em;
+  margin-bottom: 0.45em;
   background: rgba(0,119,182,0.67);
   border-radius: 32px;
-  padding: 0.3em 1.7em;
+  padding: 0.35em 1.6em;
   display: inline-block;
 }
 .hero-subline {
-  font-size: 1.15rem;
-  background: rgba(0,0,0,0.24);
+  font-size: 1.18rem;
+  background: rgba(0,0,0,0.18);
   border-radius: 20px;
-  padding: 0.3em 1.2em;
+  padding: 0.35em 1.2em;
+  margin-bottom: 0.8em;
   display: inline-block;
 }
-
-/* Chat-Box im Video-Overlay */
+.hero-secondline {
+  font-size: 1.07rem;
+  background: rgba(0,0,0,0.14);
+  border-radius: 16px;
+  padding: 0.3em 1.1em;
+  margin-bottom: 2.2em;
+  display: inline-block;
+}
 .hero-chatbox {
   background: rgba(255,255,255,0.93);
-  border-radius: 20px;
+  border-radius: 22px;
   box-shadow: 0 6px 32px #0002;
-  padding: 2em 2em 1.5em 2em;
+  padding: 2.2em 2em 1.5em 2em;
   max-width: 430px;
-  margin: 0 auto;
+  margin: 0 auto 2.5em auto;
   color: #222b38;
 }
 .hero-chatbox h2 {
@@ -128,7 +134,7 @@ header nav a:hover {
   margin-bottom: 0.6em;
 }
 
-/* VORTEILE-BEREICH AUF TRANSPARENTEM BILD MIT KACHELN */
+/* VORTEILE-BEREICH AUF KLEINEM TRANSPARENTEM BILD MIT KACHELN */
 .vorteile-bildsektion {
   width: 100vw;
   display: flex;
@@ -145,11 +151,11 @@ header nav a:hover {
 }
 .vorteile-bg-img {
   width: 100vw;
-  max-height: 600px; /* jetzt viel höher */
-  min-height: 420px;
-  object-fit: cover;
-  filter: brightness(0.45) blur(0.5px);
-  opacity: 0.7;
+  max-height: 180px; /* Bild jetzt deutlich kleiner */
+  min-height: 80px;
+  object-fit: contain;
+  filter: brightness(0.6) blur(0.2px);
+  opacity: 0.82;
   border-radius: 0;
   display: block;
 }
@@ -239,26 +245,27 @@ footer {
 
 /* Responsive Breakpoints */
 @media (max-width: 1100px) {
-  .hero-video-bg, .hero-video { height: 400px; min-height: 300px; }
-  .vorteile-bg-img { max-height: 400px; min-height: 220px; }
+  .hero-video-bg, .hero-video { height: 520px; min-height: 300px; }
+  .vorteile-bg-img { max-height: 110px; min-height: 50px; }
 }
 @media (max-width: 900px) {
-  .hero-video-bg, .hero-video { height: 320px; min-height: 200px; }
+  .hero-video-bg, .hero-video { height: 340px; min-height: 200px; }
   .hero-overlay h1 { font-size: 2rem; }
   .hero-chatbox { max-width: 98vw; padding: 1em 0.5em; }
   .vorteile-kacheln-container { flex-direction: column; gap: 2em; padding: 0 2vw; }
-  .vorteile-bg-img { max-height: 350px; }
+  .vorteile-bg-img { max-height: 70px; }
 }
 @media (max-width: 600px) {
-  .hero-video-bg, .hero-video { height: 220px; min-height: 110px; }
+  .hero-video-bg, .hero-video { height: 180px; min-height: 60px; }
   .hero-overlay h1 { font-size: 1.2rem; }
   .hero-headline { font-size: 1rem; }
   .hero-subline { font-size: 0.85rem; }
   .hero-chatbox { font-size: 0.93rem; padding: 1em 0.2em; }
   .vorteile-kacheln-container { gap: 1em; }
-  .vorteile-bg-img { max-height: 220px; min-height: 80px; }
+  .vorteile-bg-img { max-height: 30px; min-height: 18px; }
 }
 
+/* CTA-Formular auf der Hero */
 .cta {
   margin-top: 2rem;
 }
