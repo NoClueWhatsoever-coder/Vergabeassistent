@@ -68,7 +68,7 @@ header nav a:hover {
   gap: 1.4rem;
 }
 .hero-textblock {
-  margin-bottom: 0.4em;
+  margin-bottom: 2.4em;
   max-width: 580px;
   margin-left: auto;
   margin-right: auto;
@@ -217,7 +217,7 @@ header nav a:hover {
 }
 
 .hero-registerbox {
-  margin-top: 2.2rem;
+  margin-top: 2.8rem;
   background: #f7fafc;
   border-radius: 18px;
   box-shadow: 0 2px 14px #0077b612;
@@ -233,18 +233,22 @@ header nav a:hover {
   margin-bottom: 1.4em;
 }
 .register-form input[type="email"] {
-  flex: 1;
-  padding: 0.85em 1.2em;
+  flex: 2;
+  min-width: 200px;
+  max-width: 340px;
+  padding: 0.95em 1.4em;
   border-radius: 8px 0 0 8px;
   border: 1px solid #d0d7e2;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  box-sizing: border-box;
 }
 .register-form button {
-  padding: 0.85em 1.1em;
+  padding: 0.95em 1.3em;
   background: #0077b6;
   color: #fff;
   border: none;
   border-radius: 0 8px 8px 0;
+  font-size: 1.07rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;

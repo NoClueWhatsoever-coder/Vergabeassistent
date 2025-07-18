@@ -22,10 +22,12 @@ window.registerFromHero = async function() {
     alert("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
     return;
   }
+  // Random sicheres Passwort generieren:
+  const password = Math.random().toString(36).slice(-10) + "!A1";
   try {
-    // Registrierung mit Redirect zur Willkommensseite oder Dashboard
     const { data, error } = await supabase.auth.signUp({
       email,
+      password,
       options: { emailRedirectTo: window.location.origin + "/?registered=1" }
     });
     if (error) {
