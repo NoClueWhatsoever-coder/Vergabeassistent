@@ -1,5 +1,3 @@
-// dashboard.js
-
 function showDashboard() {
   document.getElementById('homepage').style.display = 'none';
   document.getElementById('authContainer').style.display = 'none';
@@ -43,9 +41,6 @@ function updateBeschaffungstabelle() {
   });
 }
 
-// Button EventHandler setzen
 window.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('addProjectBtn');
-  if(btn) btn.onclick = neueBeschaffung;
   updateBeschaffungstabelle();
 });

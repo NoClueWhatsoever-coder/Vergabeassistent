@@ -528,3 +528,51 @@ footer {
   color: #009ee1;
 }
 
+.burger-menu {
+  width: 32px; height: 32px; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; cursor: pointer; margin-right: 1.2em;
+}
+.burger-menu span {
+  display: block; width: 24px; height: 4px; background: #0077b6;
+  border-radius: 2px; margin: 3px 0;
+  transition: all 0.2s;
+}
+.login-top-btn {
+  background: #0077b6; color: #fff; border: none; border-radius: 6px;
+  font-weight: 600; padding: 0.7em 1.6em; font-size: 1.08em; margin-left: 2em;
+  cursor: pointer; transition: background 0.16s;
+}
+.login-top-btn:hover {
+  background: #009ee1;
+}
+
+.main-logo {
+  height: 42px;
+  margin-right: 1.4em;
+}
+.logo-text {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #0077B6;
+  letter-spacing: 0.04em;
+  margin-right: 1em;
+}
+.top-firm-logo img {
+  max-height: 64px;
+}
+.sidebar-menu {
+  position: fixed; top: 0; left: 0; height: 100vh; width: 220px;
+  background: #fff; box-shadow: 3px 0 22px #0001;
+  z-index: 99; display: flex; flex-direction: column;
+  padding-top: 70px; gap: 1.2em; font-size: 1.1em;
+  transition: transform 0.2s;
+}
+.sidebar-menu a {
+  color: #0077b6; text-decoration: none; padding: 0.6em 1.6em;
+  font-weight: 600; transition: background 0.13s;
+}
+.sidebar-menu a:hover { background: #f7fafc; }
+@media (max-width: 700px) {
+  .main-logo { height: 28px; }
+  .top-firm-logo img { max-height: 32px; }
+}

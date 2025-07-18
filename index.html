@@ -10,16 +10,30 @@
 </head>
 <body>
   <header>
-    <div class="logo">🏛️ VergabeAssist</div>
+    <!-- Burger Menü (links) -->
+    <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()">
+      <span></span><span></span><span></span>
+    </div>
+    <!-- Neues Logo (links im Header) -->
+    <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="main-logo" style="height: 42px; margin-right: 1.4em;">
+    <div class="logo-text">VergabeAssist</div>
     <nav>
       <a href="#features">Funktionen</a>
       <a href="#chat">KI-Chat</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
+    <!-- Login-Button (rechts oben, wenn NICHT eingeloggt) -->
+    <button id="loginTopBtn" class="login-top-btn" onclick="showLogin('login');" style="display:none;">Login</button>
     <div id="accountIcon" style="display:none;position:absolute;right:2rem;top:1.2rem;cursor:pointer;">
       <span title="Account verwalten" style="font-size:2.1rem;">👤</span>
     </div>
   </header>
+
+  <!-- Firmenlogo zentral oben auf der Seite -->
+  <div class="top-firm-logo" style="text-align:center;margin:2.1em 0 1.3em 0;">
+    <img src="img/logo_clean_2.png" alt="Firmenlogo" style="height:64px;">
+  </div>
+
   <main>
     <!-- HERO-BEREICH MIT VIDEO UND CHAT -->
     <section class="hero-video-bg">
@@ -100,6 +114,9 @@
         <input id="loginEmail" type="email" placeholder="E-Mail">
         <input id="loginPassword" type="password" placeholder="Passwort">
         <button onclick="login()">Anmelden</button>
+        <div style="margin-top:0.7em;font-size:0.95em;">
+          <a href="#" onclick="showForgotPassword();return false;" style="color:#0077b6;">Passwort vergessen?</a>
+        </div>
       </div>
       <div id="registerForm" style="display:none;">
         <input id="regAnrede" placeholder="Anrede">
@@ -117,7 +134,7 @@
     <div id="dashboard" style="display:none;max-width:1000px;margin:3.5rem auto 2rem auto;">
       <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
         <h2>Meine Beschaffungsvorhaben</h2>
-        <button id="addProjectBtn" onclick="alert('Funktion in Arbeit!')" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
+        <button id="addProjectBtn" onclick="neueBeschaffung()" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
       </div>
       <div style="overflow-x:auto;">
         <table class="dashboard-table" style="width:100%;border-collapse:collapse;background:#fff;box-shadow:0 3px 32px #0077b610;border-radius:15px;overflow:hidden;">
@@ -140,9 +157,20 @@
     </div>
 
   </main>
-  <footer id="kontakt">
-    &copy; 2025 VergabeAssist | Impressum | Datenschutz
+  <!-- Firmenlogo unten links im Footer -->
+  <footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
+    <img src="img/logo_clean_2.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
+    <span style="flex:1;">&copy; 2025 VergabeAssist | Impressum | Datenschutz</span>
   </footer>
+
+  <!-- Sidebar-Menü für das Burger-Menü -->
+  <div id="sidebarMenu" class="sidebar-menu" style="display:none;">
+    <a href="#features">Funktionen</a>
+    <a href="#chat">KI-Chat</a>
+    <a href="#kontakt">Kontakt</a>
+    <!-- Weitere Menüpunkte später -->
+  </div>
+
   <!-- Skripte -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/utils.js"></script>
@@ -160,6 +188,23 @@
       }
     }
     window.updateAccountIcon = updateAccountIcon;
+
+    // Zeige Login-Button im Header, wenn nicht eingeloggt
+    function updateLoginTopBtn() {
+      const btn = document.getElementById('loginTopBtn');
+      btn.style.display = window.currentUser ? 'none' : 'inline-block';
+    }
+    window.updateLoginTopBtn = updateLoginTopBtn;
+
+    // Burger Menü Sidebar öffnen/schließen
+    window.toggleSidebarMenu = function() {
+      const sb = document.getElementById('sidebarMenu');
+      sb.style.display = (sb.style.display === 'none' || !sb.style.display) ? 'flex' : 'none';
+    };
+    document.addEventListener('click', e => {
+      if (e.target.closest('.sidebar-menu') || e.target.closest('.burger-menu')) return;
+      document.getElementById('sidebarMenu').style.display = 'none';
+    });
   </script>
 </body>
 </html>
