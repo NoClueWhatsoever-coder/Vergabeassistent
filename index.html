@@ -104,6 +104,15 @@
         <button class="auth-tab active" onclick="switchTab('login')">Login</button>
         <button class="auth-tab" onclick="switchTab('register')">Registrieren</button>
       </div>
+    <div id="setPasswordContainer" style="display:none;max-width:560px;margin:2.5em auto 1.7em auto;">
+      <form id="setPasswordForm" class="auth-form-modern" onsubmit="event.preventDefault(); setNewPassword();">
+        <div class="form-group">
+          <label for="newPassword">Neues Passwort</label>
+          <input id="newPassword" type="password" placeholder="Neues Passwort" required minlength="8">
+        </div>
+        <button type="submit">Passwort setzen &amp; einloggen</button>
+      </form>
+    </div>
       <form id="loginForm" class="auth-form-modern">
         <div class="form-group">
           <label for="loginEmail">E-Mail</label>

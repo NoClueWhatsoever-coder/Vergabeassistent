@@ -15,17 +15,15 @@ window.registerFromHero = async function() {
   const email = document.getElementById('heroRegEmail')?.value?.trim();
   if (!email) { alert("Bitte geben Sie Ihre dienstliche E-Mail-Adresse ein."); return; }
   if (!istGueltigeEmail(email)) { alert("Bitte geben Sie eine gültige E-Mail-Adresse ein."); return; }
-  const password = Math.random().toString(36).slice(-10) + "!A1";
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
-      password,
-      options: { emailRedirectTo: window.location.origin + "/?registered=1" }
+      options: { emailRedirectTo: window.location.origin + "/?setpw=1" }
     });
     if (error) { alert("Fehler bei der Registrierung: " + error.message); return; }
     alert("Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox!");
     document.getElementById('heroRegEmail').value = '';
-    showLogin('register', email);
+    showLogin('login', email); // Login anzeigen, Email vorbelegen
   } catch (err) {
     alert("Fehler bei der Registrierung: " + err.message);
   }
@@ -159,6 +157,15 @@ function switchTab(tab) {
 // Weiterleitung abfangen: Registrierung oder Passwort-Reset
 function handleRegisteredRedirect() {
   const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('setpw')) {
+    // Passwort-Setzen-Formular anzeigen
+    document.getElementById('setPasswordContainer').style.display = 'block';
+    document.getElementById('homepage').style.display = 'none';
+    document.getElementById('authContainer').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'none';
+    window.scrollTo(0, 180);
+    return;
+  }
   if (urlParams.has('registered')) {
     showLogin('login');
     alert("Registrierung erfolgreich! Bitte loggen Sie sich jetzt ein.");
@@ -171,6 +178,25 @@ function handleRegisteredRedirect() {
   }
 }
 document.addEventListener('DOMContentLoaded', handleRegisteredRedirect);
+
+
+window.setNewPassword = async function() {
+  const pw = document.getElementById('newPassword').value;
+  if (!pw || pw.length < 8) {
+    alert('Bitte ein sicheres Passwort (mind. 8 Zeichen) eingeben!');
+    return;
+  }
+  const { data, error } = await supabase.auth.updateUser({ password: pw });
+  if (error) {
+    alert('Fehler beim Setzen des Passworts: ' + error.message);
+    return;
+  }
+  alert('Passwort erfolgreich gesetzt! Sie sind jetzt eingeloggt.');
+  // Hier kann jetzt das Dashboard gezeigt werden (oder reload):
+  showDashboard();
+  window.history.replaceState({}, document.title, window.location.pathname);
+};
+
 
 // Für HTML-Events global sichtbar machen
 window.register = register;
