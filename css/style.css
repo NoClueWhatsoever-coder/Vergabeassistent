@@ -696,3 +696,46 @@ footer {
   color: #fff;
   border-color: #0077b6;
 }
+.form-error {
+  color: #d32f2f;
+  font-size: 0.97em;
+  margin-top: 0.2em;
+  min-height: 1.2em;
+}
+
+input.error {
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 2px #ffd8d8;
+}
+.pw-hint {
+  font-size: 0.93em;
+  color: #8ba7b3;
+  margin-top: 0.15em;
+}
+
+.form-error {
+  color: #d32f2f;
+  font-size: 0.97em;
+  margin-top: 0.18em;
+  min-height: 1.18em;
+  font-weight: 500;
+  transition: color 0.18s;
+}
+input.error, select.error {
+  border-color: #d32f2f !important;
+  box-shadow: 0 0 0 2px #ffd8d8;
+  animation: shake 0.27s 1;
+}
+.pw-hint {
+  font-size: 0.93em;
+  color: #8ba7b3;
+  margin-top: 0.15em;
+}
+@keyframes shake {
+  0% { transform: translateX(0); }
+  26% { transform: translateX(-7px); }
+  46% { transform: translateX(6px); }
+  66% { transform: translateX(-4px); }
+  86% { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}

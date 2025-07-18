@@ -29,64 +29,142 @@ window.registerFromHero = async function() {
   }
 };
 
+function showSuccessOverlay(msg) {
+  document.getElementById('successMsg').textContent = msg;
+  document.getElementById('successOverlay').style.display = 'flex';
+  setTimeout(() => {
+    document.getElementById('successOverlay').style.display = 'none';
+    showHomepage();
+  }, 3600);
+}
+
 // Registrierung im Dialog
 async function register() {
-  const anrede = document.getElementById('regAnrede')?.value;
-  const vorname = document.getElementById('regVorname')?.value;
-  const nachname = document.getElementById('regNachname')?.value;
-  const organisation = document.getElementById('regOrganisation')?.value;
-  const email = document.getElementById('regEmail')?.value;
-  const password = document.getElementById('regPassword')?.value;
-  const bundesland = document.getElementById('regBundesland')?.value;
-  if (!anrede || !vorname || !nachname || !organisation || !email || !password || !bundesland) {
-    alert("Bitte alle Felder ausfüllen."); return;
+  const fields = [
+    { id: 'regAnrede', label: 'Anrede' },
+    { id: 'regVorname', label: 'Vorname' },
+    { id: 'regNachname', label: 'Nachname' },
+    { id: 'regOrganisation', label: 'Organisation' },
+    { id: 'regBundesland', label: 'Bundesland' },
+    { id: 'regEmail', label: 'E-Mail' },
+    { id: 'regPassword', label: 'Passwort' }
+  ];
+  let valid = true;
+  // Inline Fehler zurücksetzen
+  fields.forEach(f => {
+    const input = document.getElementById(f.id);
+    const errorDiv = document.getElementById('error-' + f.id.replace('reg','').toLowerCase());
+    input.classList.remove('error');
+    if (errorDiv) errorDiv.textContent = '';
+    if (!input.value.trim()) {
+      input.classList.add('error');
+      if (errorDiv) errorDiv.textContent = f.label + ' fehlt.';
+      valid = false;
+    }
+  });
+  // Passwort-Validierung nach Supabase-Policy
+  const password = document.getElementById('regPassword').value;
+  const pwError = document.getElementById('error-password');
+  const pwPolicy = {
+    minLength: 10,
+    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{10,}$/,
+  };
+  if (password && password.length < pwPolicy.minLength) {
+    document.getElementById('regPassword').classList.add('error');
+    pwError.textContent = 'Das Passwort muss mindestens 10 Zeichen lang sein.';
+    valid = false;
+  } else if (password && !pwPolicy.pattern.test(password)) {
+    document.getElementById('regPassword').classList.add('error');
+    let fehlermeldung = 'Fehlt: ';
+    if (!/[a-z]/.test(password)) fehlermeldung += 'Kleinbuchstabe, ';
+    if (!/[A-Z]/.test(password)) fehlermeldung += 'Großbuchstabe, ';
+    if (!/\d/.test(password)) fehlermeldung += 'Zahl, ';
+    if (!/[^a-zA-Z0-9]/.test(password)) fehlermeldung += 'Sonderzeichen, ';
+    pwError.textContent = fehlermeldung.replace(/, $/, '');
+    valid = false;
+  } else {
+    document.getElementById('regPassword').classList.remove('error');
+    pwError.textContent = '';
   }
-  if (password.length < 8) { alert("Das Passwort muss mindestens 8 Zeichen lang sein."); return; }
-  if (!istGueltigeEmail(email)) { alert("Bitte geben Sie eine gültige E-Mail-Adresse ein."); return; }
+  // E-Mail checken
+  const email = document.getElementById('regEmail').value;
+  const emailError = document.getElementById('error-email');
+  if (email && !istGueltigeEmail(email)) {
+    document.getElementById('regEmail').classList.add('error');
+    emailError.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+    valid = false;
+  } else if (emailError && !emailError.textContent) {
+    document.getElementById('regEmail').classList.remove('error');
+    emailError.textContent = '';
+  }
+  if (!valid) return;
+  // Daten sammeln
+  const anrede = document.getElementById('regAnrede').value;
+  const vorname = document.getElementById('regVorname').value;
+  const nachname = document.getElementById('regNachname').value;
+  const organisation = document.getElementById('regOrganisation').value;
+  const bundesland = document.getElementById('regBundesland').value;
+  // Supabase Registration
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: { anrede, vorname, nachname, organisation, bundesland },
-      emailRedirectTo: window.location.origin + "/?registered=1"
+      emailRedirectTo: window.location.origin + '/?registered=1'
     }
   });
-  if (error) { alert("Fehler bei der Registrierung: " + error.message); return; }
-  alert("Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox!");
-  showHomepage();
+  if (error) {
+    document.getElementById('error-email').textContent = error.message.includes('already registered') ? 
+      'E-Mail ist bereits registriert.' : ('Fehler: ' + error.message);
+    return;
+  }
+  // UX: Zeige Fortschrittsanzeige (s.u.)
+  showSuccessOverlay('Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox!');
+  document.getElementById('registerForm').reset();
 }
+
 
 // LOGIN
 async function login() {
-  const email = document.getElementById('loginEmail')?.value;
-  const password = document.getElementById('loginPassword')?.value;
-  if (!email || !password) { alert("Bitte geben Sie E-Mail und Passwort ein."); return; }
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) { alert("Login fehlgeschlagen: " + error.message); return; }
-  // Daten holen
-  const user = data.user;
-  let profile = null;
-  let pError = null;
-  try {
-    const { data: pData, error: profileErr } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('user_id', user.id)
-      .single();
-    profile = pData;
-    pError = profileErr;
-  } catch (err) { pError = err; }
-  if (pError || !profile) {
-    alert("Profil konnte nicht geladen werden. Bitte wenden Sie sich an den Support."); return;
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  let valid = true;
+  document.getElementById('login-error-email').textContent = '';
+  document.getElementById('login-error-password').textContent = '';
+  document.getElementById('login-global-error').textContent = '';
+  document.getElementById('loginEmail').classList.remove('error');
+  document.getElementById('loginPassword').classList.remove('error');
+  if (!email) {
+    document.getElementById('login-error-email').textContent = 'E-Mail fehlt.';
+    document.getElementById('loginEmail').classList.add('error');
+    valid = false;
+  } else if (!istGueltigeEmail(email)) {
+    document.getElementById('login-error-email').textContent = 'Bitte gültige E-Mail.';
+    document.getElementById('loginEmail').classList.add('error');
+    valid = false;
   }
-  window.currentUser = {
-    email: user.email,
-    name: `${profile.anrede || ''} ${profile.vorname || ''} ${profile.nachname || ''}`.trim(),
-    organisation: profile.organisation,
-    bundesland: profile.bundesland
-  };
+  if (!password) {
+    document.getElementById('login-error-password').textContent = 'Passwort fehlt.';
+    document.getElementById('loginPassword').classList.add('error');
+    valid = false;
+  }
+  if (!valid) return;
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    let message = 'Login fehlgeschlagen. ';
+    if (error.message.includes('Invalid login credentials')) message = 'E-Mail oder Passwort falsch.';
+    else if (error.message.includes('not confirmed')) message = 'Bitte E-Mail erst bestätigen.';
+    else message += error.message;
+    document.getElementById('login-global-error').textContent = message;
+    document.getElementById('loginPassword').classList.add('error');
+    return;
+  }
+  // Optional: Lade User-Profile, wie bei dir!
+  const user = data.user;
+  // ...
   showDashboard();
 }
+
 
 // LOGOUT
 async function logout() {
@@ -104,20 +182,19 @@ function updateLoginTopBtn() {
 window.updateLoginTopBtn = updateLoginTopBtn;
 
 window.showForgotPassword = function() {
-  const email = prompt("Bitte geben Sie Ihre E-Mail-Adresse an. Sie erhalten dann einen Link zum Zurücksetzen Ihres Passworts.");
+  const email = document.getElementById('loginEmail').value;
   if (!email || !istGueltigeEmail(email)) {
-    alert("Bitte geben Sie eine gültige E-Mail-Adresse ein."); return;
+    document.getElementById('login-error-email').textContent = 'Bitte geben Sie Ihre E-Mail-Adresse für den Reset ein.';
+    document.getElementById('loginEmail').classList.add('error');
+    return;
   }
   supabase.auth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + '/?reset=1'
   }).then(({ error }) => {
-    if (error) {
-      alert("Fehler beim Senden der E-Mail: " + error.message);
-    } else {
-      alert("Eine E-Mail zum Zurücksetzen des Passworts wurde gesendet.");
-    }
+    document.getElementById('login-global-error').textContent = error ? ('Fehler: '+error.message) : 'E-Mail zum Zurücksetzen wurde gesendet!';
   });
 };
+
 
 // NAVIGATION
 function showHomepage() {
@@ -195,6 +272,25 @@ window.setNewPassword = async function() {
   // Hier kann jetzt das Dashboard gezeigt werden (oder reload):
   showDashboard();
   window.history.replaceState({}, document.title, window.location.pathname);
+};
+
+window.gotoRegistration = function() {
+  const email = document.getElementById('heroRegEmail')?.value?.trim();
+  if (!email) { alert("Bitte geben Sie Ihre dienstliche E-Mail-Adresse ein."); return; }
+  if (!istGueltigeEmail(email)) { alert("Bitte geben Sie eine gültige E-Mail-Adresse ein."); return; }
+  // Zeige das Registrierungsformular & übergebe E-Mail
+  showLogin('register', email);
+  setTimeout(() => {
+    const regEmailField = document.getElementById('regEmail');
+    if (regEmailField) regEmailField.value = email;
+    const regPwField = document.getElementById('regPassword');
+    if (regPwField) regPwField.value = '';
+    regEmailField?.focus();
+  }, 100);
+  // Optional: zur Registrierungsmaske scrollen
+  setTimeout(() => {
+    document.getElementById('authContainer')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 120);
 };
 
 

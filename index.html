@@ -57,7 +57,7 @@
 
     <!-- REGISTRIERUNGSBEREICH wie vorher, modern -->
     <div class="hero-registerbox">
-      <form class="register-form" onsubmit="event.preventDefault(); registerFromHero();">
+      <form class="register-form" onsubmit="event.preventDefault(); gotoRegistration();">
         <input id="heroRegEmail" type="email" placeholder="Ihre dienstliche E-Mail-Adresse" required>
         <button type="submit">Jetzt bei VergabeAssistent registrieren</button>
       </form>
@@ -117,24 +117,56 @@
         <div class="form-group">
           <label for="loginEmail">E-Mail</label>
           <input id="loginEmail" type="email" placeholder="E-Mail">
+          <div class="form-error" id="login-error-email"></div>
         </div>
         <div class="form-group">
           <label for="loginPassword">Passwort</label>
           <input id="loginPassword" type="password" placeholder="Passwort">
+          <div class="form-error" id="login-error-password"></div>
         </div>
         <button type="button" onclick="login()">Anmelden</button>
-        <div style="margin-top:0.9em;font-size:0.95em;text-align:right;">
+        <div style="margin-top:0.8em;font-size:0.97em;text-align:right;">
           <a href="#" onclick="showForgotPassword();return false;" style="color:#0077b6;">Passwort vergessen?</a>
         </div>
+        <div class="form-error" id="login-global-error" style="text-align:center;margin-top:0.7em;"></div>
       </form>
       <form id="registerForm" class="auth-form-modern" style="display:none;">
-        <div class="form-group"><label for="regAnrede">Anrede</label><input id="regAnrede" placeholder="Anrede"></div>
-        <div class="form-group"><label for="regVorname">Vorname</label><input id="regVorname" placeholder="Vorname"></div>
-        <div class="form-group"><label for="regNachname">Nachname</label><input id="regNachname" placeholder="Nachname"></div>
-        <div class="form-group"><label for="regOrganisation">Organisation</label><input id="regOrganisation" placeholder="Organisation"></div>
-        <div class="form-group"><label for="regBundesland">Bundesland</label><input id="regBundesland" placeholder="Bundesland"></div>
-        <div class="form-group"><label for="regEmail">E-Mail</label><input id="regEmail" type="email" placeholder="E-Mail"></div>
-        <div class="form-group"><label for="regPassword">Passwort</label><input id="regPassword" type="password" placeholder="Passwort"></div>
+        <div class="form-group">
+          <label for="regAnrede">Anrede</label>
+          <input id="regAnrede" placeholder="Anrede">
+          <div class="form-error" id="error-anrede"></div>
+        </div>
+        <div class="form-group">
+          <label for="regVorname">Vorname</label>
+          <input id="regVorname" placeholder="Vorname">
+          <div class="form-error" id="error-vorname"></div>
+        </div>
+        <div class="form-group">
+          <label for="regNachname">Nachname</label>
+          <input id="regNachname" placeholder="Nachname">
+          <div class="form-error" id="error-nachname"></div>
+        </div>
+        <div class="form-group">
+          <label for="regOrganisation">Organisation</label>
+          <input id="regOrganisation" placeholder="Organisation">
+          <div class="form-error" id="error-organisation"></div>
+        </div>
+        <div class="form-group">
+          <label for="regBundesland">Bundesland</label>
+          <input id="regBundesland" placeholder="Bundesland">
+          <div class="form-error" id="error-bundesland"></div>
+        </div>
+        <div class="form-group">
+          <label for="regEmail">E-Mail</label>
+          <input id="regEmail" type="email" placeholder="E-Mail">
+          <div class="form-error" id="error-email"></div>
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Passwort</label>
+          <input id="regPassword" type="password" placeholder="Passwort" autocomplete="new-password">
+          <div class="form-error" id="error-password"></div>
+          <div class="pw-hint">Mindestens 10 Zeichen, je 1 Groß-, Kleinbuchstabe, Zahl &amp; Sonderzeichen.</div>
+        </div>
         <button type="button" onclick="register()">Registrieren</button>
       </form>
     </div>
@@ -176,6 +208,14 @@
     <a href="#features">Funktionen</a>
     <a href="#chat">KI-Chat</a>
     <a href="#kontakt">Kontakt</a>
+  </div>
+
+  <div id="successOverlay" style="display:none;position:fixed;z-index:1200;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.96);align-items:center;justify-content:center;text-align:center;">
+    <div style="background:#f7fafc;border-radius:18px;box-shadow:0 6px 48px #7db7ef22;padding:2.6em 2.3em;max-width:420px;margin:auto;">
+      <svg id="successCheck" style="width:54px;height:54px;margin-bottom:1em;" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#d1f8e1"/><path d="M14 25l7 7l13-13" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div id="successMsg" style="font-size:1.25em;color:#217b3a;font-weight:600;margin-bottom:1.1em;"></div>
+      <div style="color:#2a3441;opacity:0.7;">Sie werden gleich zur Startseite weitergeleitet…</div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
