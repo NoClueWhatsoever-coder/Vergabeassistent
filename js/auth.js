@@ -1,7 +1,7 @@
 // auth.js
 
 const supabaseUrl = 'https://jjkuvuywbwnvsgpbqlwo.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqa3V2dXl3YndudnNncGJxbHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzMDU3MjMsImV4cCI6MjA2Njg4MTcyM30.BeMfBKtYECSy8Sx_yH6Qh1Pwgd7KhNIA3jiBliE2DMM';
 const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 // Hilfsfunktion für E-Mail-Prüfung

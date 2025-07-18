@@ -9,25 +9,18 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-  <header>
-    <!-- Burger Menü (links) -->
-    <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()">
-      <span></span><span></span><span></span>
-    </div>
-    <!-- Neues Logo (links im Header) -->
-    <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="main-logo" style="height: 42px; margin-right: 1.4em;">
-    <div class="logo-text">VergabeAssist</div>
-    <nav>
-      <a href="#features">Funktionen</a>
-      <a href="#chat">KI-Chat</a>
-      <a href="#kontakt">Kontakt</a>
-    </nav>
-    <!-- Login-Button (rechts oben, wenn NICHT eingeloggt) -->
-    <button id="loginTopBtn" class="login-top-btn" onclick="showLogin('login');" style="display:none;">Login</button>
-    <div id="accountIcon" style="display:none;position:absolute;right:2rem;top:1.2rem;cursor:pointer;">
-      <span title="Account verwalten" style="font-size:2.1rem;">👤</span>
-    </div>
-  </header>
+<header>
+  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <!-- Nur Firmenlogo GovDisrupt AI, zentral -->
+  <div class="header-center">
+    <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo">
+  </div>
+  <nav> ... </nav>
+  <button id="loginTopBtn" ...>Login</button>
+  <div id="accountIcon" ...></div>
+</header>
 
   <!-- Firmenlogo zentral oben auf der Seite -->
   <div class="top-firm-logo" style="text-align:center;margin:2.1em 0 1.3em 0;">
@@ -43,7 +36,7 @@
       </video>
       <div class="hero-overlay hero-overlay-column">
         <div class="hero-textblock">
-          <h1>VergabeAssistent</h1>
+          <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="hero-big-logo">
           <div class="hero-headline">So effizient wie ein ganzes Team</div>
           <div class="hero-subline">KI-gestützt: Produktneutrale Leistungsbeschreibungen und Leistungsverzeichnisse erstellen</div>
         </div>
@@ -205,6 +198,12 @@
       if (e.target.closest('.sidebar-menu') || e.target.closest('.burger-menu')) return;
       document.getElementById('sidebarMenu').style.display = 'none';
     });
+    <div id="sidebarMenu" class="sidebar-menu" style="display:none;">
+      <button class="sidebar-close-btn" onclick="toggleSidebarMenu()" aria-label="Menü schließen">&times;</button>
+      <a href="#features">Funktionen</a>
+      <a href="#chat">KI-Chat</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
   </script>
 </body>
 </html>
