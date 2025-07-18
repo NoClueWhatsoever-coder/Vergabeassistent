@@ -560,7 +560,7 @@ footer {
   margin-right: 1em;
 }
 .top-firm-logo img {
-  max-height: 64px;
+  max-height: 128px;
 }
 .sidebar-menu {
   position: fixed; top: 0; left: 0; height: 100vh; width: 220px;
@@ -614,14 +614,14 @@ footer {
   z-index: 10;
 }
 .header-firm-logo {
-  height: 40px;
+  height: 80px;
 }
 @media (max-width: 700px) {
-  .header-firm-logo { height: 28px; }
+  .header-firm-logo { height: 56px; }
 }
 
 .hero-big-logo {
-  max-width: 370px;
+  max-width: 320px;
   width: 100%;
   margin-bottom: 1.1em;
   margin-top: 0.5em;
