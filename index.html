@@ -13,35 +13,30 @@
   <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()">
     <span></span><span></span><span></span>
   </div>
+  <!-- Firmenlogo GovDisrupt AI, zentriert im Header -->
   <div class="header-center">
     <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo">
   </div>
-  <nav>
-    <a href="#features">Funktionen</a>
-    <a href="#chat">KI-Chat</a>
-    <a href="#kontakt">Kontakt</a>
-  </nav>
-  <button id="loginTopBtn" class="login-top-btn" onclick="showLogin('login');">Login</button>
+  <button id="loginTopBtn" class="login-top-btn" onclick="scrollToLogin();">Login</button>
   <div id="accountIcon" style="display:none;position:absolute;right:2rem;top:1.2rem;cursor:pointer;">
     <span title="Account verwalten" style="font-size:2.1rem;">👤</span>
   </div>
 </header>
 
-  <!-- Firmenlogo groß zentral oben auf der Seite, auf Desktop sichtbar -->
-  <div class="top-firm-logo" style="text-align:center;margin:2.1em 0 1.3em 0;">
-    <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="hero-big-logo">
+  <!-- Großes VergabeAssist-Logo oben -->
+  <div class="top-firm-logo" style="text-align:center;margin:2em 0 2.1em 0;">
+    <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" style="max-width: 370px; width: 100%; height: auto;">
   </div>
 
   <main>
-    <!-- HERO-BEREICH MIT VIDEO UND CHAT -->
-    <section class="hero-video-bg">
-      <video autoplay loop muted playsinline class="hero-video">
+    <!-- HERO-BEREICH MIT VIDEO UND CHAT, weniger Höhe -->
+    <section class="hero-video-bg" style="height: 700px; min-height: 430px;">
+      <video autoplay loop muted playsinline class="hero-video" style="height: 700px; min-height: 430px;">
         <source src="videos/Startseitenvideo.mp4" type="video/mp4">
         Ihr Browser unterstützt kein HTML5-Video.
       </video>
       <div class="hero-overlay hero-overlay-column">
         <div class="hero-textblock">
-          <!-- Keine Überschrift mehr hier, da oben großes Logo ist -->
           <div class="hero-headline">So effizient wie ein ganzes Team</div>
           <div class="hero-subline">KI-gestützt: Produktneutrale Leistungsbeschreibungen und Leistungsverzeichnisse erstellen</div>
         </div>
@@ -60,13 +55,11 @@
       </div>
     </section>
 
+    <!-- REGISTRIERUNGSBEREICH wie vorher, modern -->
     <div class="hero-registerbox">
-      <form class="register-form-modern" onsubmit="event.preventDefault(); registerFromHero();">
-        <label for="heroRegEmail">Dienstliche E-Mail-Adresse</label>
-        <div style="display: flex; gap: 1.2em; align-items: center;">
-          <input id="heroRegEmail" type="email" placeholder="z.B. vorname.nachname@verwaltung.de" required>
-          <button type="submit">Jetzt registrieren</button>
-        </div>
+      <form class="register-form" onsubmit="event.preventDefault(); registerFromHero();">
+        <input id="heroRegEmail" type="email" placeholder="Ihre dienstliche E-Mail-Adresse" required>
+        <button type="submit">Jetzt bei VergabeAssistent registrieren</button>
       </form>
       <ul class="register-features">
         <li>Beschaffungsvorhaben anlegen</li>
@@ -164,13 +157,11 @@
     </div>
   </main>
 
-  <!-- Firmenlogo unten links im Footer -->
   <footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
     <img src="img/logo_clean_2.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
     <span style="flex:1;">&copy; 2025 VergabeAssist | Impressum | Datenschutz</span>
   </footer>
 
-  <!-- Sidebar-Menü für das Burger-Menü -->
   <div id="sidebarMenu" class="sidebar-menu" style="display:none;">
     <button class="sidebar-close-btn" onclick="toggleSidebarMenu()" aria-label="Menü schließen">&times;</button>
     <a href="#features">Funktionen</a>
@@ -178,7 +169,6 @@
     <a href="#kontakt">Kontakt</a>
   </div>
 
-  <!-- Skripte -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
@@ -194,13 +184,11 @@
       }
     }
     window.updateAccountIcon = updateAccountIcon;
-
     function updateLoginTopBtn() {
       const btn = document.getElementById('loginTopBtn');
       btn.style.display = window.currentUser ? 'none' : 'inline-block';
     }
     window.updateLoginTopBtn = updateLoginTopBtn;
-
     window.toggleSidebarMenu = function() {
       const sb = document.getElementById('sidebarMenu');
       sb.style.display = (sb.style.display === 'none' || !sb.style.display) ? 'flex' : 'none';
@@ -209,6 +197,14 @@
       if (e.target.closest('.sidebar-menu') || e.target.closest('.burger-menu')) return;
       document.getElementById('sidebarMenu').style.display = 'none';
     });
+    // Automatisches Scrollen zum Login-Bereich bei Klick auf Login-Button oben
+    window.scrollToLogin = function() {
+      showLogin('login');
+      setTimeout(() => {
+        const el = document.getElementById('authContainer');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 180);
+    }
   </script>
 </body>
 </html>
