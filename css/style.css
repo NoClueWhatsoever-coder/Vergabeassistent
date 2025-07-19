@@ -739,3 +739,16 @@ input.error, select.error {
   86% { transform: translateX(3px); }
   100% { transform: translateX(0); }
 }
+
+.form-group { margin-bottom: 1.3em; }
+label { font-weight: 600; font-size: 1.04em; margin-bottom: 0.14em; display:block; }
+input, select { width:100%;padding:0.86em 1.2em;border-radius:8px;border:1.2px solid #d0d7e2;font-size:1.06em;box-sizing:border-box;background:#fcfdfe;margin-top:0.1em;}
+input:focus, select:focus { outline:2px solid #009ee1; border-color:#009ee1; }
+.register-btn-modern { padding:0.95em 2.2em; background:#0077b6; color:#fff; border:none; border-radius:9px; font-size:1.09em; font-weight:600; cursor:pointer; transition:background 0.17s; margin-top:0.5em; letter-spacing:0.01em; box-shadow:0 2px 14px #0077b610; }
+.register-btn-modern:hover { background: #009ee1; }
+.form-error { color: #d32f2f; font-size: 0.97em; margin-top: 0.18em; min-height: 1.18em; font-weight: 500; transition: color 0.18s; }
+.pw-hint { font-size: 0.95em; color: #2374ad; margin-top: 0.18em; }
+.info-icon { display:inline-block; background:#e0ecfa;color:#1466a6; border-radius:60%; font-size:0.99em; font-weight:700; width:1.34em; height:1.34em; text-align:center; line-height:1.34em; cursor:pointer; margin-left:0.33em; border:1.1px solid #d2e4f6; }
+.info-icon:hover, .info-icon:focus { background:#e5f6fd; color:#0077b6; border-color:#99c1e6; outline:none; }
+
+

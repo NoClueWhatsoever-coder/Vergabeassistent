@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – VergabeAssist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header>
+  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="header-center">
+    <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo">
+  </div>
+  <button id="loginTopBtn" class="login-top-btn" style="display:none;">Login</button>
+  <div id="accountIcon" style="display:none;position:absolute;right:2rem;top:1.2rem;cursor:pointer;">
+    <span title="Account verwalten" style="font-size:2.1rem;">👤</span>
+  </div>
+</header>
+<!-- Firmenlogo zentral oben auf der Seite -->
+<div class="top-firm-logo" style="text-align:center;margin:2.1em 0 1.3em 0;">
+  <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="hero-big-logo" style="height:90px;">
+</div>
+<main>
+  <section id="dashboard" style="max-width:1000px;margin:2rem auto 2rem auto;">
+    <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
+      <h2>Meine Beschaffungsvorhaben</h2>
+      <button id="addProjectBtn" onclick="neueBeschaffung()" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="dashboard-table" style="width:100%;border-collapse:collapse;background:#fff;box-shadow:0 3px 32px #0077b610;border-radius:15px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f7fafc;color:#222b38;font-size:1.07em;">
+            <th style="padding:1em 0.6em;text-align:left;">Name</th>
+            <th style="padding:1em 0.6em;text-align:left;">Art der Leistung</th>
+            <th style="padding:1em 0.6em;text-align:left;">Status</th>
+            <th style="padding:1em 0.6em;text-align:left;">Erstellt am</th>
+            <th style="padding:1em 0.6em;text-align:left;">Zuletzt aktualisiert</th>
+          </tr>
+        </thead>
+        <tbody id="dashboardTableBody">
+          <tr>
+            <td colspan="5" style="padding:2.3em 0;text-align:center;color:#777;font-size:1.1em;">Noch keine Beschaffungsvorhaben angelegt.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
+  <img src="img/logo_clean_2.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
+  <span style="flex:1;">&copy; 2025 VergabeAssist | Impressum | Datenschutz</span>
+</footer>
+<!-- Burger-Menü-Sidebar -->
+<div id="sidebarMenu" class="sidebar-menu" style="display:none;">
+  <button class="sidebar-close-btn" onclick="toggleSidebarMenu()" aria-label="Menü schließen">&times;</button>
+  <a href="/">Startseite</a>
+  <a href="#">Beschaffungsvorhaben</a>
+  <a href="#">Account</a>
+</div>
+<script src="js/utils.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+window.toggleSidebarMenu = function() {
+  const sb = document.getElementById('sidebarMenu');
+  sb.style.display = (sb.style.display === 'none' || !sb.style.display) ? 'flex' : 'none';
+};
+document.addEventListener('click', e => {
+  if (e.target.closest('.sidebar-menu') || e.target.closest('.burger-menu')) return;
+  document.getElementById('sidebarMenu').style.display = 'none';
+});
+// Account-Icon
+function updateAccountIcon() {
+  const icon = document.getElementById('accountIcon');
+  icon.style.display = 'block';
+}
+window.updateAccountIcon = updateAccountIcon;
+// Login-Button oben ausblenden, wenn eingeloggt (hier optional)
+document.getElementById('loginTopBtn').style.display = 'none';
+</script>
+</body>
+</html>

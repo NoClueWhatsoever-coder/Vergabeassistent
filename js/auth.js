@@ -40,88 +40,86 @@ function showSuccessOverlay(msg) {
 
 // Registrierung im Dialog
 async function register() {
-  const fields = [
-    { id: 'regAnrede', label: 'Anrede' },
-    { id: 'regVorname', label: 'Vorname' },
-    { id: 'regNachname', label: 'Nachname' },
-    { id: 'regOrganisation', label: 'Organisation' },
-    { id: 'regBundesland', label: 'Bundesland' },
-    { id: 'regEmail', label: 'E-Mail' },
-    { id: 'regPassword', label: 'Passwort' }
-  ];
+  // Felder referenzieren & Pflicht prüfen
   let valid = true;
-  // Inline Fehler zurücksetzen
-  fields.forEach(f => {
-    const input = document.getElementById(f.id);
-    const errorDiv = document.getElementById('error-' + f.id.replace('reg','').toLowerCase());
-    input.classList.remove('error');
-    if (errorDiv) errorDiv.textContent = '';
-    if (!input.value.trim()) {
-      input.classList.add('error');
-      if (errorDiv) errorDiv.textContent = f.label + ' fehlt.';
-      valid = false;
-    }
-  });
-  // Passwort-Validierung nach Supabase-Policy
+  // Anrede
+  const anrede = document.getElementById('regAnrede').value;
+  if (!anrede) { document.getElementById('regAnrede').classList.add('error'); document.getElementById('error-anrede').textContent = "Bitte wählen Sie eine Anrede."; valid = false; }
+  else { document.getElementById('regAnrede').classList.remove('error'); document.getElementById('error-anrede').textContent = ""; }
+  // Vorname
+  const vorname = document.getElementById('regVorname').value;
+  if (!vorname) { document.getElementById('regVorname').classList.add('error'); document.getElementById('error-vorname').textContent = "Vorname fehlt."; valid = false; }
+  else { document.getElementById('regVorname').classList.remove('error'); document.getElementById('error-vorname').textContent = ""; }
+  // Nachname
+  const nachname = document.getElementById('regNachname').value;
+  if (!nachname) { document.getElementById('regNachname').classList.add('error'); document.getElementById('error-nachname').textContent = "Nachname fehlt."; valid = false; }
+  else { document.getElementById('regNachname').classList.remove('error'); document.getElementById('error-nachname').textContent = ""; }
+  // Organisation
+  const organisation = document.getElementById('regOrganisation').value;
+  if (!organisation) { document.getElementById('regOrganisation').classList.add('error'); document.getElementById('error-organisation').textContent = "Organisation/Behörde fehlt."; valid = false; }
+  else { document.getElementById('regOrganisation').classList.remove('error'); document.getElementById('error-organisation').textContent = ""; }
+  // E-Mail
+  const email = document.getElementById('regEmail').value;
+  if (!email) { document.getElementById('regEmail').classList.add('error'); document.getElementById('error-email').textContent = "E-Mail fehlt."; valid = false; }
+  else if (!istGueltigeEmail(email)) { document.getElementById('regEmail').classList.add('error'); document.getElementById('error-email').textContent = "Bitte geben Sie eine gültige E-Mail-Adresse ein."; valid = false; }
+  else { document.getElementById('regEmail').classList.remove('error'); document.getElementById('error-email').textContent = ""; }
+  // Telefon
+  const telefon = document.getElementById('regTelefon').value || null;
+  // Passwort
   const password = document.getElementById('regPassword').value;
   const pwError = document.getElementById('error-password');
-  const pwPolicy = {
-    minLength: 10,
-    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{10,}$/,
-  };
-  if (password && password.length < pwPolicy.minLength) {
+  const pwPolicy = { minLength: 10, pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z0-9]).{10,}$/ };
+  if (!password) { document.getElementById('regPassword').classList.add('error'); pwError.textContent = "Passwort fehlt."; valid = false; }
+  else if (password.length < pwPolicy.minLength) { document.getElementById('regPassword').classList.add('error'); pwError.textContent = "Das Passwort muss mindestens 10 Zeichen lang sein."; valid = false; }
+  else if (!pwPolicy.pattern.test(password)) {
     document.getElementById('regPassword').classList.add('error');
-    pwError.textContent = 'Das Passwort muss mindestens 10 Zeichen lang sein.';
-    valid = false;
-  } else if (password && !pwPolicy.pattern.test(password)) {
-    document.getElementById('regPassword').classList.add('error');
-    let fehlermeldung = 'Fehlt: ';
-    if (!/[a-z]/.test(password)) fehlermeldung += 'Kleinbuchstabe, ';
-    if (!/[A-Z]/.test(password)) fehlermeldung += 'Großbuchstabe, ';
-    if (!/\d/.test(password)) fehlermeldung += 'Zahl, ';
-    if (!/[^a-zA-Z0-9]/.test(password)) fehlermeldung += 'Sonderzeichen, ';
+    let fehlermeldung = "Fehlt: ";
+    if (!/[a-z]/.test(password)) fehlermeldung += "Kleinbuchstabe, ";
+    if (!/[A-Z]/.test(password)) fehlermeldung += "Großbuchstabe, ";
+    if (!/\\d/.test(password)) fehlermeldung += "Zahl, ";
+    if (!/[^a-zA-Z0-9]/.test(password)) fehlermeldung += "Sonderzeichen, ";
     pwError.textContent = fehlermeldung.replace(/, $/, '');
     valid = false;
-  } else {
-    document.getElementById('regPassword').classList.remove('error');
-    pwError.textContent = '';
-  }
-  // E-Mail checken
-  const email = document.getElementById('regEmail').value;
-  const emailError = document.getElementById('error-email');
-  if (email && !istGueltigeEmail(email)) {
-    document.getElementById('regEmail').classList.add('error');
-    emailError.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
-    valid = false;
-  } else if (emailError && !emailError.textContent) {
-    document.getElementById('regEmail').classList.remove('error');
-    emailError.textContent = '';
-  }
+  } else { document.getElementById('regPassword').classList.remove('error'); pwError.textContent = ""; }
+  // Bundesland
+  const bundesland = document.getElementById('regBundesland').value || null;
+
   if (!valid) return;
-  // Daten sammeln
-  const anrede = document.getElementById('regAnrede').value;
-  const vorname = document.getElementById('regVorname').value;
-  const nachname = document.getElementById('regNachname').value;
-  const organisation = document.getElementById('regOrganisation').value;
-  const bundesland = document.getElementById('regBundesland').value;
-  // Supabase Registration
+
+  // Supabase Signup (mit Zusatzdaten als user_metadata)
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { anrede, vorname, nachname, organisation, bundesland },
-      emailRedirectTo: window.location.origin + '/?registered=1'
+      data: { anrede, vorname, nachname, organisation, telefon, bundesland },
+      emailRedirectTo: window.location.origin + "/?registered=1"
     }
   });
+
   if (error) {
-    document.getElementById('error-email').textContent = error.message.includes('already registered') ? 
-      'E-Mail ist bereits registriert.' : ('Fehler: ' + error.message);
+    document.getElementById('error-email').textContent = error.message.includes('already registered')
+      ? 'E-Mail ist bereits registriert.' : ('Fehler: ' + error.message);
     return;
   }
-  // UX: Zeige Fortschrittsanzeige (s.u.)
-  showSuccessOverlay('Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox!');
+
+  // User-Profile direkt nach Registrierung in die Tabelle eintragen
+  // (Supabase muss eine Tabelle "profiles" haben mit user_id, anrede, vorname, nachname, organisation, bundesland)
+  if (data.user) {
+    await supabase.from('profiles').upsert([{
+      user_id: data.user.id,
+      anrede,
+      vorname,
+      nachname,
+      organisation,
+      telefon,
+      bundesland
+    }]);
+  }
+
+  showSuccessOverlay("Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox.");
   document.getElementById('registerForm').reset();
 }
+
 
 
 // LOGIN
@@ -162,7 +160,7 @@ async function login() {
   // Optional: Lade User-Profile, wie bei dir!
   const user = data.user;
   // ...
-  showDashboard();
+  window.location.href = "/dashboard.html";
 }
 
 
