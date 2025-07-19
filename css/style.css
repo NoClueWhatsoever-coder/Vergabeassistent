@@ -752,3 +752,31 @@ input:focus, select:focus { outline:2px solid #009ee1; border-color:#009ee1; }
 .info-icon:hover, .info-icon:focus { background:#e5f6fd; color:#0077b6; border-color:#99c1e6; outline:none; }
 
 
+.dashboard-hero-bg {
+  width: 100vw;
+  background: #fff;
+  padding-top: 3.7rem;
+  padding-bottom: 2.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 14px #e2eaf750;
+  min-height: 230px; /* Passe an wie auf Startseite */
+}
+.dashboard-hero-logo-container {
+  text-align: center;
+  width: 100%;
+}
+.dashboard-hero-logo {
+  height: 88px; /* wie auf Startseite, ggf. anpassen */
+  max-width: 98vw;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+@media (max-width: 700px) {
+  .dashboard-hero-bg { min-height: 110px; padding-top: 1.2rem; padding-bottom: 1.2rem; }
+  .dashboard-hero-logo { height: 56px; }
+}
+
+
