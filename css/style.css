@@ -538,15 +538,30 @@ footer {
   transition: all 0.2s;
 }
 .login-top-btn {
-  background: #0077b6; color: #fff; border: none; border-radius: 6px;
-  font-weight: 600; padding: 0.7em 1.6em; font-size: 1.08em; margin-left: 2em;
-  cursor: pointer; transition: background 0.16s, box-shadow 0.17s;
-  box-shadow: 0 2px 12px #0b8bc51a;
+  background: #fff;
+  color: #0077b6;
+  border: 1.4px solid #e2e6ef;
+  border-radius: 18px;
+  font-weight: 600;
+  padding: 0.42em 1em 0.42em 0.9em;
+  font-size: 1.03em;
+  display: flex;
+  align-items: center;
+  gap: 0.36em;
+  box-shadow: 0 1.5px 7px #0077b614;
+  cursor: pointer;
+  transition: background 0.17s, box-shadow 0.18s;
 }
 .login-top-btn:hover {
-  background: #009ee1;
-  box-shadow: 0 2px 20px #009ee111;
+  background: #f0f7fd;
+  color: #176fa6;
+  box-shadow: 0 2px 16px #0077b62a;
 }
+.login-top-btn .material-icons {
+  font-size: 1.6em;
+  vertical-align: middle;
+}
+
 
 .main-logo {
   height: 52px;
