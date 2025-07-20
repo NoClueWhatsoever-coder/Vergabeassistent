@@ -4,148 +4,113 @@ const supabaseUrl = 'https://jjkuvuywbwnvsgpbqlwo.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqa3V2dXl3YndudnNncGJxbHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzMDU3MjMsImV4cCI6MjA2Njg4MTcyM30.BeMfBKtYECSy8Sx_yH6Qh1Pwgd7KhNIA3jiBliE2DMM';
 const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-// Hilfsfunktion für E-Mail-Prüfung
+// --- Hilfsfunktionen
 function istGueltigeEmail(email) {
   const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return regex.test(email);
 }
 
-// Registrierung von der Startseite
-window.registerFromHero = async function() {
-  const email = document.getElementById('heroRegEmail')?.value?.trim();
-  if (!email) { alert("Bitte geben Sie Ihre dienstliche E-Mail-Adresse ein."); return; }
-  if (!istGueltigeEmail(email)) { alert("Bitte geben Sie eine gültige E-Mail-Adresse ein."); return; }
-  try {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      options: { emailRedirectTo: window.location.origin + "/?setpw=1" }
-    });
-    if (error) { alert("Fehler bei der Registrierung: " + error.message); return; }
-    alert("Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox!");
-    document.getElementById('heroRegEmail').value = '';
-    showLogin('login', email); // Login anzeigen, Email vorbelegen
-  } catch (err) {
-    alert("Fehler bei der Registrierung: " + err.message);
-  }
-};
-
-function showSuccessOverlay(msg) {
+// UX: Erfolgs-Overlay
+function showSuccessOverlay(msg, cb) {
   document.getElementById('successMsg').textContent = msg;
   document.getElementById('successOverlay').style.display = 'flex';
   setTimeout(() => {
     document.getElementById('successOverlay').style.display = 'none';
-    showHomepage();
-  }, 3600);
+    if (typeof cb === "function") cb();
+    else showHomepage();
+  }, 3200);
 }
 
-// Registrierung im Dialog
+// --- Registrierung (Schnellregistrierung: Modal öffnen & E-Mail vorfüllen)
+window.gotoRegistration = function() {
+  const email = document.getElementById('heroRegEmail')?.value?.trim();
+  if (!email) { showFieldError('heroRegEmail', "Bitte geben Sie Ihre dienstliche E-Mail-Adresse ein."); return; }
+  if (!istGueltigeEmail(email)) { showFieldError('heroRegEmail', "Bitte geben Sie eine gültige E-Mail-Adresse ein."); return; }
+  openAuthModal('register');
+  setTimeout(() => {
+    const regEmailField = document.getElementById('regEmail');
+    if (regEmailField) regEmailField.value = email;
+    regEmailField?.focus();
+  }, 100);
+}
+
+// --- Registrierung MODAL
 async function register() {
-  // Felder referenzieren & Pflicht prüfen
-  let valid = true;
-  // Anrede
+  // Felder holen
   const anrede = document.getElementById('regAnrede').value;
-  if (!anrede) { document.getElementById('regAnrede').classList.add('error'); document.getElementById('error-anrede').textContent = "Bitte wählen Sie eine Anrede."; valid = false; }
-  else { document.getElementById('regAnrede').classList.remove('error'); document.getElementById('error-anrede').textContent = ""; }
-  // Vorname
   const vorname = document.getElementById('regVorname').value;
-  if (!vorname) { document.getElementById('regVorname').classList.add('error'); document.getElementById('error-vorname').textContent = "Vorname fehlt."; valid = false; }
-  else { document.getElementById('regVorname').classList.remove('error'); document.getElementById('error-vorname').textContent = ""; }
-  // Nachname
   const nachname = document.getElementById('regNachname').value;
-  if (!nachname) { document.getElementById('regNachname').classList.add('error'); document.getElementById('error-nachname').textContent = "Nachname fehlt."; valid = false; }
-  else { document.getElementById('regNachname').classList.remove('error'); document.getElementById('error-nachname').textContent = ""; }
-  // Organisation
   const organisation = document.getElementById('regOrganisation').value;
-  if (!organisation) { document.getElementById('regOrganisation').classList.add('error'); document.getElementById('error-organisation').textContent = "Organisation/Behörde fehlt."; valid = false; }
-  else { document.getElementById('regOrganisation').classList.remove('error'); document.getElementById('error-organisation').textContent = ""; }
-  // E-Mail
-  const email = document.getElementById('regEmail').value;
-  if (!email) { document.getElementById('regEmail').classList.add('error'); document.getElementById('error-email').textContent = "E-Mail fehlt."; valid = false; }
-  else if (!istGueltigeEmail(email)) { document.getElementById('regEmail').classList.add('error'); document.getElementById('error-email').textContent = "Bitte geben Sie eine gültige E-Mail-Adresse ein."; valid = false; }
-  else { document.getElementById('regEmail').classList.remove('error'); document.getElementById('error-email').textContent = ""; }
-  // Telefon
+  const bundesland = document.getElementById('regBundesland').value || null;
   const telefon = document.getElementById('regTelefon').value || null;
-  // Passwort
+  const email = document.getElementById('regEmail').value;
   const password = document.getElementById('regPassword').value;
-  const pwError = document.getElementById('error-password');
-  const pwPolicy = { minLength: 10, pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^a-zA-Z0-9]).{10,}$/ };
-  if (!password) { document.getElementById('regPassword').classList.add('error'); pwError.textContent = "Passwort fehlt."; valid = false; }
-  else if (password.length < pwPolicy.minLength) { document.getElementById('regPassword').classList.add('error'); pwError.textContent = "Das Passwort muss mindestens 10 Zeichen lang sein."; valid = false; }
+
+  // Validierung
+  let valid = true;
+  // Pflichtfelder
+  valid &= showFieldError('regAnrede', anrede ? "" : "Bitte wählen Sie eine Anrede.");
+  valid &= showFieldError('regVorname', vorname ? "" : "Vorname fehlt.");
+  valid &= showFieldError('regNachname', nachname ? "" : "Nachname fehlt.");
+  valid &= showFieldError('regOrganisation', organisation ? "" : "Organisation/Behörde fehlt.");
+  valid &= showFieldError('regEmail', email ? "" : "E-Mail fehlt.");
+  if (email && !istGueltigeEmail(email)) { valid = false; showFieldError('regEmail', "Bitte geben Sie eine gültige E-Mail-Adresse ein."); }
+  // Passwortpolicy
+  const pwPolicy = { minLength: 10, pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{10,}$/ };
+  if (!password) { valid = false; showFieldError('regPassword', "Passwort fehlt."); }
+  else if (password.length < pwPolicy.minLength) { valid = false; showFieldError('regPassword', "Das Passwort muss mindestens 10 Zeichen lang sein."); }
   else if (!pwPolicy.pattern.test(password)) {
-    document.getElementById('regPassword').classList.add('error');
+    valid = false;
     let fehlermeldung = "Fehlt: ";
     if (!/[a-z]/.test(password)) fehlermeldung += "Kleinbuchstabe, ";
     if (!/[A-Z]/.test(password)) fehlermeldung += "Großbuchstabe, ";
-    if (!/\\d/.test(password)) fehlermeldung += "Zahl, ";
+    if (!/\d/.test(password)) fehlermeldung += "Zahl, ";
     if (!/[^a-zA-Z0-9]/.test(password)) fehlermeldung += "Sonderzeichen, ";
-    pwError.textContent = fehlermeldung.replace(/, $/, '');
-    valid = false;
-  } else { document.getElementById('regPassword').classList.remove('error'); pwError.textContent = ""; }
-  // Bundesland
-  const bundesland = document.getElementById('regBundesland').value || null;
-
+    showFieldError('regPassword', fehlermeldung.replace(/, $/, ''));
+  } else { showFieldError('regPassword', ""); }
   if (!valid) return;
 
-  // Supabase Signup (mit Zusatzdaten als user_metadata)
+  // Supabase Signup
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { anrede, vorname, nachname, organisation, telefon, bundesland },
+      data: { anrede, vorname, nachname, organisation, bundesland, telefon },
       emailRedirectTo: window.location.origin + "/?registered=1"
     }
   });
-
   if (error) {
-    document.getElementById('error-email').textContent = error.message.includes('already registered')
-      ? 'E-Mail ist bereits registriert.' : ('Fehler: ' + error.message);
+    showFieldError('regEmail', error.message.includes('already registered')
+      ? 'E-Mail ist bereits registriert.' : ('Fehler: ' + error.message));
     return;
   }
 
-  // User-Profile direkt nach Registrierung in die Tabelle eintragen
-  // (Supabase muss eine Tabelle "profiles" haben mit user_id, anrede, vorname, nachname, organisation, bundesland)
+  // Profile direkt anlegen (empfohlen!)
   if (data.user) {
     await supabase.from('profiles').upsert([{
       user_id: data.user.id,
-      anrede,
-      vorname,
-      nachname,
-      organisation,
-      telefon,
-      bundesland
+      anrede, vorname, nachname, organisation, bundesland, telefon
     }]);
   }
-
-  showSuccessOverlay("Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox.");
+  // UX
+  showSuccessOverlay("Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox.", () => {
+    closeAuthModal();
+    showHomepage();
+  });
   document.getElementById('registerForm').reset();
 }
 
-
-
-// LOGIN
+// --- LOGIN
 async function login() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
   let valid = true;
-  document.getElementById('login-error-email').textContent = '';
-  document.getElementById('login-error-password').textContent = '';
+  showFieldError('loginEmail', "");
+  showFieldError('loginPassword', "");
   document.getElementById('login-global-error').textContent = '';
-  document.getElementById('loginEmail').classList.remove('error');
-  document.getElementById('loginPassword').classList.remove('error');
-  if (!email) {
-    document.getElementById('login-error-email').textContent = 'E-Mail fehlt.';
-    document.getElementById('loginEmail').classList.add('error');
-    valid = false;
-  } else if (!istGueltigeEmail(email)) {
-    document.getElementById('login-error-email').textContent = 'Bitte gültige E-Mail.';
-    document.getElementById('loginEmail').classList.add('error');
-    valid = false;
-  }
-  if (!password) {
-    document.getElementById('login-error-password').textContent = 'Passwort fehlt.';
-    document.getElementById('loginPassword').classList.add('error');
-    valid = false;
-  }
+  if (!email) { valid = false; showFieldError('loginEmail', "E-Mail fehlt."); }
+  else if (!istGueltigeEmail(email)) { valid = false; showFieldError('loginEmail', "Bitte gültige E-Mail."); }
+  if (!password) { valid = false; showFieldError('loginPassword', "Passwort fehlt."); }
   if (!valid) return;
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
@@ -154,17 +119,14 @@ async function login() {
     else if (error.message.includes('not confirmed')) message = 'Bitte E-Mail erst bestätigen.';
     else message += error.message;
     document.getElementById('login-global-error').textContent = message;
-    document.getElementById('loginPassword').classList.add('error');
+    showFieldError('loginPassword', message);
     return;
   }
-  // Optional: Lade User-Profile, wie bei dir!
-  const user = data.user;
-  // ...
+  // Nach Login weiterleiten
   window.location.href = "/dashboard.html";
 }
 
-
-// LOGOUT
+// --- LOGOUT
 async function logout() {
   await supabase.auth.signOut();
   window.currentUser = null;
@@ -173,17 +135,11 @@ async function logout() {
   localStorage.removeItem("guestChatDate");
 }
 
-function updateLoginTopBtn() {
-  const btn = document.getElementById('loginTopBtn');
-  btn.style.display = window.currentUser ? 'none' : 'inline-block';
-}
-window.updateLoginTopBtn = updateLoginTopBtn;
-
+// --- Passwort vergessen (UX mit Fehler)
 window.showForgotPassword = function() {
   const email = document.getElementById('loginEmail').value;
   if (!email || !istGueltigeEmail(email)) {
-    document.getElementById('login-error-email').textContent = 'Bitte geben Sie Ihre E-Mail-Adresse für den Reset ein.';
-    document.getElementById('loginEmail').classList.add('error');
+    showFieldError('loginEmail', 'Bitte geben Sie Ihre E-Mail-Adresse für den Reset ein.');
     return;
   }
   supabase.auth.resetPasswordForEmail(email, {
@@ -193,72 +149,11 @@ window.showForgotPassword = function() {
   });
 };
 
-
-// NAVIGATION
-function showHomepage() {
-  document.getElementById('homepage').style.display = 'block';
-  document.getElementById('authContainer').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'none';
-}
-
-function showLogin(tab = "login", email = "") {
-  document.getElementById('homepage').style.display = 'none';
-  document.getElementById('authContainer').style.display = 'block';
-  switchTab(tab);
-  if (tab === "register" && email) {
-    document.getElementById("regEmail").value = email;
-  }
-  if (tab === "login" && email) {
-    document.getElementById("loginEmail").value = email;
-  }
-}
-
-function switchTab(tab) {
-  const loginForm = document.getElementById('loginForm');
-  const registerForm = document.getElementById('registerForm');
-  const tabs = document.querySelectorAll('.auth-tab');
-  tabs.forEach(t => t.classList.remove('active'));
-  if (tab === 'login') {
-    loginForm.style.display = 'block';
-    registerForm.style.display = 'none';
-    tabs[0].classList.add('active');
-  } else {
-    loginForm.style.display = 'none';
-    registerForm.style.display = 'block';
-    tabs[1].classList.add('active');
-  }
-}
-
-// Weiterleitung abfangen: Registrierung oder Passwort-Reset
-function handleRegisteredRedirect() {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('setpw')) {
-    // Passwort-Setzen-Formular anzeigen
-    document.getElementById('setPasswordContainer').style.display = 'block';
-    document.getElementById('homepage').style.display = 'none';
-    document.getElementById('authContainer').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'none';
-    window.scrollTo(0, 180);
-    return;
-  }
-  if (urlParams.has('registered')) {
-    showLogin('login');
-    alert("Registrierung erfolgreich! Bitte loggen Sie sich jetzt ein.");
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-  if (urlParams.has('reset')) {
-    alert("Ihr Passwort wurde erfolgreich geändert. Sie können sich jetzt mit dem neuen Passwort einloggen.");
-    showLogin('login');
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-}
-document.addEventListener('DOMContentLoaded', handleRegisteredRedirect);
-
-
+// --- SET PASSWORD nach Opt-In-Link
 window.setNewPassword = async function() {
   const pw = document.getElementById('newPassword').value;
-  if (!pw || pw.length < 8) {
-    alert('Bitte ein sicheres Passwort (mind. 8 Zeichen) eingeben!');
+  if (!pw || pw.length < 10) {
+    alert('Bitte ein sicheres Passwort (mind. 10 Zeichen) eingeben!');
     return;
   }
   const { data, error } = await supabase.auth.updateUser({ password: pw });
@@ -267,35 +162,75 @@ window.setNewPassword = async function() {
     return;
   }
   alert('Passwort erfolgreich gesetzt! Sie sind jetzt eingeloggt.');
-  // Hier kann jetzt das Dashboard gezeigt werden (oder reload):
-  showDashboard();
-  window.history.replaceState({}, document.title, window.location.pathname);
+  window.location.href = "/dashboard.html";
 };
 
-window.gotoRegistration = function() {
-  const email = document.getElementById('heroRegEmail')?.value?.trim();
-  if (!email) { alert("Bitte geben Sie Ihre dienstliche E-Mail-Adresse ein."); return; }
-  if (!istGueltigeEmail(email)) { alert("Bitte geben Sie eine gültige E-Mail-Adresse ein."); return; }
-  // Zeige das Registrierungsformular & übergebe E-Mail
-  showLogin('register', email);
+// --- Feld-Fehler-UX
+function showFieldError(id, msg) {
+  const inp = document.getElementById(id);
+  const errDiv = document.getElementById('error-' + id.replace(/^(reg|login)/, '').toLowerCase());
+  if (inp && msg) { inp.classList.add('error'); if (errDiv) errDiv.textContent = msg; return false; }
+  if (inp) inp.classList.remove('error');
+  if (errDiv) errDiv.textContent = '';
+  return true;
+}
+
+// --- Modal-Handling
+function openAuthModal(tab = "login") {
+  document.getElementById('authModalBackdrop').style.display = 'flex';
+  switchAuthModal(tab);
   setTimeout(() => {
-    const regEmailField = document.getElementById('regEmail');
-    if (regEmailField) regEmailField.value = email;
-    const regPwField = document.getElementById('regPassword');
-    if (regPwField) regPwField.value = '';
-    regEmailField?.focus();
+    if(tab === 'login') document.getElementById('loginEmail').focus();
+    else document.getElementById('regAnrede').focus();
   }, 100);
-  // Optional: zur Registrierungsmaske scrollen
-  setTimeout(() => {
-    document.getElementById('authContainer')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 120);
-};
+  document.body.classList.add('modal-open');
+}
+function closeAuthModal() {
+  document.getElementById('authModalBackdrop').style.display = 'none';
+  document.body.classList.remove('modal-open');
+}
+function switchAuthModal(tab) {
+  document.getElementById('loginTab').style.display = (tab === 'login') ? 'block' : 'none';
+  document.getElementById('registerTab').style.display = (tab === 'register') ? 'block' : 'none';
+  document.getElementById('login-global-error').textContent = '';
+  document.getElementById('register-global-error').textContent = '';
+}
+// Modal mit Escape schließen
+document.addEventListener('keydown', function(e){
+  if (e.key === "Escape" && document.getElementById('authModalBackdrop').style.display === 'flex') closeAuthModal();
+});
+document.getElementById('authModalBackdrop').addEventListener('click', function(e){
+  if (e.target === this) closeAuthModal();
+});
 
+// --- Weiterleitung abfangen (Opt-In/SetPW/Reset)
+function handleRegisteredRedirect() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('setpw')) {
+    document.getElementById('setPasswordContainer').style.display = 'block';
+    document.getElementById('homepage').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'none';
+    window.scrollTo(0, 180);
+    return;
+  }
+  if (urlParams.has('registered')) {
+    openAuthModal('login');
+    showSuccessOverlay("Registrierung erfolgreich! Bitte loggen Sie sich jetzt ein.", closeAuthModal);
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+  if (urlParams.has('reset')) {
+    showSuccessOverlay("Ihr Passwort wurde erfolgreich geändert. Sie können sich jetzt mit dem neuen Passwort einloggen.", closeAuthModal);
+    openAuthModal('login');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+}
+document.addEventListener('DOMContentLoaded', handleRegisteredRedirect);
 
-// Für HTML-Events global sichtbar machen
+// Für globale Verwendung
 window.register = register;
 window.login = login;
 window.logout = logout;
-window.showHomepage = showHomepage;
-window.showLogin = showLogin;
-window.switchTab = switchTab;
+window.openAuthModal = openAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.switchAuthModal = switchAuthModal;
+window.showFieldError = showFieldError;
