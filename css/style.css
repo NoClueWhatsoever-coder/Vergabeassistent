@@ -838,3 +838,73 @@ input:focus, select:focus { outline:2px solid #009ee1; border-color:#009ee1; }
 .login-btn-modern:hover { background: #009ee1; }
 
 
+.auth-modal {
+  max-width: 410px;
+  width: 96vw;
+  overflow-y: auto;
+  max-height: 96vh;
+  margin: 2.2em auto;
+  border-radius: 18px;
+  box-shadow: 0 8px 40px #042a471a;
+  background: #fff;
+  padding: 2.5em 1.2em 2em 1.2em;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 540px) {
+  .auth-modal {
+    max-width: 99vw;
+    padding: 1.5em 0.4em 1.2em 0.4em;
+  }
+  .auth-form-modern .form-group {
+    margin-bottom: 1em;
+  }
+}
+
+
+.info-icon {
+  display: inline-block;
+  margin-left: 0.3em;
+  background: #e7f0fa;
+  color: #176fa6;
+  border-radius: 50%;
+  font-weight: 700;
+  width: 1.23em;
+  height: 1.23em;
+  text-align: center;
+  font-size: 1em;
+  cursor: pointer;
+  position: relative;
+  line-height: 1.25em;
+  border: 1px solid #b3d8fa;
+  transition: background 0.17s, color 0.17s;
+}
+
+.info-icon:hover,
+.info-icon:focus {
+  background: #176fa6;
+  color: #fff;
+}
+
+.info-icon[data-tooltip]:hover::after,
+.info-icon[data-tooltip]:focus::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 120%;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 220px;
+  max-width: 320px;
+  background: #fff;
+  color: #183a56;
+  font-size: 0.99em;
+  border: 1px solid #c4d8ef;
+  box-shadow: 0 4px 32px #176fa62a;
+  border-radius: 10px;
+  padding: 0.7em 1.2em;
+  z-index: 300;
+  white-space: normal;
+}
+
+
