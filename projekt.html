@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Beschaffungsvorhaben – VergabeAssist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+  <div style="display:flex;align-items:center;gap:1em;">
+    <a href="dashboard.html" style="text-decoration:none;color:#0077b6;font-weight:700;font-size:1.2em;">&#8592; Zurück zum Dashboard</a>
+    <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="height:32px;">
+  </div>
+</header>
+
+<main style="max-width:700px;margin:2em auto;">
+  <!-- Projektdetails -->
+  <section class="projekt-info" style="margin-bottom:2em;">
+    <h2 id="projektTitel">Lädt...</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.7em;">
+      <div><b>Art:</b> <span id="projektArt">–</span></div>
+      <div><b>Frist:</b> <span id="projektFrist">–</span></div>
+      <div><b>Schätzwert:</b> <span id="projektSchaetzwert">–</span></div>
+      <div><b>CPV-Code:</b> <span id="projektCPV">–</span></div>
+    </div>
+  </section>
+
+  <!-- Chatbereich -->
+  <section class="chat-container" style="border:1px solid #ddd;border-radius:5px;display:flex;flex-direction:column;height:480px;">
+    <div class="chat-header" style="background:#f7f7f7;padding:0.7em 1em;border-bottom:1px solid #ddd;">
+      <h3 style="display:inline;">Bedarfsbeschreibung & Verlauf</h3>
+      <span class="info-icon" title="Bitte beschreiben Sie Ihren Bedarf so detailliert wie möglich oder laden Sie eine Datei hoch." style="margin-left:1em;cursor:help;">ℹ️</span>
+    </div>
+    <div id="chatMessages" class="chat-messages" style="flex:1;padding:1em;overflow-y:auto;background:#fafbfc;"></div>
+    <div class="chat-input-area" style="display:flex;border-top:1px solid #ddd;">
+      <textarea id="chatInput" placeholder="Beschreibung eingeben oder Datei hier ablegen..." style="flex:1;padding:0.7em;font:inherit;resize:vertical;"></textarea>
+      <button id="sendBtn" style="background:#0077b6;color:#fff;border:none;padding:0 1.5em;margin-left:0.4em;font-weight:600;font-size:1.1em;cursor:pointer;border-radius:4px;">Senden</button>
+    </div>
+  </section>
+</main>
+
+<footer style="margin:2em auto;text-align:center;">
+  <img src="img/logo_govdisrupt_ai.png" alt="Logo" style="height:36px;margin-right:1.4em;">
+  <span>&copy; 2025 VergabeAssist | Impressum | Datenschutz</span>
+</footer>
+
+<script src="js/projekt.js"></script>
+</body>
+</html>

@@ -22,7 +22,6 @@
   </div>
 </header>
 
-<!-- Weißer Bereich oben mit Logo wie auf Startseite -->
 <div class="dashboard-hero-bg">
   <div class="dashboard-hero-logo-container">
     <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="dashboard-hero-logo">
@@ -32,28 +31,59 @@
   <section id="dashboard" style="max-width:1000px;margin:2rem auto 2rem auto;">
     <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
       <h2>Meine Beschaffungsvorhaben</h2>
-      <button id="addProjectBtn" onclick="neueBeschaffung()" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
+      <button id="addProjectBtn" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
     </div>
     <div style="overflow-x:auto;">
       <table class="dashboard-table" style="width:100%;border-collapse:collapse;background:#fff;box-shadow:0 3px 32px #0077b610;border-radius:15px;overflow:hidden;">
         <thead>
           <tr style="background:#f7fafc;color:#222b38;font-size:1.07em;">
-            <th style="padding:1em 0.6em;text-align:left;">Name</th>
-            <th style="padding:1em 0.6em;text-align:left;">Art der Leistung</th>
-            <th style="padding:1em 0.6em;text-align:left;">Status</th>
-            <th style="padding:1em 0.6em;text-align:left;">Erstellt am</th>
-            <th style="padding:1em 0.6em;text-align:left;">Zuletzt aktualisiert</th>
+            <th>Name</th>
+            <th>Art der Leistung</th>
+            <th>Status</th>
+            <th>Erstellt am</th>
+            <th>Zuletzt aktualisiert</th>
+            <th>Aktion</th>
           </tr>
         </thead>
         <tbody id="dashboardTableBody">
           <tr>
-            <td colspan="5" style="padding:2.3em 0;text-align:center;color:#777;font-size:1.1em;">Noch keine Beschaffungsvorhaben angelegt.</td>
+            <td colspan="6" style="padding:2.3em 0;text-align:center;color:#777;font-size:1.1em;">Noch keine Beschaffungsvorhaben angelegt.</td>
           </tr>
         </tbody>
       </table>
     </div>
   </section>
 </main>
+
+<!-- Modal für Neues Projekt -->
+<div id="newProjectModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Neues Beschaffungsvorhaben</h2>
+      <span id="closeModalBtn" class="close-btn">&times;</span>
+    </div>
+    <div class="modal-body">
+      <form id="projectForm">
+        <label>Titel der Beschaffung:</label>
+        <input type="text" id="beschaffungTitel" required />
+        <label>Art der Beschaffung:</label>
+        <select id="beschaffungArt" required>
+          <option value="" disabled selected>Bitte auswählen</option>
+          <option value="Bauleistung">Bauleistung</option>
+          <option value="Lieferleistung">Lieferleistung</option>
+          <option value="Dienstleistung">Dienstleistung</option>
+        </select>
+        <label>Liefertermin / Ausführungsfrist:</label>
+        <input type="text" id="beschaffungFrist" placeholder="z.B. 30.06.2024 oder 6 Wochen ab Auftrag" />
+        <label>Schätzwert (optional):</label>
+        <input type="number" id="beschaffungSchaetzwert" placeholder="in EUR" />
+        <label>CPV-Code (optional):</label>
+        <input type="text" id="beschaffungCPV" placeholder="z.B. 45233100-0" />
+        <button type="submit" style="margin-top:1em;">Projekt anlegen</button>
+      </form>
+    </div>
+  </div>
+</div>
 <footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
   <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
   <span style="flex:1;">&copy; 2025 VergabeAssist | Impressum | Datenschutz</span>
