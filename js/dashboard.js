@@ -5,19 +5,31 @@ const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 let beschaffungsdaten = [];
 
+// Projekte laden - nur für eingeloggten User!
 async function ladeProjekte() {
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
+    alert("Sie sind nicht eingeloggt. Bitte melden Sie sich an.");
+    beschaffungsdaten = [];
+    updateBeschaffungstabelle();
+    return;
+  }
   const { data, error } = await supabase
     .from('projekte')
     .select('*')
-    .order('created_at', { ascending: false });
+    .eq('user_id', user.id)
+    .order('erstellt_am', { ascending: false });
   if (error) {
-    alert('Fehler beim Laden der Projekte');
+    alert('Fehler beim Laden der Projekte: ' + error.message);
+    beschaffungsdaten = [];
+    updateBeschaffungstabelle();
     return;
   }
   beschaffungsdaten = data;
   updateBeschaffungstabelle();
 }
 
+// Tabelle updaten
 function updateBeschaffungstabelle() {
   const tbody = document.getElementById('dashboardTableBody');
   tbody.innerHTML = '';
@@ -43,6 +55,7 @@ function updateBeschaffungstabelle() {
 const modal = document.getElementById('newProjectModal');
 document.getElementById('addProjectBtn').onclick = () => {
   modal.style.display = 'block';
+  document.getElementById('projectForm').reset();
 };
 document.getElementById('closeModalBtn').onclick = () => {
   modal.style.display = 'none';
@@ -51,7 +64,7 @@ window.onclick = (e) => {
   if (e.target === modal) modal.style.display = 'none';
 };
 
-// Formular absenden
+// Formular absenden (mit user_id)
 const form = document.getElementById('projectForm');
 form.onsubmit = async (e) => {
   e.preventDefault();
@@ -61,20 +74,28 @@ form.onsubmit = async (e) => {
   const frist = document.getElementById('beschaffungFrist').value.trim();
   const schaetzwert = document.getElementById('beschaffungSchaetzwert').value.trim();
   const cpv = document.getElementById('beschaffungCPV').value.trim();
-  // In Supabase speichern
+
+  // User holen
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
+    alert("Sie sind nicht eingeloggt. Bitte melden Sie sich an.");
+    return;
+  }
+
+  // Projekt speichern (Timestamp-Felder werden automatisch von Supabase gesetzt)
   const { data, error } = await supabase.from('projekte').insert([{
-    titel, art, frist, schaetzwert, cpv,
+    titel, art, frist, schaetzwert: schaetzwert || null, cpv: cpv || null,
     status: 'Neu angelegt',
-    erstellt_am: new Date().toISOString(),
-    aktualisiert_am: new Date().toISOString()
+    user_id: user.id
   }]).select().single();
   if(error) {
-    alert('Fehler beim Anlegen des Projekts');
+    alert('Fehler beim Anlegen des Projekts: ' + error.message);
     return;
   }
   beschaffungsdaten.unshift(data); // oben einfügen
   updateBeschaffungstabelle();
   modal.style.display = 'none';
+  form.reset();
 };
 
 window.addEventListener('DOMContentLoaded', ladeProjekte);

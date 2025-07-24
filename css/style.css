@@ -1,3 +1,8 @@
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
@@ -768,7 +773,7 @@ input:focus, select:focus { outline:2px solid #009ee1; border-color:#009ee1; }
 
 
 .dashboard-hero-bg {
-  width: 100vw;
+  width: 100%;
   background: #fff;
   padding-top: 3.7rem;
   padding-bottom: 2.6rem;
