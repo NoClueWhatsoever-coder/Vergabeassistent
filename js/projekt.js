@@ -2,7 +2,7 @@
 
 // 1. Supabase Setup (anpassen!)
 const supabaseUrl = 'https://jjkuvuywbwnvsgpbqlwo.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // gekürzt
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqa3V2dXl3YndudnNncGJxbHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzMDU3MjMsImV4cCI6MjA2Njg4MTcyM30.BeMfBKtYECSy8Sx_yH6Qh1Pwgd7KhNIA3jiBliE2DMM'; // gekürzt
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 // 2. Hole Projekt-ID aus URL
