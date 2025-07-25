@@ -5,6 +5,21 @@
   <title>Beschaffungsvorhaben – VergabeAssist</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Kurz eingebettet für das "+" Symbol unter dem Chat */
+    .upload-row {
+      display: flex; justify-content: flex-end; align-items: center; margin: 0.3em 0 0 0;
+    }
+    .upload-btn {
+      display: flex; align-items: center; justify-content: center;
+      background: #e9f5ff; color: #0077b6; border-radius: 50%; border: none;
+      width: 2.2em; height: 2.2em; font-size: 1.7em; cursor: pointer;
+      margin-top: 0.1em; box-shadow: 0 1px 4px #0077b616;
+      transition: background 0.13s;
+    }
+    .upload-btn:hover { background: #c6e6ff; }
+    .upload-btn input[type="file"] { display: none; }
+  </style>
 </head>
 <body>
 <header>
@@ -24,6 +39,10 @@
       <div><b>Schätzwert:</b> <span id="projektSchaetzwert">–</span></div>
       <div><b>CPV-Code:</b> <span id="projektCPV">–</span></div>
     </div>
+    <div style="margin-top:1em;display:flex;justify-content:space-between;align-items:center;">
+      <div><b>Status:</b> <span id="projektStatus">–</span></div>
+      <button id="abschliessenBtn" style="background:#39a800;color:#fff;font-weight:600;border:none;padding:0.5em 1.2em;border-radius:5px;cursor:pointer;display:none;">LV als abgeschlossen markieren</button>
+    </div>
   </section>
 
   <!-- Chatbereich -->
@@ -36,6 +55,16 @@
     <div class="chat-input-area" style="display:flex;border-top:1px solid #ddd;">
       <textarea id="chatInput" placeholder="Beschreibung eingeben oder Datei hier ablegen..." style="flex:1;padding:0.7em;font:inherit;resize:vertical;"></textarea>
       <button id="sendBtn" style="background:#0077b6;color:#fff;border:none;padding:0 1.5em;margin-left:0.4em;font-weight:600;font-size:1.1em;cursor:pointer;border-radius:4px;">Senden</button>
+    </div>
+    <!-- Upload-Button unter dem Chatfeld -->
+    <div class="upload-row">
+      <label class="upload-btn" title="Datei von deinem Computer einfügen">
+        +
+        <input type="file" id="fileUpload" accept=".txt,.docx,.pdf,.json" />
+      </label>
+    </div>
+    <div style="text-align:right;margin:0.7em 0 0 0;">
+      <button id="abschliessenBtn" style="background:#39a800;color:#fff;font-weight:600;border:none;padding:0.5em 1.2em;border-radius:5px;cursor:pointer;">LV als abgeschlossen markieren</button>
     </div>
   </section>
 </main>

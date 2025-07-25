@@ -11,14 +11,18 @@ function getProjektId() {
   return params.get('id');
 }
 
-// 3. Projektdaten laden & anzeigen
+// Hilfsfunktion: Sicheres Anzeigen (verträgt null/undefined/"" und verschiedene Feldnamen)
+function zeigeFeld(val) {
+  if (val === undefined || val === null || val === "") return "-";
+  return val;
+}
+
 async function ladeProjekt() {
   const id = getProjektId();
   if (!id) {
     alert('Keine Projekt-ID in URL gefunden!');
     return;
   }
-  // Projekt laden
   const { data: projekt, error } = await supabase
     .from('projekte')
     .select('*')
@@ -28,14 +32,44 @@ async function ladeProjekt() {
     alert('Projekt nicht gefunden!');
     return;
   }
-  document.getElementById('projektTitel').textContent = projekt.titel;
-  document.getElementById('projektArt').textContent = projekt.art || '-';
-  document.getElementById('projektFrist').textContent = projekt.frist || '-';
-  document.getElementById('projektSchaetzwert').textContent = projekt.schaetzwert ? projekt.schaetzwert + " €" : '-';
-  document.getElementById('projektCPV').textContent = projekt.cpv || '-';
+  document.getElementById('projektTitel').textContent = zeigeFeld(projekt.titel);
+  document.getElementById('projektArt').textContent = zeigeFeld(projekt.art);
+  document.getElementById('projektFrist').textContent = zeigeFeld(projekt.frist);
+  // Schätzwert: kann als Zahl oder String oder null kommen
+  const schätzwert = projekt.schaetzwert !== undefined ? projekt.schaetzwert : projekt.schaetz_wert;
+  document.getElementById('projektSchaetzwert').textContent = schätzwert ? schätzwert + " €" : "-";
+  // CPV: manchmal cpv, manchmal cpv_code (je nach Insert!)
+  document.getElementById('projektCPV').textContent = zeigeFeld(projekt.cpv || projekt.cpv_code);
+  document.getElementById('abschliessenBtn').onclick = async function() {
+    const id = getProjektId();
+    await supabase.from('projekte')
+      .update({ status: 'Abgeschlossen' })
+      .eq('id', id);
+    alert("Projekt wurde als abgeschlossen markiert.");
+    ladeProjekt(); // ggf. Infos neu laden!
+  };
+  document.getElementById('projektStatus').textContent = zeigeFeld(projekt.status);
+  const abschliessenBtn = document.getElementById('abschliessenBtn');
+  abschliessenBtn.style.display = projekt.status === 'Abgeschlossen' ? 'none' : 'inline-block';
+  abschliessenBtn.onclick = async function() {
+    await supabase.from('projekte')
+      .update({ status: 'Abgeschlossen' })
+      .eq('id', id);
+    alert("Projekt wurde als abgeschlossen markiert.");
+    ladeProjekt();
+  };
+
+  // --- HIER Kommt die Status-Logik für Eingabefeld/Send-Button ---
+  if (projekt.status === 'Abgeschlossen') {
+    document.getElementById('chatInput').disabled = true;
+    document.getElementById('sendBtn').disabled = true;
+  } else {
+    document.getElementById('chatInput').disabled = false;
+    document.getElementById('sendBtn').disabled = false;
+  }
 }
 
-// 4. Chathistorie laden & anzeigen
+// Globale Variable für die aktuelle Chathistorie
 let chathistory = [];
 
 async function ladeChat() {
@@ -59,9 +93,7 @@ async function ladeChat() {
     });
     const div = document.createElement('div');
     div.classList.add('message', msg.sender === 'user' ? 'user' : 'assistant');
-
     if (msg.sender === 'assistant') {
-      // KI-Antwort mit Kopier-Button
       div.innerHTML = `
         <div style="display:flex;align-items:center;justify-content:space-between;">
           <span><b>KI:</b></span>
@@ -75,12 +107,9 @@ async function ladeChat() {
     chatBox.appendChild(div);
   });
   chatBox.scrollTop = chatBox.scrollHeight;
-
-  // Kopier-Buttons nach dem Laden aktivieren!
   setTimeout(() => {
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.onclick = function() {
-        // Welcher KI-Text?
         const idx = parseInt(btn.getAttribute('data-msg-idx'));
         const msg = nachrichten[idx];
         if (msg && msg.nachricht) {
@@ -95,13 +124,17 @@ async function ladeChat() {
   }, 100);
 }
 
-// 5. Nachricht senden (User → Supabase + KI)
 async function sendeNachricht() {
+  const sendBtn = document.getElementById('sendBtn');
+  sendBtn.disabled = true;
+  sendBtn.textContent = '...';
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) {
     alert('Bitte gib eine Nachricht ein.');
     return;
+  sendBtn.disabled = false;
+  sendBtn.textContent = 'Senden';
   }
   const id = getProjektId();
 
@@ -116,12 +149,25 @@ async function sendeNachricht() {
     return;
   }
   input.value = '';
-  await ladeChat(); // History neu laden (chathistory wird aktualisiert)
 
-  // --- KI-API: Gesamten Chatverlauf mitschicken! ---
+  // --- NEU: Status auf „In Bearbeitung“ setzen (wenn noch „Neu angelegt“) ---
+  // Projekt laden
+  const { data: projekt, error: loadError } = await supabase
+    .from('projekte')
+    .select('status')
+    .eq('id', id)
+    .single();
+  if (!loadError && projekt && projekt.status === 'Neu angelegt') {
+    await supabase.from('projekte')
+      .update({ status: 'In Bearbeitung' })
+      .eq('id', id);
+  }
+
+  await ladeChat();
+
+  // KI-Antwort holen (mit Multi-Turn Verlauf)
   try {
     const kiAntwort = await lvGeneratorRequestWithHistory();
-    // KI-Antwort als neue Nachricht speichern
     await supabase.from('chats').insert([{
       projekt_id: id,
       sender: 'assistant',
@@ -133,7 +179,6 @@ async function sendeNachricht() {
   }
 }
 
-// Datei per Drag&Drop ins Eingabefeld einfügen (ohne Speicherung!)
 document.addEventListener('DOMContentLoaded', () => {
   ladeProjekt();
   ladeChat();
@@ -146,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Drag&Drop für Textdateien
   const chatInput = document.getElementById('chatInput');
   chatInput.addEventListener('dragover', (e) => { e.preventDefault(); chatInput.style.background = '#eef'; });
   chatInput.addEventListener('dragleave', (e) => { chatInput.style.background = ''; });
@@ -154,19 +200,35 @@ document.addEventListener('DOMContentLoaded', () => {
     chatInput.style.background = '';
     const file = event.dataTransfer.files[0];
     if (!file) return;
-    if (file.type.startsWith('text') || file.type === 'application/json') {
-      const text = await file.text();
-      chatInput.value = text;
-      alert('Dateiinhalt wurde eingefügt. Die Datei wurde NICHT gespeichert!');
-    } else {
-      alert('Für den Test lade bitte nur reine Textdateien hoch.');
-    }
+    handleFile(file);
+  });
+
+  // Upload-Button ("+" unter dem Chatfeld)
+  document.getElementById('fileUpload').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) handleFile(file);
+    // reset input, damit man dieselbe Datei nochmal hochladen kann
+    e.target.value = "";
   });
 });
 
-// --- Die neue KI-API, die den kompletten Verlauf sendet ---
+async function handleFile(file) {
+  const chatInput = document.getElementById('chatInput');
+  if (file.type.startsWith('text') || file.type === 'application/json') {
+    const text = await file.text();
+    chatInput.value = text;
+    alert('Dateiinhalt wurde eingefügt. Die Datei wurde NICHT gespeichert!');
+  } else if (file.type === 'application/pdf') {
+    alert('PDFs können im MVP noch nicht extrahiert werden. Bitte nur reine Textdateien oder kopierten Text einfügen.');
+  } else if (file.name.endsWith('.docx')) {
+    alert('DOCX-Unterstützung folgt in Kürze. Für den MVP bitte Textdateien verwenden.');
+  } else {
+    alert('Dateityp nicht unterstützt. Für den Test bitte nur Textdateien, PDF oder DOCX.');
+  }
+}
+
+// --- KI-API, die den kompletten Verlauf sendet ---
 async function lvGeneratorRequestWithHistory() {
-  // Gesamte Chathistorie (array aus {role, content}) an Backend schicken!
   const res = await fetch("http://localhost:8000/api/lv-generator", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
