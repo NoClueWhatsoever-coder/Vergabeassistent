@@ -84,7 +84,11 @@ form.onsubmit = async (e) => {
 
   // Projekt speichern (Timestamp-Felder werden automatisch von Supabase gesetzt)
   const { data, error } = await supabase.from('projekte').insert([{
-    titel, art, frist, schaetzwert: schaetzwert || null, cpv: cpv || null,
+    titel,
+    art,
+    frist: frist || null,
+    schaetzwert: schaetzwert !== "" ? parseFloat(schaetzwert) : null,
+    cpv: cpv || null,
     status: 'Neu angelegt',
     user_id: user.id
   }]).select().single();
