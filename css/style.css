@@ -1193,3 +1193,67 @@ footer {
 }
 
 
+/* In deiner style.css ganz unten anfügen (oder anpassen): */
+#projektStatus {
+  font-weight: 600;
+  font-size: 1em;
+  color: #005f8d;
+  margin-right: 1.2em;
+}
+
+#abschliessenBtn {
+  background: #39a800;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  padding: 0.55em 1.3em;
+  border-radius: 6px;
+  font-size: 1.07em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #39a80020;
+  transition: background 0.16s;
+}
+
+#abschliessenBtn:hover {
+  background: #207800;
+}
+
+#abschliessenBtn[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Optional: Chat-Eingabefeld und Senden-Button, wenn disabled */
+#chatInput:disabled {
+  background: #f3f6fa;
+  color: #888;
+  border: 1.5px solid #e3e8f0;
+  cursor: not-allowed;
+}
+#sendBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+header {
+  /* Überschreibt das Doppelte, konsistent für Desktop & Mobile */
+  padding-left: 2.2em;
+  padding-right: 2.2em;
+  padding-top: 1.1em;
+  padding-bottom: 1.1em;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  header {
+    padding-left: 0.9em;
+    padding-right: 0.9em;
+    padding-top: 0.7em;
+    padding-bottom: 0.7em;
+  }
+  .header-center {
+    left: 50%;
+    top: 0.5em;
+  }
+}
+
