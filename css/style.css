@@ -1272,3 +1272,19 @@ header {
 }
 
 
+main {
+  max-width: 980px !important;
+  margin: 2.4em auto !important;
+  padding: 0 1vw;
+}
+.chat-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+@media (max-width: 1000px) {
+  main { max-width: 99vw !important; }
+  .chat-container { max-width: 99vw; }
+}
+

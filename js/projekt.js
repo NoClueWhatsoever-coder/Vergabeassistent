@@ -35,9 +35,9 @@ async function ladeProjekt() {
   document.getElementById('projektArt').textContent = zeigeFeld(projekt.art);
   document.getElementById('projektFrist').textContent = zeigeFeld(projekt.frist);
   document.getElementById('projektSchaetzwert').textContent = 
-    projekt.schaetzwert !== null && projekt.schaetzwert !== undefined && projekt.schaetzwert !== ""
-      ? projekt.schaetzwert + " €"
-      : "-";
+      projekt.schaetzwert !== null && projekt.schaetzwert !== undefined && projekt.schaetzwert !== ""
+        ? projekt.schaetzwert + " €"
+        : "-";
   document.getElementById('projektCPV').textContent = zeigeFeld(projekt.cpv);
   document.getElementById('projektStatus').textContent = zeigeFeld(projekt.status);
 

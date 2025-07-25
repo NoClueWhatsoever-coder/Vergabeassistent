@@ -5,11 +5,21 @@
   <title>Beschaffungsvorhaben – VergabeAssist</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Supabase JS laden -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* Kurz eingebettet für das "+" Symbol unter dem Chat */
-    .upload-row {
-      display: flex; justify-content: flex-end; align-items: center; margin: 0.3em 0 0 0;
+    main {
+      max-width: 980px !important;
+      margin: 2.4em auto !important;
+      padding: 0 1vw;
     }
+    .chat-container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    .upload-btn input[type="file"] { display: none; }
     .upload-btn {
       display: flex; align-items: center; justify-content: center;
       background: #e9f5ff; color: #0077b6; border-radius: 50%; border: none;
@@ -18,7 +28,10 @@
       transition: background 0.13s;
     }
     .upload-btn:hover { background: #c6e6ff; }
-    .upload-btn input[type="file"] { display: none; }
+    @media (max-width: 1000px) {
+      main { max-width: 99vw !important; }
+      .chat-container { max-width: 99vw; }
+    }
   </style>
 </head>
 <body>
@@ -29,7 +42,7 @@
   </div>
 </header>
 
-<main style="max-width:700px;margin:2em auto;">
+<main>
   <!-- Projektdetails -->
   <section class="projekt-info" style="margin-bottom:2em;">
     <h2 id="projektTitel">Lädt...</h2>
@@ -41,33 +54,35 @@
     </div>
     <div style="margin-top:1em;display:flex;justify-content:space-between;align-items:center;">
       <div><b>Status:</b> <span id="projektStatus">–</span></div>
-      <button id="abschliessenBtn" style="background:#39a800;color:#fff;font-weight:600;border:none;padding:0.5em 1.2em;border-radius:5px;cursor:pointer;display:none;">LV als abgeschlossen markieren</button>
     </div>
   </section>
 
   <!-- Chatbereich -->
-  <section class="chat-container" style="border:1px solid #ddd;border-radius:5px;display:flex;flex-direction:column;height:480px;">
-    <div class="chat-header" style="background:#f7f7f7;padding:0.7em 1em;border-bottom:1px solid #ddd;">
+  <section class="chat-container" style="border:1px solid #ddd;border-radius:8px;display:flex;flex-direction:column;max-width:100%;background:#fff;box-shadow:0 4px 20px #0077b617;padding:0.4em 1.7em 2em 1.7em;">
+    <div class="chat-header" style="background:#f7f7f7;padding:0.9em 0.8em;border-bottom:1px solid #ddd;">
       <h3 style="display:inline;">Bedarfsbeschreibung & Verlauf</h3>
       <span class="info-icon" title="Bitte beschreiben Sie Ihren Bedarf so detailliert wie möglich oder laden Sie eine Datei hoch." style="margin-left:1em;cursor:help;">ℹ️</span>
     </div>
-    <div id="chatMessages" class="chat-messages" style="flex:1;padding:1em;overflow-y:auto;background:#fafbfc;"></div>
-    <div class="chat-input-area" style="flex-direction:column;border-top:1px solid #ddd;padding:1em;">
-      <textarea id="chatInput" placeholder="Beschreibung eingeben oder Datei hier ablegen..." style="width:100%;min-height:2.8em;font:inherit;padding:1em;font-size:1.07em;border-radius:6px;"></textarea>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.6em;">
-        <div>
-          <label class="upload-btn" title="Datei von deinem Computer einfügen" style="background:#e9f5ff;color:#0077b6;border-radius:50%;border:none;width:2.2em;height:2.2em;font-size:1.7em;cursor:pointer;box-shadow:0 1px 4px #0077b616;transition:background 0.13s;">
+    <div id="chatMessages" class="chat-messages" style="flex:1;padding:1.3em 0.4em 1em 0.4em;overflow-y:auto;background:#fafbfc;min-height:130px;"></div>
+    <div class="chat-input-area" style="display:flex;flex-direction:column;gap:0.6em;margin-top:0.9em;">
+      <textarea id="chatInput" placeholder="Beschreibung eingeben oder Datei hier ablegen..." style="width:100%;min-height:2.8em;font:inherit;padding:1em;font-size:1.09em;border-radius:7px;border:1.5px solid #e3e8f0;"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <!-- Upload-Button ganz links -->
+        <div style="display:flex;align-items:center;gap:0.55em;">
+          <label class="upload-btn" title="Datei von deinem Computer einfügen">
             +
             <input type="file" id="fileUpload" accept=".txt,.docx,.pdf,.json,.xml,.x83" />
           </label>
-          <span style="margin-left:0.5em;font-weight:500;">Datei auswählen</span>
+          <span style="font-weight:500;font-size:1.01em;">Datei auswählen</span>
         </div>
-        <button id="sendBtn" style="background:#0077b6;color:#fff;border:none;padding:0.6em 2.1em;font-weight:600;font-size:1.12em;cursor:pointer;border-radius:4px;">Senden</button>
+        <!-- Senden-Button ganz rechts -->
+        <button id="sendBtn" style="background:#0077b6;color:#fff;border:none;padding:0.7em 2.1em;font-weight:600;font-size:1.13em;cursor:pointer;border-radius:5px;">Senden</button>
       </div>
     </div>
   </section>
-  <div style="margin:1.2em 0 0 0;text-align:center;">
-    <button id="abschliessenBtn" style="background:#39a800;color:#fff;font-weight:600;border:none;padding:0.9em 2.2em;border-radius:6px;cursor:pointer;display:none;">LV als abgeschlossen markieren</button>
+  <!-- Abschließen-Button ZENTRAL darunter -->
+  <div style="margin:1.7em 0 0 0;text-align:center;">
+    <button id="abschliessenBtn" style="background:#39a800;color:#fff;font-weight:600;border:none;padding:0.9em 2.2em;border-radius:7px;cursor:pointer;display:none;">LV als abgeschlossen markieren</button>
   </div>
 </main>
 
