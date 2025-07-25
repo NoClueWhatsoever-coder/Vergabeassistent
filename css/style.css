@@ -1288,3 +1288,91 @@ main {
   .chat-container { max-width: 99vw; }
 }
 
+/* Datei-Bubble (ChatGPT-Style) */
+.file-bubble {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  background: #f4f6fb;
+  border-radius: 11px;
+  padding: 0.4em 1em 0.4em 0.7em;
+  box-shadow: 0 2px 7px #0077b610;
+  font-size: 1.03em;
+  position: relative;
+}
+.file-bubble .file-icon {
+  font-size: 1.5em;
+  margin-right: 0.1em;
+}
+.file-bubble .file-type {
+  color: #0087c1;
+  font-size: 0.97em;
+  font-weight: 600;
+  margin-left: 0.18em;
+}
+.file-bubble .file-name {
+  font-weight: 600;
+  margin-right: 0.18em;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.file-bubble .file-remove {
+  background: none;
+  border: none;
+  font-size: 1.25em;
+  color: #ba1d1d;
+  cursor: pointer;
+  margin-left: 0.4em;
+  opacity: 0.8;
+  font-weight: 700;
+}
+.file-bubble .file-remove:hover { color: #e83232; opacity: 1; }
+
+/* Snackbar-Hinweis */
+#snackbar {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #184e8b;
+  color: #fff;
+  padding: 1em 2.7em;
+  border-radius: 14px;
+  font-size: 1.11em;
+  font-weight: 600;
+  z-index: 9999;
+  opacity: 0.97;
+  box-shadow: 0 4px 24px #003c7b27;
+  display: none;
+}
+
+/* Drag & Drop Overlay */
+#dropOverlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(38,66,107,0.12);
+  z-index: 5000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#dropOverlay > div {
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 6px 28px #0077b644;
+  border-radius: 22px;
+  padding: 3em 4em;
+  min-width: 320px;
+}
+#dropOverlay .file-icon {
+  font-size: 2.5em;
+  margin-bottom: 0.3em;
+}
+
+@media (max-width: 600px) {
+  #dropOverlay > div { padding: 1.4em 0.6em; min-width: 80vw;}
+  .file-bubble .file-name { max-width: 90vw; }
+}

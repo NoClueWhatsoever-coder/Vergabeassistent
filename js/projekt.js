@@ -5,7 +5,263 @@ const supabaseUrl = 'https://jjkuvuywbwnvsgpbqlwo.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqa3V2dXl3YndudnNncGJxbHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzMDU3MjMsImV4cCI6MjA2Njg4MTcyM30.BeMfBKtYECSy8Sx_yH6Qh1Pwgd7KhNIA3jiBliE2DMM'; // gekürzt
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-// 2. Hole Projekt-ID aus URL
+// Globale Variable: Dateien für aktuelle Nachricht
+let hochgeladeneDateien = [];
+const MAX_FILES = 3;
+const MAX_FILESIZE = 10 * 1024 * 1024; // 10 MB
+
+// Snackbar
+function showSnackbar(msg, color='#184e8b') {
+  let sb = document.getElementById('snackbar');
+  if (!sb) {
+    sb = document.createElement('div');
+    sb.id = 'snackbar';
+    document.body.appendChild(sb);
+    Object.assign(sb.style, {
+      position: 'fixed', top: '16px', left: '50%',
+      transform: 'translateX(-50%)', background: color, color: '#fff',
+      padding: '0.9em 2.5em', borderRadius: '14px', fontSize: '1.08em',
+      fontWeight: '600', zIndex: 9999, boxShadow: '0 4px 24px #003c7b27',
+      transition: 'opacity 0.2s', opacity: '0.96', display: 'block'
+    });
+  } else {
+    sb.style.background = color;
+    sb.style.display = 'block';
+  }
+  sb.textContent = msg;
+  setTimeout(() => { sb.style.display = 'none'; }, 2100);
+}
+
+// Datei-Bubbles wie ChatGPT
+function renderFileBubbles() {
+  const filesRow = document.getElementById('fileBubbleRow');
+  filesRow.innerHTML = '';
+  hochgeladeneDateien.forEach((file, idx) => {
+    const div = document.createElement('div');
+    div.className = 'file-bubble';
+    div.innerHTML = `
+      <span class="file-icon">${getFileIcon(file.name)}</span>
+      <span class="file-name">${file.name}</span>
+      <span class="file-type">${getFileTypeLabel(file.name)}</span>
+      <button class="file-remove" title="Entfernen" data-idx="${idx}">×</button>
+    `;
+    filesRow.appendChild(div);
+  });
+  document.querySelectorAll('.file-remove').forEach(btn => {
+    btn.onclick = function() {
+      const idx = parseInt(btn.getAttribute('data-idx'));
+      hochgeladeneDateien.splice(idx, 1);
+      renderFileBubbles();
+    }
+  });
+}
+
+function getFileIcon(filename) {
+  if (/\.pdf$/i.test(filename)) return '📄';
+  if (/\.docx$/i.test(filename)) return '📝';
+  if (/\.xlsx$/i.test(filename)) return '📊';
+  if (/\.csv$/i.test(filename)) return '🗒️';
+  if (/\.json$/i.test(filename)) return '🔣';
+  if (/\.(xml|x83)$/i.test(filename)) return '🗂️';
+  return '📎';
+}
+function getFileTypeLabel(filename) {
+  if (/\.pdf$/i.test(filename)) return 'PDF';
+  if (/\.docx$/i.test(filename)) return 'DOCX';
+  if (/\.xlsx$/i.test(filename)) return 'Excel';
+  if (/\.csv$/i.test(filename)) return 'CSV';
+  if (/\.json$/i.test(filename)) return 'JSON';
+  if (/\.(xml|x83)$/i.test(filename)) return 'GAEB';
+  return '';
+}
+
+// Drag&Drop Overlay wie ChatGPT
+function showDropOverlay(show=true) {
+  let ov = document.getElementById('dropOverlay');
+  if (!ov && show) {
+    ov = document.createElement('div');
+    ov.id = 'dropOverlay';
+    ov.innerHTML = `
+      <div style="text-align:center;background:#fff;box-shadow:0 6px 28px #0077b644;border-radius:22px;padding:3em 4em;min-width:320px;">
+        <div class="file-icon" style="font-size:2.4em;">📎</div>
+        <div style="font-size:1.25em;font-weight:600;margin:0.6em 0 0.2em 0;color:#0077b6;">Füge etwas hinzu</div>
+        <div style="font-size:1em;color:#495b7b;">Lege bis zu 3 Dateien ab, um sie zum Gespräch hinzuzufügen.</div>
+      </div>`;
+    Object.assign(ov.style, {
+      position: 'fixed', top: 0, left: 0,
+      width: '100vw', height: '100vh',
+      background: 'rgba(38,66,107,0.14)', zIndex: 5000,
+      display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
+    });
+    document.body.appendChild(ov);
+  }
+  if (ov) ov.style.display = show ? 'flex' : 'none';
+}
+
+function handleUploadFiles(fileList) {
+  for (let i = 0; i < fileList.length; i++) {
+    const file = fileList[i];
+    if (hochgeladeneDateien.length >= MAX_FILES) {
+      showSnackbar('Maximal 3 Dateien pro Nachricht erlaubt!', '#b53a1b');
+      break;
+    }
+    if (file.size > MAX_FILESIZE) {
+      showSnackbar('Datei übersteigt das maximale Volumen von 10 MB!', '#b53a1b');
+      continue;
+    }
+    if (!/\.(pdf|docx|xlsx|csv|json|xml|x83)$/i.test(file.name)) {
+      showSnackbar('Nicht unterstütztes Dateiformat!', '#b53a1b');
+      continue;
+    }
+    hochgeladeneDateien.push(file);
+    showSnackbar('Datei hinzugefügt!', '#207c37');
+  }
+  renderFileBubbles();
+}
+
+// DOM Ready
+document.addEventListener('DOMContentLoaded', () => {
+  ladeProjekt();
+  ladeChat();
+  // Datei-Bubble Row, falls noch nicht vorhanden
+  if (!document.getElementById('fileBubbleRow')) {
+    const filesRow = document.createElement('div');
+    filesRow.id = 'fileBubbleRow';
+    filesRow.style.display = 'flex';
+    filesRow.style.flexWrap = 'wrap';
+    filesRow.style.gap = '1em';
+    filesRow.style.margin = '1em 0 0.4em 0';
+    document.querySelector('.chat-container').insertBefore(filesRow, document.querySelector('.chat-input-area'));
+  }
+  // Datei-Upload (Button)
+  document.getElementById('fileUpload').addEventListener('change', function(e) {
+    handleUploadFiles(e.target.files);
+    e.target.value = '';
+  });
+  // Drag & Drop
+  const chatInput = document.getElementById('chatInput');
+  chatInput.addEventListener('dragover', (e) => { e.preventDefault(); showDropOverlay(true); });
+  chatInput.addEventListener('dragleave', (e) => { showDropOverlay(false); });
+  chatInput.addEventListener('drop', async (event) => {
+    event.preventDefault(); showDropOverlay(false);
+    handleUploadFiles(event.dataTransfer.files);
+  });
+  // Senden
+  document.getElementById('sendBtn').onclick = sendeNachricht;
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); sendeNachricht();
+    }
+  });
+});
+
+// Senden mit Datei-Parsing im Hintergrund
+async function sendeNachricht() {
+  const sendBtn = document.getElementById('sendBtn');
+  sendBtn.disabled = true; sendBtn.textContent = '...';
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text && hochgeladeneDateien.length === 0) {
+    showSnackbar('Bitte gib eine Nachricht oder eine Datei ein!', '#b53a1b');
+    sendBtn.disabled = false; sendBtn.textContent = 'Senden';
+    return;
+  }
+  const id = getProjektId();
+
+  // Lies alle Dateien asynchron aus (Promise.all)
+  const fileContents = await Promise.all(
+    hochgeladeneDateien.map(async (file) => {
+      if (file.type === 'application/pdf') {
+        if (!window.pdfjsLib) {
+          await loadScript('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js');
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+        }
+        const ab = await file.arrayBuffer();
+        const pdf = await window.pdfjsLib.getDocument({ data: ab }).promise;
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          const strings = content.items.map(item => item.str);
+          text += strings.join(' ') + '\n';
+        }
+        return {name: file.name, text: text.trim()};
+      }
+      if (file.name.endsWith('.docx')) {
+        if (!window.mammoth) {
+          await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.7.0/mammoth.browser.min.js');
+        }
+        const ab = await file.arrayBuffer();
+        const resultObject = await window.mammoth.convertToHtml({ arrayBuffer: ab });
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(resultObject.value, "text/html");
+        return {name: file.name, text: doc.body.textContent.trim()};
+      }
+      if (file.name.endsWith('.xml') || file.name.endsWith('.x83')) {
+        const text = await file.text();
+        return {name: file.name, text: text};
+      }
+      if (file.type.startsWith('text') || file.type === 'application/json') {
+        const text = await file.text();
+        return {name: file.name, text: text};
+      }
+      // Excel, CSV etc: nur Hinweistext
+      return {name: file.name, text: '[Datei nicht automatisch extrahiert]'};
+    })
+  );
+
+  // Nachricht speichern (Metadaten der Dateien im Chatverlauf)
+  let { error } = await supabase.from('chats').insert([{
+    projekt_id: id,
+    sender: 'user',
+    nachricht: text,
+    dateien: fileContents.length ? fileContents.map(f=>({name:f.name})) : null
+  }]);
+  if (error) {
+    showSnackbar('Fehler beim Speichern der Nachricht.', '#b53a1b');
+    sendBtn.disabled = false; sendBtn.textContent = 'Senden';
+    return;
+  }
+  input.value = '';
+  hochgeladeneDateien = [];
+  renderFileBubbles();
+
+  // Status setzen auf "In Bearbeitung"
+  const { data: projekt, error: loadError } = await supabase.from('projekte').select('status').eq('id', id).single();
+  if (!loadError && projekt && projekt.status === 'Neu angelegt') {
+    await supabase.from('projekte').update({ status: 'In Bearbeitung' }).eq('id', id);
+  }
+  await ladeChat();
+
+  // KI-Antwort holen (fileContents als Kontext mitgeben)
+  try {
+    const kiAntwort = await lvGeneratorRequestWithHistory({userText:text, files:fileContents});
+    await supabase.from('chats').insert([{
+      projekt_id: id,
+      sender: 'assistant',
+      nachricht: kiAntwort
+    }]);
+    ladeChat();
+  } catch (err) {
+    showSnackbar('Fehler bei der KI-Antwort: ' + err.message, '#b53a1b');
+  } finally {
+    sendBtn.disabled = false; sendBtn.textContent = 'Senden';
+  }
+}
+
+// Helper zum Nachladen von JS-Libs
+function loadScript(src) {
+  return new Promise(function(resolve, reject) {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+// ===== REST Chat, Status, Projektdetails (wie gehabt) =====
+
 function getProjektId() {
   const params = new URLSearchParams(window.location.search);
   return params.get('id');
@@ -30,14 +286,13 @@ async function ladeProjekt() {
     alert('Projekt nicht gefunden!');
     return;
   }
-  // Setze die Projektinfos im UI (100% korrekt, keine Fallbacks mehr nötig)
   document.getElementById('projektTitel').textContent = zeigeFeld(projekt.titel);
   document.getElementById('projektArt').textContent = zeigeFeld(projekt.art);
   document.getElementById('projektFrist').textContent = zeigeFeld(projekt.frist);
-  document.getElementById('projektSchaetzwert').textContent = 
-      projekt.schaetzwert !== null && projekt.schaetzwert !== undefined && projekt.schaetzwert !== ""
-        ? projekt.schaetzwert + " €"
-        : "-";
+  document.getElementById('projektSchaetzwert').textContent =
+    projekt.schaetzwert !== null && projekt.schaetzwert !== undefined && projekt.schaetzwert !== ""
+      ? projekt.schaetzwert + " €"
+      : "-";
   document.getElementById('projektCPV').textContent = zeigeFeld(projekt.cpv);
   document.getElementById('projektStatus').textContent = zeigeFeld(projekt.status);
 
@@ -112,178 +367,14 @@ async function ladeChat() {
   }, 100);
 }
 
-// Senden-Button + KI-Antwort
-async function sendeNachricht() {
-  const sendBtn = document.getElementById('sendBtn');
-  sendBtn.disabled = true;
-  sendBtn.textContent = '...';
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) {
-    alert('Bitte gib eine Nachricht ein.');
-    sendBtn.disabled = false;
-    sendBtn.textContent = 'Senden';
-    return;
-  }
-  const id = getProjektId();
-
-  let { error } = await supabase.from('chats').insert([{
-    projekt_id: id,
-    sender: 'user',
-    nachricht: text
-  }]);
-  if (error) {
-    alert('Fehler beim Speichern der Nachricht.');
-    sendBtn.disabled = false;
-    sendBtn.textContent = 'Senden';
-    return;
-  }
-  input.value = '';
-
-  // Status setzen auf "In Bearbeitung"
-  const { data: projekt, error: loadError } = await supabase
-    .from('projekte')
-    .select('status')
-    .eq('id', id)
-    .single();
-  if (!loadError && projekt && projekt.status === 'Neu angelegt') {
-    await supabase.from('projekte')
-      .update({ status: 'In Bearbeitung' })
-      .eq('id', id);
-  }
-
-  await ladeChat();
-
-  // KI-Antwort holen (mit Multi-Turn Verlauf)
-  try {
-    const kiAntwort = await lvGeneratorRequestWithHistory();
-    await supabase.from('chats').insert([{
-      projekt_id: id,
-      sender: 'assistant',
-      nachricht: kiAntwort
-    }]);
-    ladeChat();
-  } catch (err) {
-    alert('Fehler bei der KI-Antwort: ' + err.message);
-  } finally {
-    sendBtn.disabled = false;
-    sendBtn.textContent = 'Senden';
-  }
-}
-
-// Datei-Upload/Parsing
-document.addEventListener('DOMContentLoaded', () => {
-  ladeProjekt();
-  ladeChat();
-
-  document.getElementById('sendBtn').onclick = sendeNachricht;
-  document.getElementById('chatInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendeNachricht();
-    }
-  });
-
-  // Drag&Drop für Textdateien, PDFs, DOCX, GAEB
-  const chatInput = document.getElementById('chatInput');
-  chatInput.addEventListener('dragover', (e) => { e.preventDefault(); chatInput.style.background = '#eef'; });
-  chatInput.addEventListener('dragleave', (e) => { chatInput.style.background = ''; });
-  chatInput.addEventListener('drop', async (event) => {
-    event.preventDefault();
-    chatInput.style.background = '';
-    const file = event.dataTransfer.files[0];
-    if (!file) return;
-    handleFile(file);
-  });
-
-  // Upload-Button ("Datei auswählen")
-  document.getElementById('fileUpload').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) handleFile(file);
-    e.target.value = "";
-  });
-});
-
-async function handleFile(file) {
-  const chatInput = document.getElementById('chatInput');
-  // TEXT & JSON
-  if (file.type.startsWith('text') || file.type === 'application/json') {
-    const text = await file.text();
-    chatInput.value = text;
-    alert('Dateiinhalt wurde eingefügt. Die Datei wurde NICHT gespeichert!');
-    return;
-  }
-  // PDF (nutzt pdf.js via CDN)
-  if (file.type === 'application/pdf') {
-    if (!window.pdfjsLib) {
-      alert('PDF.js wird geladen...');
-      await loadScript('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js');
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
-    }
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-      const typedarray = new Uint8Array(e.target.result);
-      const pdf = await window.pdfjsLib.getDocument({ data: typedarray }).promise;
-      let allText = '';
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        const strings = content.items.map(item => item.str);
-        allText += strings.join(' ') + '\n';
-      }
-      chatInput.value = allText.trim();
-      alert('PDF-Text eingefügt! Die Datei wurde NICHT gespeichert!');
-    };
-    reader.readAsArrayBuffer(file);
-    return;
-  }
-  // DOCX (nutzt mammoth.js via CDN)
-  if (file.name.endsWith('.docx')) {
-    if (!window.mammoth) {
-      alert('Lade DOCX-Parser...');
-      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.7.0/mammoth.browser.min.js');
-    }
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-      window.mammoth.convertToHtml({ arrayBuffer: e.target.result })
-        .then(function(resultObject) {
-          // Entferne alle Tags für reinen Text
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(resultObject.value, "text/html");
-          chatInput.value = doc.body.textContent.trim();
-          alert('DOCX-Text eingefügt! Die Datei wurde NICHT gespeichert!');
-        });
-    };
-    reader.readAsArrayBuffer(file);
-    return;
-  }
-  // GAEB (einfach als Text, später echte GAEB-Parsing-Logik)
-  if (file.name.toLowerCase().endsWith('.xml') || file.name.toLowerCase().endsWith('.x83')) {
-    const text = await file.text();
-    chatInput.value = text;
-    alert('GAEB-XML eingefügt! Die Datei wurde NICHT gespeichert!');
-    return;
-  }
-  alert('Dateityp nicht unterstützt. Für den Test bitte Text, PDF, DOCX oder GAEB.');
-}
-
-// Helper zum Nachladen von JS-Libs
-function loadScript(src) {
-  return new Promise(function(resolve, reject) {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
 // KI-Request wie gehabt
-async function lvGeneratorRequestWithHistory() {
+async function lvGeneratorRequestWithHistory(payload) {
+  // Wenn du fileContents mitgeben willst: payload={userText, files}
+  // Passe dein Backend entsprechend an!
   const res = await fetch("http://localhost:8000/api/lv-generator", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages: chathistory })
+    body: JSON.stringify(payload)
   });
   const data = await res.json();
   if (data.result) {
