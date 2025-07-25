@@ -52,21 +52,23 @@
       <span class="info-icon" title="Bitte beschreiben Sie Ihren Bedarf so detailliert wie möglich oder laden Sie eine Datei hoch." style="margin-left:1em;cursor:help;">ℹ️</span>
     </div>
     <div id="chatMessages" class="chat-messages" style="flex:1;padding:1em;overflow-y:auto;background:#fafbfc;"></div>
-    <div class="chat-input-area" style="display:flex;border-top:1px solid #ddd;">
-      <textarea id="chatInput" placeholder="Beschreibung eingeben oder Datei hier ablegen..." style="flex:1;padding:0.7em;font:inherit;resize:vertical;"></textarea>
-      <button id="sendBtn" style="background:#0077b6;color:#fff;border:none;padding:0 1.5em;margin-left:0.4em;font-weight:600;font-size:1.1em;cursor:pointer;border-radius:4px;">Senden</button>
-    </div>
-    <!-- Upload-Button unter dem Chatfeld -->
-    <div class="upload-row">
-      <label class="upload-btn" title="Datei von deinem Computer einfügen">
-        +
-        <input type="file" id="fileUpload" accept=".txt,.docx,.pdf,.json" />
-      </label>
-    </div>
-    <div style="text-align:right;margin:0.7em 0 0 0;">
-      <button id="abschliessenBtn" style="background:#39a800;color:#fff;font-weight:600;border:none;padding:0.5em 1.2em;border-radius:5px;cursor:pointer;">LV als abgeschlossen markieren</button>
+    <div class="chat-input-area" style="flex-direction:column;border-top:1px solid #ddd;padding:1em;">
+      <textarea id="chatInput" placeholder="Beschreibung eingeben oder Datei hier ablegen..." style="width:100%;min-height:2.8em;font:inherit;padding:1em;font-size:1.07em;border-radius:6px;"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.6em;">
+        <div>
+          <label class="upload-btn" title="Datei von deinem Computer einfügen" style="background:#e9f5ff;color:#0077b6;border-radius:50%;border:none;width:2.2em;height:2.2em;font-size:1.7em;cursor:pointer;box-shadow:0 1px 4px #0077b616;transition:background 0.13s;">
+            +
+            <input type="file" id="fileUpload" accept=".txt,.docx,.pdf,.json,.xml,.x83" />
+          </label>
+          <span style="margin-left:0.5em;font-weight:500;">Datei auswählen</span>
+        </div>
+        <button id="sendBtn" style="background:#0077b6;color:#fff;border:none;padding:0.6em 2.1em;font-weight:600;font-size:1.12em;cursor:pointer;border-radius:4px;">Senden</button>
+      </div>
     </div>
   </section>
+  <div style="margin:1.2em 0 0 0;text-align:center;">
+    <button id="abschliessenBtn" style="background:#39a800;color:#fff;font-weight:600;border:none;padding:0.9em 2.2em;border-radius:6px;cursor:pointer;display:none;">LV als abgeschlossen markieren</button>
+  </div>
 </main>
 
 <footer style="margin:2em auto;text-align:center;">

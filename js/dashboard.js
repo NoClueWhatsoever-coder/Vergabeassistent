@@ -33,7 +33,7 @@ async function ladeProjekte() {
 function updateBeschaffungstabelle() {
   const tbody = document.getElementById('dashboardTableBody');
   tbody.innerHTML = '';
-  if(beschaffungsdaten.length === 0) {
+  if (beschaffungsdaten.length === 0) {
     tbody.innerHTML = `<tr><td colspan="6" style="padding:2.3em 0;text-align:center;color:#777;font-size:1.1em;">Noch keine Beschaffungsvorhaben angelegt.</td></tr>`;
     return;
   }
@@ -45,11 +45,34 @@ function updateBeschaffungstabelle() {
       <td>${projekt.status || '-'}</td>
       <td>${projekt.erstellt_am ? new Date(projekt.erstellt_am).toLocaleDateString('de-DE') : '-'}</td>
       <td>${projekt.aktualisiert_am ? new Date(projekt.aktualisiert_am).toLocaleDateString('de-DE') : '-'}</td>
-      <td><a href="projekt.html?id=${projekt.id}" class="projekt-link">Öffnen</a></td>
+      <td style="display:flex;gap:0.8em;align-items:center;">
+        <a href="projekt.html?id=${projekt.id}" class="projekt-link" style="font-weight:600;">Öffnen</a>
+        <button class="delete-btn" title="Beschaffungsvorhaben löschen" style="background:none;border:none;cursor:pointer;padding:0;margin:0;">
+          <span class="material-icons" style="font-size:1.5em;color:#d32f2f;">delete</span>
+        </button>
+      </td>
     `;
+    // Lösch-Button Event
+    const deleteBtn = tr.querySelector('.delete-btn');
+    deleteBtn.onclick = async function () {
+      if (confirm("Sind Sie sich sicher, dass Sie dieses Beschaffungsvorhaben und den bisherigen Verlauf sowie die bereitgestellten Dokumente vollständig löschen möchten?")) {
+        // Zuerst alle Chats zu diesem Projekt löschen:
+        await supabase.from('chats').delete().eq('projekt_id', projekt.id);
+        // Dann das Projekt selbst löschen:
+        const { error } = await supabase.from('projekte').delete().eq('id', projekt.id);
+        if (!error) {
+          // Aus dem Array entfernen und Tabelle neu rendern
+          beschaffungsdaten = beschaffungsdaten.filter(p => p.id !== projekt.id);
+          updateBeschaffungstabelle();
+        } else {
+          alert("Löschen fehlgeschlagen: " + error.message);
+        }
+      }
+    };
     tbody.appendChild(tr);
   });
 }
+    
 
 // Modal Logik
 const modal = document.getElementById('newProjectModal');

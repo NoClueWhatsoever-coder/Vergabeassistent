@@ -1257,3 +1257,18 @@ header {
   }
 }
 
+
+.delete-btn .material-icons {
+  color: #d32f2f;
+  opacity: 0.83;
+  transition: color 0.16s, opacity 0.13s;
+  vertical-align: middle;
+}
+.delete-btn:hover .material-icons {
+  color: #ab2222;
+  opacity: 1;
+  background: #ffdada;
+  border-radius: 5px;
+}
+
+

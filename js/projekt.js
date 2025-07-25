@@ -1,6 +1,6 @@
 // projekt.js
 
-// 1. Supabase Setup (anpassen!)
+// 1. Supabase Setup 
 const supabaseUrl = 'https://jjkuvuywbwnvsgpbqlwo.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqa3V2dXl3YndudnNncGJxbHdvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEzMDU3MjMsImV4cCI6MjA2Njg4MTcyM30.BeMfBKtYECSy8Sx_yH6Qh1Pwgd7KhNIA3jiBliE2DMM'; // gekürzt
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -10,8 +10,6 @@ function getProjektId() {
   const params = new URLSearchParams(window.location.search);
   return params.get('id');
 }
-
-// Hilfsfunktion: Sicheres Anzeigen (verträgt null/undefined/"" und verschiedene Feldnamen)
 function zeigeFeld(val) {
   if (val === undefined || val === null || val === "") return "-";
   return val;
@@ -32,23 +30,18 @@ async function ladeProjekt() {
     alert('Projekt nicht gefunden!');
     return;
   }
+  // Setze die Projektinfos im UI (100% korrekt, keine Fallbacks mehr nötig)
   document.getElementById('projektTitel').textContent = zeigeFeld(projekt.titel);
   document.getElementById('projektArt').textContent = zeigeFeld(projekt.art);
   document.getElementById('projektFrist').textContent = zeigeFeld(projekt.frist);
-  // Schätzwert: kann als Zahl oder String oder null kommen
-  const schätzwert = projekt.schaetzwert !== undefined ? projekt.schaetzwert : projekt.schaetz_wert;
-  document.getElementById('projektSchaetzwert').textContent = schätzwert ? schätzwert + " €" : "-";
-  // CPV: manchmal cpv, manchmal cpv_code (je nach Insert!)
-  document.getElementById('projektCPV').textContent = zeigeFeld(projekt.cpv || projekt.cpv_code);
-  document.getElementById('abschliessenBtn').onclick = async function() {
-    const id = getProjektId();
-    await supabase.from('projekte')
-      .update({ status: 'Abgeschlossen' })
-      .eq('id', id);
-    alert("Projekt wurde als abgeschlossen markiert.");
-    ladeProjekt(); // ggf. Infos neu laden!
-  };
+  document.getElementById('projektSchaetzwert').textContent = 
+    projekt.schaetzwert !== null && projekt.schaetzwert !== undefined && projekt.schaetzwert !== ""
+      ? projekt.schaetzwert + " €"
+      : "-";
+  document.getElementById('projektCPV').textContent = zeigeFeld(projekt.cpv);
   document.getElementById('projektStatus').textContent = zeigeFeld(projekt.status);
+
+  // Abschließen-Button zentriert und nur sichtbar, wenn nicht abgeschlossen
   const abschliessenBtn = document.getElementById('abschliessenBtn');
   abschliessenBtn.style.display = projekt.status === 'Abgeschlossen' ? 'none' : 'inline-block';
   abschliessenBtn.onclick = async function() {
@@ -59,17 +52,12 @@ async function ladeProjekt() {
     ladeProjekt();
   };
 
-  // --- HIER Kommt die Status-Logik für Eingabefeld/Send-Button ---
-  if (projekt.status === 'Abgeschlossen') {
-    document.getElementById('chatInput').disabled = true;
-    document.getElementById('sendBtn').disabled = true;
-  } else {
-    document.getElementById('chatInput').disabled = false;
-    document.getElementById('sendBtn').disabled = false;
-  }
+  // Chat-Eingabe und Senden-Button sperren, wenn abgeschlossen
+  document.getElementById('chatInput').disabled = projekt.status === 'Abgeschlossen';
+  document.getElementById('sendBtn').disabled = projekt.status === 'Abgeschlossen';
 }
 
-// Globale Variable für die aktuelle Chathistorie
+// Chathistorie global
 let chathistory = [];
 
 async function ladeChat() {
@@ -124,6 +112,7 @@ async function ladeChat() {
   }, 100);
 }
 
+// Senden-Button + KI-Antwort
 async function sendeNachricht() {
   const sendBtn = document.getElementById('sendBtn');
   sendBtn.disabled = true;
@@ -132,13 +121,12 @@ async function sendeNachricht() {
   const text = input.value.trim();
   if (!text) {
     alert('Bitte gib eine Nachricht ein.');
+    sendBtn.disabled = false;
+    sendBtn.textContent = 'Senden';
     return;
-  sendBtn.disabled = false;
-  sendBtn.textContent = 'Senden';
   }
   const id = getProjektId();
 
-  // User-Nachricht speichern
   let { error } = await supabase.from('chats').insert([{
     projekt_id: id,
     sender: 'user',
@@ -146,12 +134,13 @@ async function sendeNachricht() {
   }]);
   if (error) {
     alert('Fehler beim Speichern der Nachricht.');
+    sendBtn.disabled = false;
+    sendBtn.textContent = 'Senden';
     return;
   }
   input.value = '';
 
-  // --- NEU: Status auf „In Bearbeitung“ setzen (wenn noch „Neu angelegt“) ---
-  // Projekt laden
+  // Status setzen auf "In Bearbeitung"
   const { data: projekt, error: loadError } = await supabase
     .from('projekte')
     .select('status')
@@ -176,9 +165,13 @@ async function sendeNachricht() {
     ladeChat();
   } catch (err) {
     alert('Fehler bei der KI-Antwort: ' + err.message);
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = 'Senden';
   }
 }
 
+// Datei-Upload/Parsing
 document.addEventListener('DOMContentLoaded', () => {
   ladeProjekt();
   ladeChat();
@@ -191,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Drag&Drop für Textdateien
+  // Drag&Drop für Textdateien, PDFs, DOCX, GAEB
   const chatInput = document.getElementById('chatInput');
   chatInput.addEventListener('dragover', (e) => { e.preventDefault(); chatInput.style.background = '#eef'; });
   chatInput.addEventListener('dragleave', (e) => { chatInput.style.background = ''; });
@@ -203,31 +196,89 @@ document.addEventListener('DOMContentLoaded', () => {
     handleFile(file);
   });
 
-  // Upload-Button ("+" unter dem Chatfeld)
+  // Upload-Button ("Datei auswählen")
   document.getElementById('fileUpload').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) handleFile(file);
-    // reset input, damit man dieselbe Datei nochmal hochladen kann
     e.target.value = "";
   });
 });
 
 async function handleFile(file) {
   const chatInput = document.getElementById('chatInput');
+  // TEXT & JSON
   if (file.type.startsWith('text') || file.type === 'application/json') {
     const text = await file.text();
     chatInput.value = text;
     alert('Dateiinhalt wurde eingefügt. Die Datei wurde NICHT gespeichert!');
-  } else if (file.type === 'application/pdf') {
-    alert('PDFs können im MVP noch nicht extrahiert werden. Bitte nur reine Textdateien oder kopierten Text einfügen.');
-  } else if (file.name.endsWith('.docx')) {
-    alert('DOCX-Unterstützung folgt in Kürze. Für den MVP bitte Textdateien verwenden.');
-  } else {
-    alert('Dateityp nicht unterstützt. Für den Test bitte nur Textdateien, PDF oder DOCX.');
+    return;
   }
+  // PDF (nutzt pdf.js via CDN)
+  if (file.type === 'application/pdf') {
+    if (!window.pdfjsLib) {
+      alert('PDF.js wird geladen...');
+      await loadScript('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js');
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    }
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const typedarray = new Uint8Array(e.target.result);
+      const pdf = await window.pdfjsLib.getDocument({ data: typedarray }).promise;
+      let allText = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const strings = content.items.map(item => item.str);
+        allText += strings.join(' ') + '\n';
+      }
+      chatInput.value = allText.trim();
+      alert('PDF-Text eingefügt! Die Datei wurde NICHT gespeichert!');
+    };
+    reader.readAsArrayBuffer(file);
+    return;
+  }
+  // DOCX (nutzt mammoth.js via CDN)
+  if (file.name.endsWith('.docx')) {
+    if (!window.mammoth) {
+      alert('Lade DOCX-Parser...');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.7.0/mammoth.browser.min.js');
+    }
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      window.mammoth.convertToHtml({ arrayBuffer: e.target.result })
+        .then(function(resultObject) {
+          // Entferne alle Tags für reinen Text
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(resultObject.value, "text/html");
+          chatInput.value = doc.body.textContent.trim();
+          alert('DOCX-Text eingefügt! Die Datei wurde NICHT gespeichert!');
+        });
+    };
+    reader.readAsArrayBuffer(file);
+    return;
+  }
+  // GAEB (einfach als Text, später echte GAEB-Parsing-Logik)
+  if (file.name.toLowerCase().endsWith('.xml') || file.name.toLowerCase().endsWith('.x83')) {
+    const text = await file.text();
+    chatInput.value = text;
+    alert('GAEB-XML eingefügt! Die Datei wurde NICHT gespeichert!');
+    return;
+  }
+  alert('Dateityp nicht unterstützt. Für den Test bitte Text, PDF, DOCX oder GAEB.');
 }
 
-// --- KI-API, die den kompletten Verlauf sendet ---
+// Helper zum Nachladen von JS-Libs
+function loadScript(src) {
+  return new Promise(function(resolve, reject) {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+// KI-Request wie gehabt
 async function lvGeneratorRequestWithHistory() {
   const res = await fetch("http://localhost:8000/api/lv-generator", {
     method: "POST",
