@@ -399,7 +399,7 @@ header nav a:hover {
 }
 .vorteile-kacheln-container {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
+  top: 0; left: 0; width: 100%; height: auto;
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -1628,3 +1628,15 @@ footer {
   margin-top: 2em;
 }
 
+
+.hero-video-bg,
+.hero-registerbox,
+.vorteile-bildsektion {
+  width: 100vw;
+  min-width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  position: relative;
+  left: 0; right: 0;
+  box-sizing: border-box;
+}
