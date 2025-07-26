@@ -47,7 +47,7 @@ main {
   width: 100%;
   max-width: 1000px;
   margin: 2.4em auto;
-  padding: 0 2vw;
+  padding: 0 1vw;
   box-sizing: border-box;
   background: none;
 }
@@ -56,6 +56,12 @@ main {
 }
 @media (max-width: 800px) {
   main { max-width: 99vw; padding-left: 0.7vw; padding-right: 0.7vw; }
+}
+@media (max-width: 700px) {
+  main { padding-left: 0.2em; padding-right: 0.2em; }
+}
+@media (max-width: 600px) {
+  main { padding-left: 0.1em; padding-right: 0.1em; }
 }
 @media (max-width: 600px) {
   header { padding: 0.7em 0.9em; min-height: 48px; }
@@ -1389,13 +1395,6 @@ header {
 }
 
 
-main {
-  max-width: 980px;
-  width: 98vw;
-  margin: 2.4em auto;
-  padding: 0 1vw;
-  box-sizing: border-box;
-}
 .chat-container {
   width: 100%;
   max-width: 100%;
