@@ -301,9 +301,16 @@ header nav a:hover {
   border-radius: 18px;
   box-shadow: 0 2px 14px #0077b612;
   padding: 2.1rem 1.5rem 1.2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 .register-form {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 0.5em;
   align-items: center;
   margin-bottom: 1.4em;
@@ -387,11 +394,12 @@ header nav a:hover {
 }
 .vorteile-bg-img {
   width: 100%;
-  height: auto;
+  height: 320px;
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
   object-fit: cover;
+  object-position: center 45%;
   filter: brightness(0.56) blur(0.1px);
   opacity: 0.82;
   border-radius: 0;
@@ -399,12 +407,17 @@ header nav a:hover {
 }
 .vorteile-kacheln-container {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  min-width: 0;
+  height: auto;
   display: flex;
-  align-items: stretch;
   justify-content: center;
+  align-items: center;
   gap: 3vw;
-  padding: 0 4vw;
+  padding: 0;
   z-index: 2;
 }
 .vorteil-kachel {
@@ -477,7 +490,7 @@ header nav a:hover {
 
 /* Responsive Breakpoints */
 @media (max-width: 1100px) {
-  .hero-video-bg, .hero-video { height: 520px; min-height: 300px; }
+  .hero-video-bg, .hero-video { height: 850px; min-height: 530px; }
   .vorteile-bildsektion, .vorteile-img-wrapper, .vorteile-bg-img { min-height: 220px; height: 240px; max-height: 320px; }
   .vorteile-kacheln-container { gap: 1.3vw; }
   .vorteil-kachel { min-width: 140px; max-width: 340px; }
