@@ -1630,3 +1630,18 @@ footer {
   gap: 1.2em;
   margin-top: 2em;
 }
+
+
+.hero-video-bg,
+.hero-overlay,
+.vorteile-bildsektion,
+.vorteile-img-wrapper,
+.vorteile-bg-img,
+.section-gap-alt,
+.hero-registerbox {
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
