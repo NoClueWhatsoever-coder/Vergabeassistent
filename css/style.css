@@ -1333,7 +1333,8 @@ header {
   display: none;
   position: fixed;
   z-index: 15000;
-  top:0; left:0; width:100vw; height:100vh;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
   background: rgba(36,66,125,0.16);
   justify-content: center;
   align-items: center;
@@ -1342,27 +1343,23 @@ header {
   display: flex;
 }
 #dropOverlay .drop-inner {
-  text-align:center; background:#fff; box-shadow:0 6px 28px #0077b644;
-  border-radius:22px; padding:3em 4em; min-width:260px; max-width:90vw;
-  border:2px dashed #1999ea; color:#0077b6;
-  font-size:1.2em;
-}
-#dropOverlay > div {
   text-align: center;
   background: #fff;
   box-shadow: 0 6px 28px #0077b644;
   border-radius: 22px;
   padding: 3em 4em;
-  min-width: 320px;
+  min-width: 260px;
+  max-width: 90vw;
+  border: 2px dashed #1999ea;
+  color: #0077b6;
+  font-size: 1.2em;
 }
 #dropOverlay .file-icon {
   font-size: 2.5em;
   margin-bottom: 0.3em;
 }
-
 @media (max-width: 600px) {
-  #dropOverlay > div { padding: 1.4em 0.6em; min-width: 80vw;}
-  .file-bubble .file-name { max-width: 90vw; }
+  #dropOverlay .drop-inner { padding: 1.4em 0.6em; min-width: 80vw;}
 }
 
 
@@ -1400,9 +1397,7 @@ main {
 }
 .file-remove:hover { color: #b8060e; }
 .upload-btn { position: relative; }
-#dropOverlay {
-  animation: fadeIn .16s;
-}
+
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
 
@@ -1462,19 +1457,7 @@ main {
   cursor: pointer; margin-left: 0.35em; margin-right: -0.2em;
 }
 .file-remove:hover { color: #b8060e; }
-#dropOverlay {
-  display:none; position: fixed; z-index: 15000; top:0; left:0; width:100vw; height:100vh;
-  background: rgba(36,66,125,0.16); justify-content: center; align-items: center;
-}
-#dropOverlay.show {
-  display: flex;
-}
-#dropOverlay .drop-inner {
-  text-align:center; background:#fff; box-shadow:0 6px 28px #0077b644;
-  border-radius:22px; padding:3em 4em; min-width:260px; max-width:90vw;
-  border:2px dashed #1999ea; color:#0077b6;
-  font-size:1.2em;
-}
+
 
 /* ========== DASHBOARD/STARTSEITE ========== */
 .dashboard-hero-bg {
@@ -1592,20 +1575,6 @@ main {
 }
 .file-remove:hover { color: #b8060e; }
 
-/* Drag & Drop Overlay wie ChatGPT */
-#dropOverlay {
-  display:none; position: fixed; z-index: 15000; top:0; left:0; width:100vw; height:100vh;
-  background: rgba(36,66,125,0.16); justify-content: center; align-items: center;
-}
-#dropOverlay.show {
-  display: flex;
-}
-#dropOverlay .drop-inner {
-  text-align:center; background:#fff; box-shadow:0 6px 28px #0077b644;
-  border-radius:22px; padding:3em 4em; min-width:260px; max-width:90vw;
-  border:2px dashed #1999ea; color:#0077b6;
-  font-size:1.2em;
-}
 
 /* Abschließen-Button grün */
 #abschliessenBtn {

@@ -77,28 +77,57 @@ function getFileTypeLabel(filename) {
   return '';
 }
 
-// Drag&Drop Overlay wie ChatGPT
-function showDropOverlay(show=true) {
-  let ov = document.getElementById('dropOverlay');
-  if (!ov && show) {
-    ov = document.createElement('div');
-    ov.id = 'dropOverlay';
-    ov.innerHTML = `
-      <div style="text-align:center;background:#fff;box-shadow:0 6px 28px #0077b644;border-radius:22px;padding:3em 4em;min-width:320px;">
-        <div class="file-icon" style="font-size:2.4em;">📎</div>
-        <div style="font-size:1.25em;font-weight:600;margin:0.6em 0 0.2em 0;color:#0077b6;">Füge etwas hinzu</div>
-        <div style="font-size:1em;color:#495b7b;">Lege bis zu 3 Dateien ab, um sie zum Gespräch hinzuzufügen.</div>
-      </div>`;
-    Object.assign(ov.style, {
-      position: 'fixed', top: 0, left: 0,
-      width: '100vw', height: '100vh',
-      background: 'rgba(38,66,107,0.14)', zIndex: 5000,
-      display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
+// Drag & Drop über das ganze Fenster
+(function(){
+  // Overlay erzeugen (nur einmal)
+  let dropOverlay = document.createElement('div');
+  dropOverlay.id = 'dropOverlay';
+  dropOverlay.innerHTML = `
+    <div class="drop-inner">
+      <div class="file-icon">📎</div>
+      <div style="font-size:1.18em;font-weight:600;margin:0.6em 0 0.2em 0;color:#0077b6;">Datei(en) hierher ziehen</div>
+      <div style="font-size:1em;color:#495b7b;">Bis zu 3 Dateien, max. 10 MB pro Datei.</div>
+    </div>`;
+  dropOverlay.className = '';
+  document.body.appendChild(dropOverlay);
+
+  // Events auf das ganze Fenster:
+  let dragCounter = 0;
+  window.addEventListener('dragenter', e => {
+    e.preventDefault();
+    dragCounter++;
+    dropOverlay.classList.add('show');
+  });
+  window.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropOverlay.classList.add('show');
+  });
+  window.addEventListener('dragleave', e => {
+    e.preventDefault();
+    dragCounter--;
+    if (dragCounter <= 0) {
+      dropOverlay.classList.remove('show');
+      dragCounter = 0;
+    }
+  });
+  window.addEventListener('drop', e => {
+    e.preventDefault();
+    dropOverlay.classList.remove('show');
+    dragCounter = 0;
+    // Check if Files exist
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleUploadFiles(e.dataTransfer.files);
+    }
+  });
+
+  // Blockiere auch Drag&Drops auf das Dokument (sonst "Datei öffnen"!)
+  ['dragover', 'drop'].forEach(eventName => {
+    document.addEventListener(eventName, function(e) {
+      e.preventDefault();
     });
-    document.body.appendChild(ov);
-  }
-  if (ov) ov.style.display = show ? 'flex' : 'none';
-}
+  });
+})();
+
 
 function handleUploadFiles(fileList) {
   for (let i = 0; i < fileList.length; i++) {
@@ -140,14 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     handleUploadFiles(e.target.files);
     e.target.value = '';
   });
-  // Drag & Drop
-  const chatInput = document.getElementById('chatInput');
-  chatInput.addEventListener('dragover', (e) => { e.preventDefault(); showDropOverlay(true); });
-  chatInput.addEventListener('dragleave', (e) => { showDropOverlay(false); });
-  chatInput.addEventListener('drop', async (event) => {
-    event.preventDefault(); showDropOverlay(false);
-    handleUploadFiles(event.dataTransfer.files);
-  });
+
   // Senden
   document.getElementById('sendBtn').onclick = sendeNachricht;
   chatInput.addEventListener('keydown', function(e) {
