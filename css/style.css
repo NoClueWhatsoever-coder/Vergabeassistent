@@ -814,29 +814,47 @@ input:focus, select:focus { outline:2px solid #009ee1; border-color:#009ee1; }
 .dashboard-hero-bg {
   width: 100%;
   background: #fff;
-  padding-top: 3.7rem;
-  padding-bottom: 2.6rem;
+  padding-top: 1.2rem;        /* deutlich weniger Abstand oben */
+  padding-bottom: 0.9rem;     /* deutlich weniger Abstand unten */
   display: flex;
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 14px #e2eaf750;
-  min-height: 230px; /* Passe an wie auf Startseite */
+  min-height: 60px;           /* statt 230px */
 }
+
 .dashboard-hero-logo-container {
   text-align: center;
   width: 100%;
 }
 .dashboard-hero-logo {
-  height: 88px; /* wie auf Startseite, ggf. anpassen */
+  height: 54px;               /* statt 88px */
   max-width: 98vw;
   object-fit: contain;
   display: block;
   margin: 0 auto;
 }
+
 @media (max-width: 700px) {
-  .dashboard-hero-bg { min-height: 110px; padding-top: 1.2rem; padding-bottom: 1.2rem; }
-  .dashboard-hero-logo { height: 56px; }
+  .dashboard-hero-bg {
+    min-height: 32px;
+    padding-top: 0.7rem;
+    padding-bottom: 0.6rem;
+  }
+  .dashboard-hero-logo {
+    height: 32px;
+  }
 }
+
+#dashboard {
+  max-width: 1000px;
+  margin: 1.3rem auto 2rem auto;   /* vorher 3.5rem, jetzt kompakter */
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 4px 30px #0077b62a;
+  padding: 2.2rem 2.3rem 2.4rem 2.3rem;
+}
+
 
 .modal-backdrop {
   display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -1466,40 +1484,6 @@ main {
 }
 .file-remove:hover { color: #b8060e; }
 
-
-/* ========== DASHBOARD/STARTSEITE ========== */
-.dashboard-hero-bg {
-  width: 100%; background: #fff;
-  padding-top: 3.7rem; padding-bottom: 2.6rem;
-  display: flex; justify-content: center; align-items: center;
-  box-shadow: 0 2px 14px #e2eaf750;
-  min-height: 230px;
-}
-.dashboard-hero-logo-container { text-align: center; width: 100%; }
-.dashboard-hero-logo {
-  height: 88px; max-width: 98vw;
-  object-fit: contain; display: block;
-  margin: 0 auto;
-}
-@media (max-width: 700px) {
-  .dashboard-hero-bg { min-height: 110px; padding-top: 1.2rem; padding-bottom: 1.2rem; }
-  .dashboard-hero-logo { height: 56px; }
-}
-#dashboard {
-  max-width: 1000px; margin: 3.5rem auto 2rem auto;
-  background: #fff; border-radius: 22px;
-  box-shadow: 0 4px 30px #0077b62a;
-  padding: 2.2rem 2.3rem 2.4rem 2.3rem;
-}
-@media (max-width: 900px) {
-  main, #dashboard { max-width: 99vw; }
-}
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.7rem;
-}
 
 /* ========== CHAT & PROJEKTSEITE ========== */
 .chat-container.fix-max-breite {
