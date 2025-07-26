@@ -1,23 +1,48 @@
 html, body {
   width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
 }
-
 body {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: #f4f6f9;
+  font-family: 'Inter', Arial, sans-serif;
+  background: #f4f8fb;
   color: #1f2937;
   line-height: 1.6;
 }
+
 header {
-  background: white;
-  padding: 1.5rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e9f2;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1.1em 2.2em;
+  box-sizing: border-box;
+  position: relative;
+  min-height: 72px;
 }
+.header-center {
+  position: absolute;
+  left: 50%;
+  top: 1.1em;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+.header-firm-logo {
+  height: 80px;
+}
+
+@media (max-width: 700px) {
+  header { padding: 0.7em 0.9em; min-height: 48px; }
+  .header-firm-logo { height: 56px; }
+  .header-center { top: 0.5em; }
+}
+
 header nav a {
   margin-left: 1rem;
   text-decoration: none;
@@ -624,22 +649,6 @@ footer {
   transition: transform 0.2s;
 }
 
-.header-center {
-  position: absolute;
-  left: 50%;
-  top: 1.1em;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  z-index: 10;
-}
-.header-firm-logo {
-  height: 80px;
-}
-@media (max-width: 700px) {
-  .header-firm-logo { height: 56px; }
-}
-
 .hero-big-logo {
   max-width: 320px;
   width: 100%;
@@ -1058,34 +1067,48 @@ button:hover, .btn:hover {
 
 /* ========== Chat-Container & Verlauf ========== */
 .chat-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
   background: #fff;
   border: 1px solid #e3e8f0;
-  border-radius: 8px;
-  box-shadow: 0 3px 18px #0077b61a;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px #0077b617;
   display: flex;
   flex-direction: column;
-  min-height: 380px;
-  max-height: 500px;
-  overflow: hidden;
+  padding: 0.4em 2em 2em 2em;
 }
 .chat-header {
   background: #f7f7f7;
-  padding: 0.7em 1.1em;
-  border-bottom: 1px solid #e9eef4;
-  font-weight: 600;
-  color: #005f8d;
+  padding: 0.9em 0.8em;
+  border-bottom: 1px solid #ddd;
+  font-weight:600; color:#166ca8;
+  border-radius:10px 10px 0 0;
+  display: flex;
+  align-items: center;
 }
 .info-icon {
   font-size: 1.2em;
-  margin-left: 0.6em;
+  margin-left: 0.7em;
   vertical-align: middle;
+}
+.filebubble-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  margin: 1em 0 0.4em 0;
 }
 .chat-messages {
   flex: 1;
-  padding: 1em;
+  min-height: 120px;
+  max-height: 320px;
   overflow-y: auto;
   background: #fafdfe;
   font-size: 1.06em;
+  padding: 1em 0.5em 1em 0.5em;
+  margin-bottom: 0.6em;
+  border-radius: 7px;
 }
 .message {
   margin: 0.4em 0;
@@ -1123,23 +1146,45 @@ button:hover, .btn:hover {
   background: #fbfdff;
 }
 #chatInput {
-  flex: 1;
-  padding: 0.7em 0.8em;
-  font: inherit;
-  font-size: 1.07em;
-  resize: vertical;
-  min-height: 2.6em;
-  max-height: 7.5em;
-  border: 1.5px solid #e3e8f0;
-  border-radius: 7px;
-  margin-right: 0.6em;
-  transition: border 0.14s, background 0.2s;
-  background: #fafdfe;
+  flex:1;
+  min-width:220px;
+  min-height:2.8em;
+  font:inherit;
+  padding:1em;
+  font-size:1.09em;
+  border-radius:7px;
+  border:1.5px solid #e3e8f0;
+  resize:vertical;
+  background:#fafdfe;
+  margin-left: 0.3em;
 }
 #chatInput:focus {
   border: 1.5px solid #0077b6;
   background: #f4fafe;
 }
+
+.chat-input-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.3em;
+  margin-top: 0.8em;
+  flex-wrap: wrap;
+}
+.chat-upload-block {
+  display: flex;
+  align-items: center;
+  gap: 0.48em;
+  margin-bottom: 0.1em;
+}
+
+.upload-btn {
+  background:#e9f5ff; color:#0077b6; border-radius:50%; border:none;
+  width:2.2em; height:2.2em; font-size:1.6em; cursor:pointer; box-shadow:0 1px 4px #0077b616;
+  display:flex;align-items:center;justify-content:center; transition:background 0.13s; position:relative;
+}
+.upload-btn input[type="file"] { display:none; }
+.upload-plus { font-size:1.3em; }
+.upload-label { font-weight:500; font-size:1.01em; margin-left:0.1em; }
 
 /* ========== Mobile/Responsive ========== */
 @media (max-width: 800px) {
@@ -1230,10 +1275,13 @@ footer {
   border: 1.5px solid #e3e8f0;
   cursor: not-allowed;
 }
-#sendBtn:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
+
+#sendBtn {
+  background:#0077b6; color:#fff; border:none; padding:0.7em 2.1em;
+  font-weight:600; font-size:1.13em; cursor:pointer; border-radius:5px; margin-left:0.2em;
+  transition:background 0.14s;
 }
+#sendBtn:disabled { opacity:0.6; cursor:not-allowed; }
 
 header {
   /* Überschreibt das Doppelte, konsistent für Desktop & Mobile */
@@ -1335,14 +1383,22 @@ header {
 
 /* Drag & Drop Overlay */
 #dropOverlay {
+  display: none;
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(38,66,107,0.12);
-  z-index: 5000;
-  display: flex;
-  flex-direction: column;
+  z-index: 15000;
+  top:0; left:0; width:100vw; height:100vh;
+  background: rgba(36,66,125,0.16);
   justify-content: center;
   align-items: center;
+}
+#dropOverlay.show {
+  display: flex;
+}
+#dropOverlay .drop-inner {
+  text-align:center; background:#fff; box-shadow:0 6px 28px #0077b644;
+  border-radius:22px; padding:3em 4em; min-width:260px; max-width:90vw;
+  border:2px dashed #1999ea; color:#0077b6;
+  font-size:1.2em;
 }
 #dropOverlay > div {
   text-align: center;
@@ -1364,9 +1420,11 @@ header {
 
 
 main {
-  max-width: 980px !important;
-  margin: 2.4em auto !important;
+  max-width: 980px;
+  width: 98vw;
+  margin: 2.4em auto;
   padding: 0 1vw;
+  box-sizing: border-box;
 }
 .chat-container {
   width: 100%;
@@ -1401,3 +1459,77 @@ main {
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
 
+.chat-container.fix-max-breite {
+  border: 1px solid #ddd; border-radius: 12px;
+  box-shadow: 0 4px 20px #0077b617; background: #fff;
+  max-width: 100%; width: 100%; padding: 0.4em 2em 2em 2em;
+  margin: 0 auto;
+}
+.chat-header {
+  background: #f7f7f7; padding: 0.9em 0.8em; border-bottom: 1px solid #ddd;
+  font-weight:600; color:#166ca8; border-radius:10px 10px 0 0;
+}
+.filebubble-row {
+  display: flex; flex-wrap: wrap; gap: 1em; margin: 1em 0 0.4em 0;
+}
+.chat-input-bar {
+  display: flex; align-items: flex-end; gap: 1.3em;
+  margin-top: 0.8em; flex-wrap: wrap;
+}
+.chat-upload-block {
+  display: flex; align-items: center; gap: 0.48em; margin-bottom: 0.1em;
+}
+.upload-btn {
+  background:#e9f5ff; color:#0077b6; border-radius:50%; border:none;
+  width:2.2em; height:2.2em; font-size:1.6em; cursor:pointer; box-shadow:0 1px 4px #0077b616;
+  display:flex;align-items:center;justify-content:center; transition:background 0.13s; position:relative;
+}
+.upload-btn input[type="file"] { display:none; }
+.upload-plus { font-size:1.3em; }
+.upload-label { font-weight:500; font-size:1.01em; margin-left:0.1em; }
+#chatInput {
+  flex:1; min-width:220px; min-height:2.8em; font:inherit; padding:1em;
+  font-size:1.09em; border-radius:7px; border:1.5px solid #e3e8f0; resize:vertical;
+  background:#fafdfe;
+}
+#sendBtn {
+  background:#0077b6; color:#fff; border:none; padding:0.7em 2.1em;
+  font-weight:600; font-size:1.13em; cursor:pointer; border-radius:5px; margin-left:0.2em;
+  transition:background 0.14s;
+}
+#sendBtn:disabled { opacity:0.6; cursor:not-allowed; }
+@media (max-width: 900px) {
+  .chat-container.fix-max-breite { padding:0.7em 0.2em 1.1em 0.2em; }
+  .chat-header { font-size:1.04em; }
+  .chat-input-bar { flex-direction: column; align-items: stretch; gap:0.5em; }
+  #chatInput { width:100%; min-width:100px; }
+}
+/* Datei-Bubble Style */
+.file-bubble {
+  display: flex; align-items: center; gap: 0.7em;
+  background: #f7f8fc; color: #184e8b;
+  border-radius: 13px; box-shadow: 0 1.5px 7px #0077b612;
+  padding: 0.65em 1.3em 0.65em 0.95em; font-size: 1.03em;
+  margin-bottom: 0.22em;
+}
+.file-icon { font-size: 1.25em; margin-right:0.16em; }
+.file-name { font-weight: 600; margin-right:0.3em; }
+.file-type { font-size: 0.97em; color: #3472b8; margin-right:0.5em; }
+.file-remove {
+  background: none; border: none; color: #d32f2f; font-size: 1.2em; font-weight: 700;
+  cursor: pointer; margin-left: 0.35em; margin-right: -0.2em;
+}
+.file-remove:hover { color: #b8060e; }
+#dropOverlay {
+  display:none; position: fixed; z-index: 15000; top:0; left:0; width:100vw; height:100vh;
+  background: rgba(36,66,125,0.16); justify-content: center; align-items: center;
+}
+#dropOverlay.show {
+  display: flex;
+}
+#dropOverlay .drop-inner {
+  text-align:center; background:#fff; box-shadow:0 6px 28px #0077b644;
+  border-radius:22px; padding:3em 4em; min-width:260px; max-width:90vw;
+  border:2px dashed #1999ea; color:#0077b6;
+  font-size:1.2em;
+}

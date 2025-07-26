@@ -57,30 +57,38 @@
     </div>
   </section>
 
-  <!-- Chatbereich -->
-   <section class="chat-container" style="border:1px solid #ddd;border-radius:8px;display:flex;flex-direction:column;max-width:100%;background:#fff;box-shadow:0 4px 20px #0077b617;padding:0.4em 1.7em 2em 1.7em;">
-    <div class="chat-header" style="background:#f7f7f7;padding:0.9em 0.8em;border-bottom:1px solid #ddd;">
+  <!-- Chatbereich: Maximale Breite, Datei-Bubbles, Upload-Button links, Button sichtbar -->
+  <section class="chat-container fix-max-breite">
+    <div class="chat-header">
       <h3 style="display:inline;">Bedarfsbeschreibung & Verlauf</h3>
       <span class="info-icon" title="Bitte beschreiben Sie Ihren Bedarf so detailliert wie möglich oder laden Sie eine Datei hoch." style="margin-left:1em;cursor:help;">ℹ️</span>
     </div>
-    <div id="fileBubbleRow" style="display:flex;flex-wrap:wrap;gap:1em;margin:1em 0 0.4em 0;"></div>
-    <div id="chatMessages" class="chat-messages" style="flex:1;padding:1.3em 0.4em 1em 0.4em;overflow-y:auto;background:#fafbfc;min-height:130px;"></div>
-    <div class="chat-input-area" style="display:flex;flex-direction:column;gap:0.6em;margin-top:0.9em;">
-        <!-- Upload ganz LINKS -->
-      <label class="upload-btn" style="background:#e9f5ff;color:#0077b6;border-radius:50%;border:none;width:2.1em;height:2.1em;font-size:1.6em;cursor:pointer;box-shadow:0 1px 4px #0077b616;transition:background 0.13s;display:flex;align-items:center;justify-content:center;margin-right:0.3em;">
-        +
-        <input type="file" id="fileUpload" accept=".txt,.docx,.pdf,.json,.xml,.x83,.xlsx,.csv" style="display:none;" multiple />
-      </label>
-      <span style="font-weight:500;font-size:1.01em;margin-right:1.2em;">Datei auswählen</span>
-      <textarea id="chatInput" placeholder="Beschreibung eingeben..." style="flex:1;min-height:2.8em;font:inherit;padding:1em;font-size:1.09em;border-radius:7px;border:1.5px solid #e3e8f0;"></textarea>
-      <button id="sendBtn" style="background:#0077b6;color:#fff;border:none;padding:0.7em 2.1em;font-weight:600;font-size:1.13em;cursor:pointer;border-radius:5px;">Senden</button>
+    <div id="fileBubbleRow" class="filebubble-row"></div>
+    <div id="chatMessages" class="chat-messages"></div>
+    <div class="chat-input-bar">
+      <!-- Upload-Block GANZ LINKS -->
+      <div class="chat-upload-block">
+        <label class="upload-btn">
+          <span class="upload-plus">+</span>
+          <input type="file" id="fileUpload" accept=".txt,.docx,.pdf,.json,.xml,.x83,.xlsx,.csv" multiple />
+        </label>
+        <span class="upload-label">Datei auswählen</span>
+      </div>
+      <!-- Textfeld -->
+      <textarea id="chatInput" placeholder="Beschreibung eingeben..."></textarea>
+      <!-- Senden-Button GANZ RECHTS -->
+      <button id="sendBtn">Senden</button>
     </div>
   </section>
   <!-- Abschließen-Button ZENTRAL darunter -->
   <div style="margin:1.7em 0 0 0;text-align:center;">
     <button id="abschliessenBtn" style="background:#39a800;color:#fff;font-weight:600;border:none;padding:0.9em 2.2em;border-radius:7px;cursor:pointer;display:none;">LV als abgeschlossen markieren</button>
   </div>
+  <!-- Snackbar und DragDrop-Overlay -->
+  <div id="snackbar" style="display:none;"></div>
+  <div id="dropOverlay"></div>
 </main>
+
 
 <footer style="margin:2em auto;text-align:center;">
   <img src="img/logo_govdisrupt_ai.png" alt="Logo" style="height:36px;margin-right:1.4em;">
