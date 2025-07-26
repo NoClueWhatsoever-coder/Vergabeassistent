@@ -3,6 +3,7 @@ html, body {
   min-width: 0;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   overflow-x: hidden;
 }
 body {
@@ -23,6 +24,7 @@ header {
   box-sizing: border-box;
   position: relative;
   min-height: 72px;
+  max-width: 100vw;
 }
 .header-center {
   position: absolute;
@@ -43,6 +45,24 @@ header {
   .header-center { top: 0.5em; }
 }
 
+main {
+  width: 100%;
+  max-width: 1000px;
+  margin: 2.4em auto;
+  padding: 0 2vw;
+  background: none;
+  box-sizing: border-box;
+}
+@media (max-width: 1100px) {
+  main { max-width: 99vw; }
+}
+@media (max-width: 800px) {
+  main { max-width: 99vw; padding-left: 0.7vw; padding-right: 0.7vw; }
+}
+@media (max-width: 600px) {
+  main { padding-left: 0.5vw; padding-right: 0.5vw; }
+}
+
 header nav a {
   margin-left: 1rem;
   text-decoration: none;
@@ -58,12 +78,12 @@ header nav a:hover {
   font-size: 1.5rem;
   color: #0077B6;
 }
-/* HERO-BEREICH MIT VIDEO, TEXT (3 Zeilen) UND CHAT */
+
+/* HERO & andere Komponenten bleiben gleich */
 .hero-video-bg {
   position: relative;
   width: 100vw;
-  height: 1500px;  /* noch mehr Höhe! */
-  min-height: 1200px;
+  min-height: 300px;
   overflow: hidden;
   background: #0077b6;
   display: flex;
@@ -73,9 +93,8 @@ header nav a:hover {
 .hero-video {
   width: 100vw;
   height: 100%;
-  min-height: 1200px;
   object-fit: cover;
-  object-position: center 30%;  /* Zeigt den Mittelpunkt etwas weiter oben: weniger Zoom auf Köpfe! */
+  object-position: center 30%;
   position: absolute;
   left: 0;
   top: 0;
@@ -415,14 +434,7 @@ header nav a:hover {
   padding: 2rem;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
-footer {
-  text-align: center;
-  padding: 2rem;
-  font-size: 0.9rem;
-  color: #6b7280;
-  background-color: #ffffff;
-  margin-top: 4rem;
-}
+
 /* Responsive Breakpoints */
 @media (max-width: 1100px) {
   .hero-video-bg, .hero-video { height: 520px; min-height: 300px; }
@@ -1210,18 +1222,6 @@ button:hover, .btn:hover {
   .chat-container { min-height: 320px; max-height: 450px; }
 }
 
-/* ========== Footer/Sidebar ========== */
-footer {
-  background: #fff;
-  padding: 1.1em 2vw;
-  font-size: 1em;
-  border-top: 1px solid #e7eef6;
-  color: #497398;
-  display: flex;
-  align-items: center;
-  gap: 1.2em;
-  margin-top: 2em;
-}
 .sidebar-menu {
   background: #fff;
   box-shadow: 0 7px 28px #0077b624;
@@ -1755,7 +1755,9 @@ header {
 }
 
 footer {
-  background: #fff;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
   padding: 1.1em 2vw;
   font-size: 1em;
   border-top: 1px solid #e7eef6;
@@ -1764,7 +1766,6 @@ footer {
   align-items: center;
   gap: 1.2em;
   margin-top: 2em;
-  justify-content: center;
 }
 
 /* ========== RESPONSIVE BREAKPOINTS ========== */
