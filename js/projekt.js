@@ -10,6 +10,8 @@ let hochgeladeneDateien = [];
 const MAX_FILES = 3;
 const MAX_FILESIZE = 10 * 1024 * 1024; // 10 MB
 
+
+
 // Snackbar
 function showSnackbar(msg, color='#184e8b') {
   let sb = document.getElementById('snackbar');
