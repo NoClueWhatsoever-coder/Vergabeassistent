@@ -34,9 +34,15 @@ header {
   align-items: center;
   z-index: 10;
 }
+
 .header-firm-logo {
-  height: 80px;
+  display: block;
+  max-height: 48px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
+
 main {
   width: 100%;
   max-width: 1000px;
@@ -53,7 +59,9 @@ main {
 }
 @media (max-width: 600px) {
   header { padding: 0.7em 0.9em; min-height: 48px; }
-  .header-firm-logo { height: 56px; }
+  .header-firm-logo {
+    max-height: 36px;
+  }
   .header-center { top: 0.5em; }
   main { padding-left: 0.5vw; padding-right: 0.5vw; }
 }
