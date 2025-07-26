@@ -116,6 +116,7 @@ header nav a:hover {
 }
 .hero-video {
   width: 100%;
+  height: auto;
   object-fit: cover;
   object-position: center 30%;
   position: absolute;
@@ -128,6 +129,10 @@ header nav a:hover {
   position: relative;
   z-index: 2;
   width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
   text-align: center;
   color: #fff;
   text-shadow: 0 2px 18px #0a162366;
@@ -135,7 +140,6 @@ header nav a:hover {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100%;
   padding-top: 48px;
   gap: 1.4rem;
 }
@@ -289,14 +293,16 @@ header nav a:hover {
 }
 
 .hero-registerbox {
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
   margin-top: 2.8rem;
   background: #f7fafc;
   border-radius: 18px;
   box-shadow: 0 2px 14px #0077b612;
   padding: 2.1rem 1.5rem 1.2rem 1.5rem;
-  max-width: 960px;
-  margin-left: auto;
-  margin-right: auto;
 }
 .register-form {
   display: flex;
@@ -350,8 +356,11 @@ header nav a:hover {
 /* ABSTAND/FARBE ZWISCHEN VIDEO UND BILD */
 .section-gap-alt {
   width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
   min-height: 52px;
-  height: 8vw;
   background: #f0f4f8;
   display: flex;
   align-items: center;
@@ -360,6 +369,11 @@ header nav a:hover {
 /* VORTEILE-BILDSEKTION: Banner, volle Breite, angemessene Höhe */
 .vorteile-bildsektion {
   width: 100%;
+  max-width: 1000px;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
   position: relative;
   display: flex;
   justify-content: center;
@@ -367,16 +381,22 @@ header nav a:hover {
   margin-top: 0;
   margin-bottom: 2.7rem;
   min-height: 340px;
-  height: 390px;
 }
 .vorteile-img-wrapper {
   width: 100%;
-  height: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
   position: relative;
 }
 .vorteile-bg-img {
   width: 100%;
-  height: 100%;
+  max-width: 1000px;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
   object-fit: cover;
   filter: brightness(0.56) blur(0.1px);
   opacity: 0.82;
