@@ -106,7 +106,7 @@ header nav a:hover {
   position: relative;
   width: 100%;
   margin: 0 auto;
-  min-height: 300px;
+  min-height: 400px;
   overflow: hidden;
   background: #0077b6;
   display: flex;
@@ -317,6 +317,7 @@ header nav a:hover {
   border: 1px solid #d0d7e2;
   font-size: 1.18rem;
   box-sizing: border-box;
+  align-items: center;
 }
 .register-form button {
   padding: 1.15em 2.6em;
@@ -366,7 +367,7 @@ header nav a:hover {
 /* VORTEILE-BILDSEKTION: Banner, volle Breite, angemessene Höhe */
 .vorteile-bildsektion {
   width: 100%;
-  height: auto;
+  max-height: 400;
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
@@ -398,10 +399,9 @@ header nav a:hover {
   display: block;
 }
 .vorteile-kacheln-container {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: auto;
+  width: 100%; height: auto;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   gap: 3vw;
   padding: 0 4vw;
