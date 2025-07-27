@@ -368,7 +368,7 @@ header nav a:hover {
   font-size: 1.04rem;
   color: #1f2937;
   margin-bottom: 0.32em;
-  padding-left: 0.5em;
+  padding-left: 1.6em;
 }
 .register-features li::before {
   content: '✓';
