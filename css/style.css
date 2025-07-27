@@ -312,7 +312,6 @@ header nav a:hover {
   flex-direction: column;
   align-items: center;
   gap: 0.5em;
-  align-items: center;
   margin-bottom: 1.4em;
 }
 .register-form input[type="email"] {
@@ -322,6 +321,7 @@ header nav a:hover {
   padding: 1.15em 1.6em;
   border-radius: 8px 0 0 8px;
   border: 1px solid #d0d7e2;
+  align-items: center;
   font-size: 1.18rem;
   box-sizing: border-box;
 }
@@ -429,6 +429,8 @@ header nav a:hover {
   min-width: 280px;
   flex: 1 1 320px;
   display: flex;
+  top: 50%;
+  left: 50%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
