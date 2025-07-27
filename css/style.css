@@ -292,10 +292,6 @@ header nav a:hover {
 }
 
 .hero-registerbox {
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  box-sizing: border-box;
   margin-top: 2.8rem;
   background: #f7fafc;
   border-radius: 18px;
@@ -309,7 +305,7 @@ header nav a:hover {
 }
 .register-form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 0.5em;
   margin-bottom: 1.4em;
@@ -320,9 +316,9 @@ header nav a:hover {
   max-width: 600px;
   padding: 1.15em 1.6em;
   border-radius: 8px 0 0 8px;
+  border-right: none;
   border: 1px solid #d0d7e2;
   font-size: 1.18rem;
-  box-sizing: border-box;
 }
 .register-form button {
   padding: 1.15em 2.6em;
@@ -334,14 +330,40 @@ header nav a:hover {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
+  height: 100%;
+  margin-bottom: 0;
+  white-space: nowrap;
 }
 .register-form button:hover {
   background: #009ee1;
 }
+
+@media (max-width: 700px) {
+    .register-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .register-form input[type="email"],
+    .register-form button {
+        border-radius: 8px;
+        min-width: 0;
+        max-width: 100%;
+        width: 100%;
+        margin-bottom: 0.8em;
+        border-right: 1px solid #d0d7e2;
+    }
+    .register-form button { margin-top: 0; }
+}
+
 .register-features {
-  list-style: none;
-  padding: 0 0 0 1.1em;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    max-width: 420px;
+    margin-left: 0; /* exakt unter dem Inputfeld */
+    margin-right: auto;
+    align-self: flex-start;
 }
 .register-features li {
   position: relative;
@@ -393,7 +415,7 @@ header nav a:hover {
 }
 .vorteile-bg-img {
   width: 100%;
-  height: 320px;
+  height: 560px;
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
@@ -413,29 +435,30 @@ header nav a:hover {
   min-width: 0;
   height: auto;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: 3vw;
-  padding: 0;
+  padding: 0 3vw;
   z-index: 2;
 }
 .vorteil-kachel {
   background: rgba(240, 240, 240, 0.96);
   border-radius: 24px;
   box-shadow: 0 4px 32px #0002;
-  padding: 2.5em 2em 1.6em 2em;
+  padding: 2.2em 2em 1.6em 2em;
   max-width: 380px;
   min-width: 280px;
-  flex: 1 1 320px;
+  width: 100%;
+  flex: 1 1 0;
   display: flex;
-  top: 50%;
-  left: 50%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   transition: transform 0.18s;
   border: 1px solid #e6e6e6;
+  margin: 0;
 }
 .vorteil-kachel:hover {
   transform: translateY(-6px) scale(1.04);
