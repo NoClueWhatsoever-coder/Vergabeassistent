@@ -61,17 +61,19 @@
 
   <!-- MODERNE SCHNELLREGISTRIERUNG: nur E-Mail, öffnet Modal -->
   <div class="hero-registerbox">
-    <form class="register-form" onsubmit="event.preventDefault(); gotoRegistration();">
-      <input id="heroRegEmail" type="email" placeholder="Ihre dienstliche E-Mail-Adresse" required>
-      <button type="submit">Jetzt bei VergabeAssistent registrieren</button>
-    </form>
-    <ul class="register-features">
-      <li>Beschaffungsvorhaben anlegen</li>
-      <li>Markterkundungen durchführen</li>
-      <li>Leistungsverzeichnisse generieren</li>
-      <li>Vergaberechtliche Fragen stellen</li>
-      <li>Ergebnisse exportieren</li>
-    </ul>
+    <div class="register-align-wrapper">
+      <form class="register-form" onsubmit="event.preventDefault(); gotoRegistration();">
+        <input id="heroRegEmail" type="email" placeholder="Ihre dienstliche E-Mail-Adresse" required>
+        <button type="submit">Jetzt bei VergabeAssistent registrieren</button>
+      </form>
+      <ul class="register-features">
+        <li>Beschaffungsvorhaben anlegen</li>
+        <li>Markterkundungen durchführen</li>
+        <li>Leistungsverzeichnisse generieren</li>
+        <li>Vergaberechtliche Fragen stellen</li>
+        <li>Ergebnisse exportieren</li>
+      </ul>
+    </div>
   </div>
 
   <div class="section-gap-alt"></div>
