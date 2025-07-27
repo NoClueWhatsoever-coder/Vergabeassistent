@@ -291,35 +291,37 @@ header nav a:hover {
   margin-left: 0.55em;
 }
 
-.register-align-wrapper {
+.hero-registerbox {
+  margin-top: 2.8rem;
+  background: #f7fafc;
+  border-radius: 18px;
+  box-shadow: 0 2px 14px #0077b612;
+  padding: 2.1rem 1.5rem 1.2rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  justify-content: center;
+  text-align: center;
 }
 .register-form {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 1.2em;
-  width: 100%;
-  max-width: 620px;
+  gap: 0.5em;
+  margin-bottom: 1.4em;
 }
 .register-form input[type="email"] {
   flex: 3;
-  min-width: 320px;
+  min-width: 380px;
   max-width: 600px;
   padding: 1.15em 1.6em;
   border-radius: 8px 0 0 8px;
   border-right: none;
   border: 1px solid #d0d7e2;
   font-size: 1.18rem;
-  height: 54px;
-  box-sizing: border-box;
 }
 .register-form button {
-  padding: 0 2.6em;
+  padding: 1.15em 2.6em;
   background: #0077b6;
   color: #fff;
   border: none;
@@ -328,20 +330,38 @@ header nav a:hover {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
-  height: 54px;
-  box-sizing: border-box;
+  height: 100%;
   margin-bottom: 0;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
 }
+.register-form button:hover {
+  background: #009ee1;
+}
+
+@media (max-width: 700px) {
+    .register-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .register-form input[type="email"],
+    .register-form button {
+        border-radius: 8px;
+        min-width: 0;
+        max-width: 100%;
+        width: 100%;
+        margin-bottom: 0.8em;
+        border-right: 1px solid #d0d7e2;
+    }
+    .register-form button { margin-top: 0; }
+}
+
 .register-features {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-  width: 100%;
-  max-width: 600px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    max-width: 600px;
+    margin-left: 1.6em; /* exakt unter dem Inputfeld */
 }
 .register-features li {
   position: relative;
