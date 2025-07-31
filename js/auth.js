@@ -81,6 +81,10 @@ async function register() {
   if (!tosValid || !valid) return;
 
   // Supabase Signup
+  console.log("[DEBUG] Registrierung wird abgeschickt", {
+    email, password, anrede, vorname, nachname, organisation, bundesland, telefon
+  });
+
   let signUpRes;
   try {
     signUpRes = await supabase.auth.signUp({
@@ -92,15 +96,16 @@ async function register() {
       }
     });
   } catch (err) {
+    console.error("[DEBUG] Fehler beim Supabase-Call:", err);
     showFieldError('regEmail', "Serverfehler: " + (err.message || err));
     return;
   }
 
   const { data, error } = signUpRes;
-  // Debugging
-  console.log("Supabase signUp response:", { data, error });
+  console.log("[DEBUG] Supabase signUp Antwort:", { data, error });
 
   if (error) {
+    console.error("[DEBUG] Supabase Fehler:", error);
     showFieldError('regEmail', error.message.includes('already registered')
       ? 'E-Mail ist bereits registriert.' : ('Fehler: ' + error.message));
     return;
@@ -111,23 +116,25 @@ async function register() {
   if (!userId && data && data.session && data.session.user && data.session.user.id) {
     userId = data.session.user.id;
   }
-  // Workaround: Fallback auf Supabase getUser()
   if (!userId) {
     const { data: authData } = await supabase.auth.getUser();
     userId = authData?.user?.id || null;
+    console.log("[DEBUG] Fallback userId aus getUser:", userId);
   }
-  // E-Mail immer mit speichern!
+
   if (userId) {
     try {
-      await supabase.from('profiles').upsert([{
+      const upsertRes = await supabase.from('profiles').upsert([{
         user_id: userId,
         email,
         anrede, vorname, nachname, organisation, bundesland, telefon
       }]);
+      console.log("[DEBUG] Upsert in profiles Result:", upsertRes);
     } catch (err) {
-      // Ignorieren – Profil kann im ersten Login nachgeholt werden
-      console.log("Fehler beim Profile-Upsert:", err);
+      console.error("[DEBUG] Fehler beim Profile-Upsert:", err);
     }
+  } else {
+    console.warn("[DEBUG] Kein userId beim Profile-Upsert verfügbar!");
   }
 
   showSuccessOverlay(
@@ -137,12 +144,12 @@ async function register() {
       showHomepage();
     }
   );
-  // Optionales Reset
+
   const form = document.getElementById('registerForm');
   if (form) form.reset();
 }
 
-// --- LOGIN
+// --- LOGIN (inkl. Debug)
 async function login() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
@@ -155,7 +162,9 @@ async function login() {
   if (!password) { valid = false; showFieldError('loginPassword', "Passwort fehlt."); }
   if (!valid) return;
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  console.log("[DEBUG] Login Antwort:", { data, error });
   if (error) {
+    console.error("[DEBUG] Login-Fehler:", error);
     let message = 'Login fehlgeschlagen. ';
     if (error.message.includes('Invalid login credentials')) message = 'E-Mail oder Passwort falsch.';
     else if (error.message.includes('not confirmed')) message = 'Bitte E-Mail erst bestätigen.';
@@ -252,8 +261,6 @@ document.addEventListener('keydown', function(e){
 // document.getElementById('authModalBackdrop').addEventListener('click', function(e){
 //   if (e.target === this) closeAuthModal();
 // });
-
-
 
 // --- Weiterleitung abfangen (Opt-In/SetPW/Reset)
 function handleRegisteredRedirect() {
