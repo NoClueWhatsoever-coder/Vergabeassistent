@@ -1,15 +1,31 @@
 # lv-generator.py
 from fastapi import FastAPI, Request
+from fastapi import HTTPException, Header
 from sentence_transformers import SentenceTransformer
+from supabase import create_client, Client
+import os
+import jwt
 import requests
 import re
+
+SUPABASE_JWT_SECRET = "62a48z4n1mwhYPpgSEgGAOS7fUQrGwxJ/uSiG1otlqQGRnPzF7caqAqUP+uJs/mpVpQ9NjsOWgjce3tZNOV8NQ=="  # Siehe Supabase Settings (findest du in den API-Einstellungen)
+SUPABASE_URL = os.getenv("https://jjkuvuywbwnvsgpbqlwo.supabase.co")
+SUPABASE_SERVICE_KEY = os.getenv("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impqa3V2dXl3YndudnNncGJxbHdvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTMwNTcyMywiZXhwIjoyMDY2ODgxNzIzfQ.uYDofjoM_c_BBhLym6r65re31jH5YugqFI08Lq_SQeo")  # Niemals im Frontend verwenden!
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 app = FastAPI()
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 QDRANT_URL = "http://localhost:6333/collections/leistungsdokumente/points/search"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_KEY = "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"  # Deinen Key eintragen!
+OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
+
+def verify_jwt(token):
+    try:
+        payload = jwt.decode(token, SUPABASE_JWT_SECRET, algorithms=['HS256'])
+        return payload
+    except Exception:
+        return None
 
 def anonymize_text(text):
     # Entfernt typische Auftraggeber-/Ort-/Schulnamenmuster, kann bei Bedarf erweitert werden!
@@ -24,7 +40,16 @@ def anonymize_text(text):
     return text
 
 @app.post("/api/lv-generator")
-async def lv_generator(req: Request):
+async def lv_generator(req: Request, authorization: str = Header(None)):
+    # 1. Prüfe Auth
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token fehlt")
+    token = authorization.split(" ")[1]
+    user = verify_jwt(token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Ungültiges Token")
+
+    # Ab hier ist user["sub"] die user_id
     data = await req.json()
 
     # --- Neu: Multi-Turn/Verlauf aus messages (wie OpenAI) ---
@@ -142,6 +167,20 @@ Bitte formuliere einen vollständigen, produktneutralen Vorschlag für ein neues
     result = ""
     if or_res.ok:
         data = or_res.json()
-        result = data['choices'][0]['message']['content']
+        try:
+            result = data['choices'][0]['message']['content']
+        except (KeyError, IndexError):
+            result = data.get("error", "KI-Fehler: Keine Antwort erhalten.")
+    else:
+        result = f"Fehler bei OpenRouter-Call: {or_res.status_code} {or_res.text}"
 
+    # NEU: Speichern in Supabase, falls projekt_id vorhanden
+    projekt_id = data.get("projekt_id")
+    if projekt_id and result:
+        supabase.table("projekt_lv").upsert({
+            "projekt_id": projekt_id,
+            "inhalt": result,
+        }).execute()
     return {"result": result, "used_examples": examples}
+    
+

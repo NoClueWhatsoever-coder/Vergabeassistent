@@ -154,6 +154,8 @@ function handleUploadFiles(fileList) {
 document.addEventListener('DOMContentLoaded', () => {
   ladeProjekt();
   ladeChat();
+  ladeFormularfelder(); // <-- NEU: Formular-Felder laden
+
   // Datei-Bubble Row, falls noch nicht vorhanden
   if (!document.getElementById('fileBubbleRow')) {
     const filesRow = document.createElement('div');
@@ -177,7 +179,71 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault(); sendeNachricht();
     }
   });
+
+  // Speichern der Formularfelder (NEU)
+  document.getElementById('saveFormularFieldsBtn').onclick = async function() {
+    const id = getProjektId();
+    const baumaßnahme = document.getElementById('baumaßnahmeInput').value.trim();
+    const maßnahme_nr = document.getElementById('maßnahmeNrInput').value.trim();
+    const vergabe_nr = document.getElementById('vergabeNrInput').value.trim();
+    const { error } = await supabase.from('projekte').update({
+      baumaßnahme, maßnahme_nr, vergabe_nr
+    }).eq('id', id);
+    const stat = document.getElementById('formularSaveStatus');
+    if (!error) {
+      stat.textContent = "Gespeichert!";
+      setTimeout(() => stat.textContent = "", 1600);
+    } else {
+      stat.textContent = "Fehler beim Speichern!";
+    }
+  };
+
+  // Hilfsfunktion zum Ermitteln der Projekt-ID aus der URL
+  function getProjektId() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
+  }
+
+  // Buttons abfragen
+  const btnLV = document.getElementById('btnVergabeUnterlagen');
+  const btnMarkt = document.getElementById('btnMarkterkundung');
+  const btnRecht = document.getElementById('btnRechtsfragen');
+
+  // Prüfen, ob die Buttons existieren (Seite könnte auch ohne sie geladen werden)
+  if (btnLV) {
+    btnLV.onclick = function() {
+      const pid = getProjektId();
+      // Leitet weiter und gibt die Projekt-ID mit – so können alle Unterlagen projektbezogen geladen werden
+      window.location.href = `vergabeunterlagen.html?id=${encodeURIComponent(pid)}`;
+    };
+  }
+  if (btnMarkt) {
+    btnMarkt.onclick = function() {
+      alert("Die Markterkundung wird in einer späteren Version verfügbar sein.");
+    };
+  }
+  if (btnRecht) {
+    btnRecht.onclick = function() {
+      alert("Der Rechtsfragen-Chat wird bald freigeschaltet.");
+      // Optional: window.location.href = "rechtschat.html?id=...";
+    };
+  }
 });
+
+// NEU: Formularfelder laden
+async function ladeFormularfelder() {
+  const id = getProjektId();
+  const { data: projekt, error } = await supabase
+    .from('projekte')
+    .select('baumaßnahme, maßnahme_nr, vergabe_nr')
+    .eq('id', id)
+    .single();
+  if (!error && projekt) {
+    document.getElementById('baumaßnahmeInput').value = projekt.baumaßnahme || '';
+    document.getElementById('maßnahmeNrInput').value = projekt.maßnahme_nr || '';
+    document.getElementById('vergabeNrInput').value = projekt.vergabe_nr || '';
+  }
+}
 
 // Senden mit Datei-Parsing im Hintergrund
 async function sendeNachricht() {

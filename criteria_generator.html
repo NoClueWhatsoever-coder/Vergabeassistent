@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kriterien generieren – VergabeAssist</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+        header { background: #003366; color: #fff; padding: 1rem; }
+        .container { max-width: 800px; margin: 2rem auto; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 80vh; }
+        .chat-area { flex: 1; padding: 1rem; overflow-y: auto; border-bottom: 1px solid #ddd; }
+        .message { margin-bottom: 1rem; }
+        .message.user { text-align: right; }
+        .message.ai { text-align: left; }
+        .message .bubble { display: inline-block; padding: 0.5rem 0.75rem; border-radius: 15px; max-width: 70%; }
+        .message.user .bubble { background: #e0f7fa; color: #004d40; }
+        .message.ai .bubble { background: #e8eaf6; color: #1a237e; }
+        .input-area { display: flex; padding: 1rem; }
+        .input-area input[type="text"] { flex: 1; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-right: 0.5rem; }
+        .input-area button { padding: 0.5rem 1rem; background: #003366; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        .input-area button:disabled { opacity: 0.5; cursor: default; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Kriterien generieren</h1>
+        <p>Eignungs- und Zuschlagskriterien vorschlagen lassen</p>
+    </header>
+    <div class="container">
+        <div id="chatArea" class="chat-area"></div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Beschreiben Sie die ausgeschriebene Leistung oder formulieren Sie Fragen zu Eignungs-/Zuschlagskriterien…">
+            <button id="sendBtn" onclick="sendMessage()">Senden</button>
+        </div>
+    </div>
+    <script>
+        const chatArea = document.getElementById('chatArea');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        function appendMessage(sender, text) {
+            const msg = document.createElement('div');
+            msg.classList.add('message', sender);
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.textContent = text;
+            msg.appendChild(bubble);
+            chatArea.appendChild(msg);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+            appendMessage('user', text);
+            userInput.value = '';
+            userInput.focus();
+            sendBtn.disabled = true;
+            // Placeholder for backend call to generate criteria suggestions
+            setTimeout(() => {
+                const reply = 'Hier würden von der KI passende Eignungs- und Zuschlagskriterien samt Gewichtung vorgeschlagen werden. (Demonstration)';
+                appendMessage('ai', reply);
+                sendBtn.disabled = false;
+            }, 1000);
+        }
+        userInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vergabeunterlagen – Übersicht & Export</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+        header { background: #003366; color: #fff; padding: 1rem; }
+        main { max-width: 1000px; margin: 2rem auto; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1.5rem; }
+        h2 { margin-top: 1.5rem; }
+        .section { margin-bottom: 2rem; }
+        .documents { list-style: none; padding: 0; }
+        .documents li { margin-bottom: 0.5rem; }
+        .export-buttons button { margin-right: 1rem; padding: 0.5rem 1rem; background: #003366; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        .export-buttons button:disabled { opacity: 0.5; cursor: default; }
+        .template-list { margin-top: 0.5rem; }
+        .template-list select { padding: 0.4rem; }
+        nav a { margin-right: 1rem; color: #003366; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Vergabeunterlagen</h1>
+        <nav>
+            <a href="lv_generator.html">LV erstellen</a>
+            <a href="criteria_generator.html">Kriterien</a>
+            <a href="eigenerklaerungen_generator.html">Eigenerklärungen</a>
+            <a href="contracts_generator.html">Vertragsbedingungen</a>
+        </nav>
+    </header>
+    <main>
+        <section class="section" id="overview">
+            <h2>Übersicht</h2>
+            <p>Hier sehen Sie alle bisher generierten Dokumente Ihres Projekts. Sobald Sie ein Modul abschließen, erscheint das Dokument in der entsprechenden Liste.</p>
+            <h3>Leistungsverzeichnis</h3>
+            <ul class="documents" id="lvList">
+                <li>Noch kein LV erstellt.</li>
+            </ul>
+            <h3>Kriterien (Eignung & Zuschlag)</h3>
+            <ul class="documents" id="criteriaList">
+                <li>Keine Kriterien generiert.</li>
+            </ul>
+            <h3>Eigenerklärungen</h3>
+            <!-- Neuer Button für Formblatt 124 -->
+            <button id="addFormblatt124Btn" style="margin-bottom:0.8em;">Formblatt 124 automatisch generieren & hinzufügen</button>
+            <ul class="documents" id="declarationList">
+                <li>Keine Eigenerklärungen ausgewählt.</li>
+            </ul>
+            <h3>Vertragsbedingungen</h3>
+            <ul class="documents" id="contractList">
+                <li>Keine Vertragsbedingungen vorgeschlagen.</li>
+            </ul>
+        </section>
+        <section class="section" id="templates">
+            <h2>Vorlagen verwenden</h2>
+            <p>Sie können hier aus bereits gespeicherten Dokumentenvorlagen auswählen. Die Projektdaten werden automatisch in die Vorlage eingefügt.</p>
+            <label for="templateSelect">Vorlage auswählen:</label>
+            <div class="template-list">
+                <select id="templateSelect">
+                    <option value="">Bitte wählen…</option>
+                    <option value="lv_standard">LV‑Standardvorlage</option>
+                    <option value="criteria_standard">Kriterienkatalog Standard</option>
+                    <option value="declaration_tax">Eigenerklärung Steuerehrlichkeit</option>
+                    <option value="contract_evb_it">EVB‑IT Vertrag Standard</option>
+                </select>
+                <button onclick="addTemplate()">Hinzufügen</button>
+            </div>
+        </section>
+        <section class="section" id="export">
+            <h2>Exportieren</h2>
+            <p>Sobald alle benötigten Dokumente vorhanden sind, können Sie das vollständige Vergabepaket exportieren. Wählen Sie das gewünschte Format:</p>
+            <div class="export-buttons">
+                <button onclick="exportDocs('pdf')">Als PDF herunterladen</button>
+                <button onclick="exportDocs('docx')">Als DOCX herunterladen</button>
+                <button onclick="exportDocs('zip')">Als ZIP herunterladen</button>
+            </div>
+        </section>
+    </main>
+    <script src="vergabeunterlagen.js"></script>
+    <script>
+        // Diese Funktionen kannst du für die Vorlagen-Demo weiter nutzen:
+        function addTemplate() {
+            const select = document.getElementById('templateSelect');
+            const value = select.value;
+            if (!value) return;
+            let targetList;
+            if (value.startsWith('lv')) targetList = document.getElementById('lvList');
+            else if (value.startsWith('criteria')) targetList = document.getElementById('criteriaList');
+            else if (value.startsWith('declaration')) targetList = document.getElementById('declarationList');
+            else if (value.startsWith('contract')) targetList = document.getElementById('contractList');
+            else targetList = null;
+            if (targetList) {
+                // Remove placeholder item
+                if (targetList.children.length === 1) {
+                    targetList.removeChild(targetList.children[0]);
+                }
+                const li = document.createElement('li');
+                li.textContent = select.options[select.selectedIndex].text + ' (Vorlage)';
+                targetList.appendChild(li);
+            }
+        }
+        function exportDocs(format) {
+            alert('Export als ' + format + ' ist noch nicht implementiert. Hier würde die Anwendung alle Dokumente zusammenstellen und zum Download bereitstellen.');
+        }
+    </script>
+</body>
+</html>

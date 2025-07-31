@@ -7,32 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <!-- Supabase JS laden -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    main {
-      max-width: 980px !important;
-      margin: 2.4em auto !important;
-      padding: 0 1vw;
-    }
-    .chat-container {
-      width: 100%;
-      max-width: 100%;
-      margin: 0 auto;
-      box-sizing: border-box;
-    }
-    .upload-btn input[type="file"] { display: none; }
-    .upload-btn {
-      display: flex; align-items: center; justify-content: center;
-      background: #e9f5ff; color: #0077b6; border-radius: 50%; border: none;
-      width: 2.2em; height: 2.2em; font-size: 1.7em; cursor: pointer;
-      margin-top: 0.1em; box-shadow: 0 1px 4px #0077b616;
-      transition: background 0.13s;
-    }
-    .upload-btn:hover { background: #c6e6ff; }
-    @media (max-width: 1000px) {
-      main { max-width: 99vw !important; }
-      .chat-container { max-width: 99vw; }
-    }
-  </style>
 </head>
 <body>
 <header>
@@ -59,6 +33,34 @@
     </div>
   </section>
 
+  <section class="projekt-formularexport" style="margin-bottom:2em;">
+    <h3>Projekt-/Formularfelder für Formblätter</h3>
+    <div style="background:#eaf4fb;padding:1em 1.3em;border-radius:8px;">
+      <label>
+        <b>Baumaßnahme / Projekt:</b><br>
+        <input type="text" id="baumaßnahmeInput" placeholder="z.B. Sanierung Turnhalle" style="width:80%;">
+      </label>
+      <br>
+      <label>
+        <b>Maßnahmenummer:</b><br>
+        <input type="text" id="maßnahmeNrInput" placeholder="z.B. 2024-001" style="width:60%;">
+      </label>
+      <br>
+      <label>
+        <b>Vergabenummer:</b><br>
+        <input type="text" id="vergabeNrInput" placeholder="z.B. 24-0112-03" style="width:60%;">
+      </label>
+      <div style="color:#4183a4;margin-top:0.7em;">
+        <small>Hinweis: Diese Angaben werden später für Formblätter (z.B. VHB 124) und die automatische Formularbefüllung genutzt.<br>Sie sind <b>optional</b>, aber sehr empfohlen.</small>
+      </div>
+      <div style="margin-top:0.8em;">
+        <button id="saveFormularFieldsBtn" style="padding:0.4em 1.3em;">Speichern</button>
+        <span id="formularSaveStatus" style="color:#2a8826;font-size:1em;"></span>
+      </div>
+    </div>
+  </section>
+
+
   <!-- Chatbereich -->
   <section class="chat-container fix-max-breite">
     <div class="chat-header">
@@ -83,11 +85,25 @@
       </div>
     </div>
   </section>
-  <!-- Abschließen-Button ZENTRAL darunter -->
-  <div style="margin:1.7em 0 0 0;text-align:center;">
-    <button id="abschliessenBtn" style="display:none;">LV als abgeschlossen markieren</button>
+
+  <!-- Aktionen: Nächste Schritte -->
+  <div style="margin:2.2em 0 1em 0; text-align:center;">
+    <h3>Nächste Schritte im Projekt</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:1.3em;justify-content:center;">
+      <button id="btnVergabeUnterlagen" style="padding:1.1em 2.2em;font-size:1.1em;border-radius:12px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 10px #0077b63b;cursor:pointer;">
+        📄 Vergabeunterlagen erstellen
+      </button>
+      <button id="btnMarkterkundung" style="padding:1.1em 2.2em;font-size:1.1em;border-radius:12px;border:none;background:#4e80bb;color:#fff;font-weight:600;box-shadow:0 2px 10px #0077b63b;cursor:pointer;">
+        🔍 Markterkundung (bald)
+      </button>
+      <button id="btnRechtsfragen" style="padding:1.1em 2.2em;font-size:1.1em;border-radius:12px;border:none;background:#b0bec5;color:#fff;font-weight:600;box-shadow:0 2px 10px #0077b63b;cursor:pointer;">
+        ⚖️ Vergaberechtliche Fragen
+      </button>
+    </div>
+    <div style="margin-top:1em;color:#777;">
+      Wählen Sie die nächste Aktion für dieses Projekt.
+    </div>
   </div>
-</main>
 
 <footer style="margin:2em auto;text-align:center;">
   <img src="img/logo_govdisrupt_ai.png" alt="Logo" style="height:36px;margin-right:1.4em;">

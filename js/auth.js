@@ -70,6 +70,17 @@ async function register() {
   } else { showFieldError('regPassword', ""); }
   if (!valid) return;
 
+  // Nutzungsbedingungen/Datenschutz/AVV-Checkbox prüfen:
+  const agreeTOS = document.getElementById('regAgreeTOS').checked;
+  let tosValid = true;
+  if (!agreeTOS) {
+    tosValid = false;
+    showFieldError('agreetos', "Bitte akzeptieren Sie die Bedingungen.");
+  } else {
+    showFieldError('agreetos', "");
+  }
+  if (!tosValid || !valid) return;
+
   // Supabase Signup
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -174,6 +185,21 @@ function showFieldError(id, msg) {
   if (errDiv) errDiv.textContent = '';
   return true;
 }
+
+
+function showFieldError(id, msg) {
+  const inp = document.getElementById(id);
+  const errDiv = document.getElementById('error-' + id.replace(/^(reg|login)/, '').toLowerCase());
+  if (inp && msg) {
+    inp.classList.add('error');
+    if (errDiv) errDiv.textContent = msg;
+    return false;
+  }
+  if (inp) inp.classList.remove('error');
+  if (errDiv) errDiv.textContent = '';
+  return true;
+}
+
 
 // --- Modal-Handling
 function openAuthModal(tab = "login") {

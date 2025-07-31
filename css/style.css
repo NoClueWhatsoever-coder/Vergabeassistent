@@ -1675,3 +1675,143 @@ footer {
   left: 0; right: 0;
   box-sizing: border-box;
 }
+
+
+/* Tab-Navigation für mehrstufige Prozesse */
+.step-tabs {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.step-tab {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #f0f6fc;
+  color: #184e8b;
+  font-weight: 600;
+  transition: background 0.15s, color 0.15s;
+}
+.step-tab.active {
+  background: #184e8b;
+  color: #fff;
+}
+.step-content {
+  display: none;
+}
+.step-content.active {
+  display: block;
+}
+
+/* Ladeanimation/Spinner für LV-Generierung */
+.spinner {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  border: 4px solid #0077b6;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Formulare: Auftraggeber-Vorlage und Account */
+.vorlagen-form, .account-form {
+  max-width: 520px;
+  margin: 2em auto;
+  background: #f5faff;
+  padding: 2em 2em 1em 2em;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px #0077b617;
+}
+.vorlagen-form h3, .account-form h3 {
+  margin-top: 0;
+}
+.vorlagen-form label, .account-form label {
+  font-weight: 600;
+  margin-top: 1em;
+  display: block;
+}
+.vorlagen-form input, .account-form input,
+.vorlagen-form textarea, .account-form textarea {
+  width: 100%;
+  margin-top: 0.3em;
+  margin-bottom: 1em;
+  padding: 0.5em;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+.vorlagen-form button, .account-form button {
+  background: #0077b6;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 0.7em 1.7em;
+  font-size: 1.07em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0077b63a;
+  margin-bottom: 1em;
+  transition: background 0.13s;
+}
+.vorlagen-form button:hover, .account-form button:hover {
+  background: #005380;
+}
+.success-msg {
+  color: #207c37;
+  font-weight: 600;
+  margin-top: 0.5em;
+}
+.danger-btn {
+  background: #b53a1b;
+}
+.section {
+  margin-bottom: 2em;
+  border-bottom: 1px solid #d8e7f7;
+  padding-bottom: 1em;
+}
+
+main {
+  max-width: 980px !important;
+  margin: 2.4em auto !important;
+  padding: 0 1vw;
+}
+.chat-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.upload-btn input[type="file"] { display: none; }
+.upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e9f5ff;
+  color: #0077b6;
+  border-radius: 50%;
+  border: none;
+  width: 2.2em;
+  height: 2.2em;
+  font-size: 1.7em;
+  cursor: pointer;
+  margin-top: 0.1em;
+  box-shadow: 0 1px 4px #0077b616;
+  transition: background 0.13s;
+}
+.upload-btn:hover {
+  background: #c6e6ff;
+}
+@media (max-width: 1000px) {
+  main { max-width: 99vw !important; }
+  .chat-container { max-width: 99vw; }
+}
+
+
+input.error { border-color: #b53a1b; }
+input[type="checkbox"].error { outline: 2px solid #b53a1b; }

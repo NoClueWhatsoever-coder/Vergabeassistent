@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account verwalten – VergabeAssist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="js/account.js" defer></script>
+</head>
+<body>
+  <header>
+    <div style="display:flex;align-items:center;gap:1em;">
+      <a href="dashboard.html" style="text-decoration:none;color:#0077b6;font-weight:700;font-size:1.2em;">← Zurück zum Dashboard</a>
+    </div>
+    <div class="header-center">
+      <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo">
+    </div>
+  </header>
+  <main>
+    <form class="account-form" id="accountForm">
+      <h3>Persönliche Daten</h3>
+      <label for="vorname">Vorname</label>
+      <input type="text" id="vorname" autocomplete="given-name">
+
+      <label for="nachname">Nachname</label>
+      <input type="text" id="nachname" autocomplete="family-name">
+
+      <label for="organisation">Organisation / Behörde</label>
+      <input type="text" id="organisation" autocomplete="organization">
+
+      <label for="bundesland">Bundesland</label>
+      <input type="text" id="bundesland" autocomplete="address-level1">
+
+      <label for="telefon">Telefon</label>
+      <input type="text" id="telefon" autocomplete="tel">
+
+      <button type="submit">Änderungen speichern</button>
+      <span class="success-msg" id="accountSuccess"></span>
+    </form>
+    <form class="account-form section" id="pwForm">
+      <h3>Passwort ändern</h3>
+      <label for="oldPw">Altes Passwort</label>
+      <input type="password" id="oldPw" autocomplete="current-password">
+      <label for="newPw">Neues Passwort</label>
+      <input type="password" id="newPw" autocomplete="new-password">
+      <button type="submit">Passwort ändern</button>
+      <span class="success-msg" id="pwSuccess"></span>
+    </form>
+    <div class="account-form section" style="border-bottom:none;">
+      <h3>Account löschen</h3>
+      <p style="color:#b53a1b;font-weight:600;">Achtung: Dieser Vorgang ist endgültig! Alle Daten und Projekte werden gelöscht.</p>
+      <button class="danger-btn" id="deleteAccountBtn">Account löschen</button>
+      <span class="success-msg" id="deleteSuccess"></span>
+    </div>
+    <div style="max-width:500px;margin:2em auto;text-align:center;">
+      <a href="impressum.html" target="_blank">Impressum</a> &nbsp;|&nbsp;
+      <a href="datenschutz.html" target="_blank">Datenschutz & AVV</a>
+    </div>
+  </main>
+  <footer style="margin:2em auto;text-align:center;">
+    <img src="img/logo_govdisrupt_ai.png" alt="Logo" style="height:36px;margin-right:1.4em;">
+    <span>&copy; 2025 VergabeAssist</span>
+  </footer>
+</body>
+</html>

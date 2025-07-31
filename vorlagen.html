@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vorlagen verwalten – VergabeAssist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="js/vorlagen.js" defer></script>
+</head>
+<body>
+  <header>
+    <div style="display:flex;align-items:center;gap:1em;">
+      <a href="dashboard.html" style="text-decoration:none;color:#0077b6;font-weight:700;font-size:1.2em;">← Zurück zum Dashboard</a>
+    </div>
+    <div class="header-center">
+      <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo">
+    </div>
+  </header>
+  <main>
+    <form class="vorlagen-form" id="vorlagenForm">
+      <h3>Auftraggeber-Vorlage</h3>
+      <label for="orgName">Organisation / Behörde</label>
+      <input type="text" id="orgName" required placeholder="z.B. Stadt Musterhausen, Bauamt">
+
+      <label for="orgAddress">Adresse</label>
+      <input type="text" id="orgAddress" placeholder="Straße, PLZ Ort">
+
+      <label for="contactPerson">Zuständige Person</label>
+      <input type="text" id="contactPerson" placeholder="Name Ansprechpartner">
+
+      <label for="contactEmail">E-Mail</label>
+      <input type="email" id="contactEmail" placeholder="kontakt@behoerde.de">
+
+      <label for="standardText">Standard-Textbaustein</label>
+      <textarea id="standardText" rows="3" placeholder="Wird automatisch eingefügt – z.B. Hinweis für Bieter …"></textarea>
+
+      <button type="submit">Vorlage speichern</button>
+      <span class="success-msg" id="vorlagenSuccess"></span>
+    </form>
+  </main>
+  <footer style="margin:2em auto;text-align:center;">
+    <img src="img/logo_govdisrupt_ai.png" alt="Logo" style="height:36px;margin-right:1.4em;">
+    <span>&copy; 2025 VergabeAssist | Impressum | Datenschutz</span>
+  </footer>
+</body>
+</html>
