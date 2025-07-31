@@ -224,7 +224,7 @@ function showFieldError(id, msg) {
   return true;
 }
 
-// --- Modal-Handling
+// --- Modal-Handling (nur Schließen über X oder Escape)
 function openAuthModal(tab = "login") {
   document.getElementById('authModalBackdrop').style.display = 'flex';
   switchAuthModal(tab);
@@ -248,9 +248,12 @@ function switchAuthModal(tab) {
 document.addEventListener('keydown', function(e){
   if (e.key === "Escape" && document.getElementById('authModalBackdrop').style.display === 'flex') closeAuthModal();
 });
-document.getElementById('authModalBackdrop').addEventListener('click', function(e){
-  if (e.target === this) closeAuthModal();
-});
+// Kein Schließen mehr durch Klick auf Modal-Backdrop!
+// document.getElementById('authModalBackdrop').addEventListener('click', function(e){
+//   if (e.target === this) closeAuthModal();
+// });
+
+
 
 // --- Weiterleitung abfangen (Opt-In/SetPW/Reset)
 function handleRegisteredRedirect() {
