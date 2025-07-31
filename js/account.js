@@ -1,12 +1,12 @@
 // js/account.js
 
-// Supabase-Konfiguration (wie im Projekt, ggf. anpassen)
+// Supabase-Konfiguration
 const supabaseUrl = 'https://jjkuvuywbwnvsgpbqlwo.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // ggf. kürzen
 
 const supabase = window.supabase?.createClient
   ? window.supabase.createClient(supabaseUrl, supabaseAnonKey)
-  : supabase; // Fallback, falls schon global geladen
+  : supabase;
 
 const form = document.getElementById('accountForm');
 const vorname = document.getElementById('vorname');
@@ -22,7 +22,7 @@ async function loadUserProfile() {
   const { data, error } = await supabase.auth.getUser();
   if (data?.user) userId = data.user.id;
   if (!userId) return;
-  // Profile holen (ggf. Tabelle anpassen)
+  // Profile holen
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
@@ -34,6 +34,9 @@ async function loadUserProfile() {
     organisation.value = profile.organisation || "";
     bundesland.value = profile.bundesland || "";
     telefon.value = profile.telefon || "";
+  } else {
+    // Falls kein Profil existiert, lege es an
+    await supabase.from('profiles').upsert([{ user_id: userId }]);
   }
 }
 loadUserProfile();
@@ -68,6 +71,7 @@ form.addEventListener('submit', async e => {
 const pwForm = document.getElementById('pwForm');
 const oldPw = document.getElementById('oldPw');
 const newPw = document.getElementById('newPw');
+const repeatNewPw = document.getElementById('repeatNewPw');
 const pwSuccess = document.getElementById('pwSuccess');
 
 pwForm.addEventListener('submit', async e => {
@@ -76,12 +80,25 @@ pwForm.addEventListener('submit', async e => {
     pwSuccess.textContent = "Nicht eingeloggt!";
     return;
   }
-  // (Supabase-Standard: Passwort-Änderung ohne alten Hash – nur mit Session!)
+  // Passwörter vergleichen
+  if (newPw.value !== repeatNewPw.value) {
+    pwSuccess.textContent = "Die neuen Passwörter stimmen nicht überein!";
+    newPw.classList.add('error');
+    repeatNewPw.classList.add('error');
+    return;
+  } else {
+    newPw.classList.remove('error');
+    repeatNewPw.classList.remove('error');
+  }
+  if (newPw.value.length < 10) {
+    pwSuccess.textContent = "Das neue Passwort muss mindestens 10 Zeichen haben!";
+    return;
+  }
   const { error } = await supabase.auth.updateUser({ password: newPw.value });
   if (!error) {
     pwSuccess.textContent = "Passwort geändert!";
     setTimeout(() => pwSuccess.textContent = "", 2000);
-    oldPw.value = ""; newPw.value = "";
+    oldPw.value = ""; newPw.value = ""; repeatNewPw.value = "";
   } else {
     pwSuccess.textContent = "Fehler beim Ändern!";
   }
@@ -95,10 +112,7 @@ deleteBtn.addEventListener('click', async e => {
   e.preventDefault();
   if (!userId) return;
   if (!confirm("Account und ALLE Daten wirklich unwiderruflich löschen?")) return;
-  // Supabase: Account-Löschung mit Service-Key (muss serverseitig erfolgen!)
-  // Hier kann nur das Profil gelöscht werden, nicht der Auth-User!
   await supabase.from('profiles').delete().eq('user_id', userId);
   deleteSuccess.textContent = "Account (Profil) gelöscht. Für vollständige Löschung bitte Support kontaktieren.";
-  // Optional: Auto-Logout / Weiterleitung
   setTimeout(() => window.location.href = "index.html", 2500);
 });

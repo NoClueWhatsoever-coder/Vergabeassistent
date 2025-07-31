@@ -14,10 +14,19 @@
       <a href="dashboard.html" style="text-decoration:none;color:#0077b6;font-weight:700;font-size:1.2em;">← Zurück zum Dashboard</a>
     </div>
     <div class="header-center">
-      <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo">
+      <a href="index.html" tabindex="0">
+        <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
+      </a>
     </div>
   </header>
   <main>
+    <div class="breadcrumb-top">
+      <a href="index.html" class="breadcrumb-link">
+        <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
+        Zurück zur Startseite
+      </a>
+    </div>
+
     <form class="vorlagen-form" id="vorlagenForm">
       <h3>Auftraggeber-Vorlage</h3>
       <label for="orgName">Organisation / Behörde</label>
@@ -39,9 +48,15 @@
       <span class="success-msg" id="vorlagenSuccess"></span>
     </form>
   </main>
-  <footer style="margin:2em auto;text-align:center;">
-    <img src="img/logo_govdisrupt_ai.png" alt="Logo" style="height:36px;margin-right:1.4em;">
-    <span>&copy; 2025 VergabeAssist | Impressum | Datenschutz</span>
+  <footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
+    <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
+    <span style="flex:1;">
+      &copy; 2025 VergabeAssist |
+      <a href="impressum.html" target="_blank">Impressum</a> |
+      <a href="datenschutz.html" target="_blank">Datenschutz</a> |
+      <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
+      <a href="avv.html" target="_blank">AVV</a>
+    </span>
   </footer>
 </body>
 </html>

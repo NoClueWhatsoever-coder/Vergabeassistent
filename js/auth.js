@@ -48,7 +48,6 @@ async function register() {
 
   // Validierung
   let valid = true;
-  // Pflichtfelder
   valid &= showFieldError('regAnrede', anrede ? "" : "Bitte wählen Sie eine Anrede.");
   valid &= showFieldError('regVorname', vorname ? "" : "Vorname fehlt.");
   valid &= showFieldError('regNachname', nachname ? "" : "Nachname fehlt.");
@@ -82,33 +81,65 @@ async function register() {
   if (!tosValid || !valid) return;
 
   // Supabase Signup
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { anrede, vorname, nachname, organisation, bundesland, telefon },
-      emailRedirectTo: window.location.origin + "/?registered=1"
-    }
-  });
+  let signUpRes;
+  try {
+    signUpRes = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { anrede, vorname, nachname, organisation, bundesland, telefon },
+        emailRedirectTo: window.location.origin + "/?registered=1"
+      }
+    });
+  } catch (err) {
+    showFieldError('regEmail', "Serverfehler: " + (err.message || err));
+    return;
+  }
+
+  const { data, error } = signUpRes;
+  // Debugging
+  console.log("Supabase signUp response:", { data, error });
+
   if (error) {
     showFieldError('regEmail', error.message.includes('already registered')
       ? 'E-Mail ist bereits registriert.' : ('Fehler: ' + error.message));
     return;
   }
 
-  // Profile direkt anlegen (empfohlen!)
-  if (data.user) {
-    await supabase.from('profiles').upsert([{
-      user_id: data.user.id,
-      anrede, vorname, nachname, organisation, bundesland, telefon
-    }]);
+  // Profil schreiben – auch bei Magic Link/Confirm!
+  let userId = (data && data.user && data.user.id) ? data.user.id : null;
+  if (!userId && data && data.session && data.session.user && data.session.user.id) {
+    userId = data.session.user.id;
   }
-  // UX
-  showSuccessOverlay("Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox.", () => {
-    closeAuthModal();
-    showHomepage();
-  });
-  document.getElementById('registerForm').reset();
+  // Workaround: Fallback auf Supabase getUser()
+  if (!userId) {
+    const { data: authData } = await supabase.auth.getUser();
+    userId = authData?.user?.id || null;
+  }
+  // E-Mail immer mit speichern!
+  if (userId) {
+    try {
+      await supabase.from('profiles').upsert([{
+        user_id: userId,
+        email,
+        anrede, vorname, nachname, organisation, bundesland, telefon
+      }]);
+    } catch (err) {
+      // Ignorieren – Profil kann im ersten Login nachgeholt werden
+      console.log("Fehler beim Profile-Upsert:", err);
+    }
+  }
+
+  showSuccessOverlay(
+    "Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox.",
+    () => {
+      closeAuthModal();
+      showHomepage();
+    }
+  );
+  // Optionales Reset
+  const form = document.getElementById('registerForm');
+  if (form) form.reset();
 }
 
 // --- LOGIN
@@ -133,7 +164,14 @@ async function login() {
     showFieldError('loginPassword', message);
     return;
   }
-  // Nach Login weiterleiten
+  // Beim ersten Login ggf. Profil anlegen, falls noch nicht vorhanden!
+  const userId = data?.user?.id;
+  if (userId) {
+    const { data: existingProfile } = await supabase.from('profiles').select('user_id').eq('user_id', userId).single();
+    if (!existingProfile) {
+      await supabase.from('profiles').upsert([{ user_id: userId, email }]);
+    }
+  }
   window.location.href = "/dashboard.html";
 }
 
@@ -185,21 +223,6 @@ function showFieldError(id, msg) {
   if (errDiv) errDiv.textContent = '';
   return true;
 }
-
-
-function showFieldError(id, msg) {
-  const inp = document.getElementById(id);
-  const errDiv = document.getElementById('error-' + id.replace(/^(reg|login)/, '').toLowerCase());
-  if (inp && msg) {
-    inp.classList.add('error');
-    if (errDiv) errDiv.textContent = msg;
-    return false;
-  }
-  if (inp) inp.classList.remove('error');
-  if (errDiv) errDiv.textContent = '';
-  return true;
-}
-
 
 // --- Modal-Handling
 function openAuthModal(tab = "login") {

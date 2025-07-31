@@ -24,9 +24,22 @@
 </head>
 <body>
     <header>
+        <div class="header-center">
+            <a href="index.html" tabindex="0">
+                <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
+            </a>
+        </div>
+
         <h1>Kriterien generieren</h1>
         <p>Eignungs- und Zuschlagskriterien vorschlagen lassen</p>
     </header>
+    <div class="breadcrumb-top">
+        <a href="index.html" class="breadcrumb-link">
+            <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
+            Zurück zur Startseite
+        </a>
+    </div>
+
     <div class="container">
         <div id="chatArea" class="chat-area"></div>
         <div class="input-area">
@@ -66,5 +79,17 @@
             if (e.key === 'Enter') sendMessage();
         });
     </script>
+
+    <footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
+        <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
+        <span style="flex:1;">
+            &copy; 2025 VergabeAssist |
+            <a href="impressum.html" target="_blank">Impressum</a> |
+            <a href="datenschutz.html" target="_blank">Datenschutz</a> |
+            <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
+            <a href="avv.html" target="_blank">AVV</a>
+        </span>
+    </footer>
+
 </body>
 </html>
