@@ -43,8 +43,12 @@
   </section>
 
   <section class="projekt-formularexport" style="margin-bottom:2em;">
-    <h3>Projekt-/Formularfelder für Formblätter</h3>
-    <div style="background:#eaf4fb;padding:1em 1.3em;border-radius:8px;">
+    <div class="collapsible-head" style="display:flex;align-items:center;gap:0.8em;cursor:pointer;">
+      <h3 id="formExtraHead" style="margin:0;">Zusätzliche Angaben zum Projekt</h3>
+      <span id="collapser" class="material-icons" style="transition:transform 0.19s;font-size:1.5em;user-select:none;">expand_less</span>
+    </div>
+    <div class="collapsible-content" id="formExtraContent" style="background:#eaf4fb;padding:1em 1.3em;border-radius:8px; margin-top:1em;">
+      <!-- Deine Eingabefelder und Button wie gehabt... -->
       <label>
         <b>Baumaßnahme / Projekt:</b><br>
         <input type="text" id="baumaßnahmeInput" placeholder="z.B. Sanierung Turnhalle" style="width:80%;">
@@ -126,5 +130,31 @@
 </footer>
 
 <script src="js/projekt.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const head = document.querySelector('.collapsible-head');
+  const content = document.getElementById('formExtraContent');
+  const collapser = document.getElementById('collapser');
+  let collapsed = false;
+  function setCollapsed(state) {
+    collapsed = state;
+    if (collapsed) {
+      content.classList.add('collapsed');
+      collapser.classList.add('rotate');
+    } else {
+      content.classList.remove('collapsed');
+      collapser.classList.remove('rotate');
+    }
+  }
+  head.onclick = () => setCollapsed(!collapsed);
+  // Nach Speichern automatisch einklappen:
+  const saveBtn = document.getElementById('saveFormularFieldsBtn');
+  saveBtn && saveBtn.addEventListener('click', function(){
+    setTimeout(() => setCollapsed(true), 600);
+  });
+});
+</script>
+
 </body>
 </html>

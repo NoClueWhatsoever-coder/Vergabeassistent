@@ -246,6 +246,7 @@ async function ladeFormularfelder() {
 }
 
 // Senden mit Datei-Parsing im Hintergrund
+// Senden mit Datei-Parsing im Hintergrund
 async function sendeNachricht() {
   const sendBtn = document.getElementById('sendBtn');
   sendBtn.disabled = true; sendBtn.textContent = '...';
@@ -298,11 +299,20 @@ async function sendeNachricht() {
       // Excel, CSV etc: nur Hinweistext
       return {name: file.name, text: '[Datei nicht automatisch extrahiert]'};
     })
-  );
+  ); 
 
-  // Nachricht speichern (Metadaten der Dateien im Chatverlauf).
-  // Wenn die Verbindung zu Supabase fehlt, wird error gesetzt. In diesem Fall
-  // zeigen wir lediglich einen Hinweis an und fahren dann normal fort.
+  const projektMeta = `
+Titel: ${document.getElementById('projektTitel').textContent}
+Art: ${document.getElementById('projektArt').textContent}
+Frist: ${document.getElementById('projektFrist').textContent}
+Schätzwert: ${document.getElementById('projektSchaetzwert').textContent}
+CPV: ${document.getElementById('projektCPV').textContent}
+Baumaßnahme: ${document.getElementById('baumaßnahmeInput').value}
+Maßnahmenummer: ${document.getElementById('maßnahmeNrInput').value}
+Vergabenummer: ${document.getElementById('vergabeNrInput').value}
+`;
+
+  // Nachricht zuerst in Supabase speichern
   let { error } = await supabase
     .from('chats')
     .insert([
@@ -314,11 +324,8 @@ async function sendeNachricht() {
       }
     ]);
   if (error) {
-    // Hinweis an den Nutzer: Die Nachricht konnte nicht dauerhaft gespeichert werden,
-    // bleibt aber trotzdem im Verlauf sichtbar.
     showSnackbar('Fehler beim Speichern der Nachricht (Offline-Modus).', '#b53a1b');
   }
-  // Eingabefeld leeren und Datei-Uploads zurücksetzen
   input.value = '';
   hochgeladeneDateien = [];
   renderFileBubbles();
@@ -337,26 +344,24 @@ async function sendeNachricht() {
     // Fehler beim Laden oder Aktualisieren ignorieren
   }
 
-  // Chatverlauf neu laden. Sollte das nicht funktionieren, wird in ladeChat()
-  // eine entsprechende Meldung angezeigt.
   await ladeChat();
 
-  // Hole die KI-Antwort (fileContents als Kontext mitgeben). Bei einem Fehler
-  // wird eine Snackbar angezeigt. Anschließend versuchen wir, die Antwort zu
-  // speichern; sollte das fehlschlagen, wird dies im Hintergrund ignoriert.
+  // KI-Anfrage stellen und Antwort in Supabase speichern
   try {
-    const kiAntwort = await lvGeneratorRequestWithHistory({ userText: text, files: fileContents });
-    try {
-      await supabase.from('chats').insert([
-        {
-          projekt_id: id,
-          sender: 'assistant',
-          nachricht: kiAntwort
-        }
-      ]);
-    } catch (_) {
-      // Speichern der KI-Antwort ist optional; ignoriere Fehler
-    }
+    const antwort = await requestKIResponse({
+      prompt: text,
+      chatHistory: chathistory,
+      metaFields: projektMeta,
+      files: fileContents
+    });
+    // Antwort im Chat speichern
+    await supabase.from('chats').insert([
+      {
+        projekt_id: id,
+        sender: 'assistant',
+        nachricht: antwort
+      }
+    ]);
     await ladeChat();
   } catch (err) {
     showSnackbar('Fehler bei der KI-Antwort: ' + err.message, '#b53a1b');
@@ -365,6 +370,7 @@ async function sendeNachricht() {
     sendBtn.textContent = 'Senden';
   }
 }
+
 
 // Helper zum Nachladen von JS-Libs
 function loadScript(src) {
@@ -485,18 +491,21 @@ async function ladeChat() {
 }
 
 // KI-Request wie gehabt
-async function lvGeneratorRequestWithHistory(payload) {
-  // Wenn du fileContents mitgeben willst: payload={userText, files}
-  // Passe dein Backend entsprechend an!
-  const res = await fetch("http://localhost:8000/api/lv-generator", {
+async function requestKIResponse({ prompt, chatHistory, metaFields, files }) {
+  const res = await fetch("/api/openrouter-chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({
+      prompt,
+      chatHistory,
+      metaFields,
+      files
+    })
   });
   const data = await res.json();
   if (data.result) {
     return data.result;
   } else {
-    throw new Error(data.error || "Unbekannter Fehler bei LV-Generator");
+    throw new Error(data.error || "Unbekannter Fehler bei der KI-Antwort");
   }
 }
