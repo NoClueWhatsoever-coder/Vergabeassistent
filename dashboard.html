@@ -46,10 +46,13 @@
 </div>
 <main>
   <div class="breadcrumb-bottomright">
-  <!-- Beispiel für eine Breadcrumb. Ersetze nach Bedarf oder lasse leer! -->
-    <nav class="breadcrumb-nav">
-      <!-- Hier kannst du bei Bedarf weitere Breadcrumb-Elemente einfügen -->
-      <span class="breadcrumb-current">Dashboard</span>
+    <nav class="breadcrumb-nav" id="dynamicBreadcrumb">
+      <a href="index.html" class="breadcrumb-link">
+        <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
+        Zurück zur Startseite
+      </a>
+      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
+      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
     </nav>
   </div>
 
@@ -164,5 +167,20 @@ document.addEventListener('keydown', e => {
   if (e.key === "Escape") toggleSidebarMenu(true);
 });
 </script>
+
+<script>
+(function() {
+  // Automatisch den aktuellen Seitentitel holen (ohne „– VergabeAssist“)
+  let title = document.title || '';
+  // Optional: Trenne z.B. "Dashboard – VergabeAssist" => "Dashboard"
+  if(title.indexOf('–') > 0) title = title.split('–')[0].trim();
+  document.getElementById('breadcrumbCurrent').textContent = title;
+
+  // Optional: Wenn du dynamisch umschaltest (z.B. bei Projekten mit JS), kannst du
+  // auch später per JS document.getElementById('breadcrumbCurrent').textContent = 'Projekt XY';
+})();
+</script>
+
+
 </body>
 </html>
