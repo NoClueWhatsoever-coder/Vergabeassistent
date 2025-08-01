@@ -5,6 +5,7 @@
   <title>Beschaffungsvorhaben – VergabeAssist</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Supabase JS laden -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -75,10 +76,13 @@
 
 
   <!-- Chatbereich -->
-  <section class="chat-container fix-max-breite">
+  <section class="chat-container">
     <div class="chat-header">
-      <h3 style="display:inline;">Bedarfsbeschreibung & Verlauf</h3>
-      <span class="info-icon" title="Bitte beschreiben Sie Ihren Bedarf so detailliert wie möglich oder laden Sie eine Datei hoch." style="margin-left:1em;cursor:help;">ℹ️</span>
+      <h3 style="display:inline;">Bedarfsbeschreibung</h3>
+      <span class="material-icons info-icon" style="margin-left:0.5em;font-size:1.38em;vertical-align:-0.12em;cursor:help;color:#2777b6;"
+            title="Bitte beschreibe deinen Bedarf so detailliert wie möglich oder lade eine Datei hoch.">
+        info
+      </span>
     </div>
     <div id="fileBubbleRow" class="filebubble-row"></div>
     <div id="chatMessages" class="chat-messages"></div>

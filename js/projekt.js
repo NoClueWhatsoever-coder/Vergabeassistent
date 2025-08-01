@@ -419,16 +419,6 @@ async function ladeProjekt() {
   document.getElementById('projektCPV').textContent = zeigeFeld(projekt.cpv);
   document.getElementById('projektStatus').textContent = zeigeFeld(projekt.status);
 
-  // Abschließen-Button zentriert und nur sichtbar, wenn nicht abgeschlossen
-  const abschliessenBtn = document.getElementById('abschliessenBtn');
-  abschliessenBtn.style.display = projekt.status === 'Abgeschlossen' ? 'none' : 'inline-block';
-  abschliessenBtn.onclick = async function() {
-    await supabase.from('projekte')
-      .update({ status: 'Abgeschlossen' })
-      .eq('id', id);
-    alert("Projekt wurde als abgeschlossen markiert.");
-    ladeProjekt();
-  };
 
   // Chat-Eingabe und Senden-Button sperren, wenn abgeschlossen
   document.getElementById('chatInput').disabled = projekt.status === 'Abgeschlossen';
