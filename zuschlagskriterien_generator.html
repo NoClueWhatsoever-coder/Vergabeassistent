@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zuschlagskriterien generieren – VergabeAssist</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div style="display:flex;align-items:center;gap:1em;">
+            <a id="backLink" href="#" style="text-decoration:none;color:#0077b6;font-weight:700;font-size:1.2em;">
+                &#8592; Zurück
+            </a>
+        </div>
+        <div class="header-center">
+            <a href="index.html" tabindex="0">
+                <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
+            </a>
+        </div>
+    </header>
+    <div class="breadcrumb-top">
+        <a href="index.html" class="breadcrumb-link">
+            <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
+            Zurück zur Startseite
+        </a>
+    </div>
+    <main style="max-width:900px;margin:2em auto;padding:0 1em;">
+        <h1>Zuschlagskriterien generieren</h1>
+        <p>Nutzen Sie dieses Modul, um passende Zuschlagskriterien für Ihr Vergabeverfahren vorschlagen zu lassen.</p>
+        <div class="container" style="max-width:800px;margin:1.5rem auto;background:#fff;border-radius:6px;box-shadow:0 2px 4px rgba(0,0,0,0.1);display:flex;flex-direction:column;height:70vh;">
+            <div id="chatArea" class="chat-area" style="flex:1;padding:1rem;overflow-y:auto;border-bottom:1px solid #ddd;"></div>
+            <div class="input-area" style="display:flex;padding:1rem;">
+                <input type="text" id="userInput" placeholder="Beschreiben Sie die ausgeschriebene Leistung oder formulieren Sie Fragen zu Zuschlagskriterien…" style="flex:1;padding:0.5rem;border:1px solid #ccc;border-radius:4px;margin-right:0.5rem;">
+                <button id="sendBtn" onclick="sendMessage()" style="padding:0.5rem 1rem;background:#0077b6;color:#fff;border:none;border-radius:4px;cursor:pointer;">Senden</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        const chatArea = document.getElementById('chatArea');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        function appendMessage(sender, text) {
+            const msg = document.createElement('div');
+            msg.classList.add('message', sender);
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.textContent = text;
+            msg.appendChild(bubble);
+            chatArea.appendChild(msg);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+            appendMessage('user', text);
+            userInput.value = '';
+            userInput.focus();
+            sendBtn.disabled = true;
+            // Placeholder für Backend-Aufruf zur Generierung von Zuschlagskriterien
+            setTimeout(() => {
+                const reply = 'Hier würden von der KI passende Zuschlagskriterien samt Gewichtung vorgeschlagen werden. (Demonstration)';
+                appendMessage('ai', reply);
+                sendBtn.disabled = false;
+            }, 1000);
+        }
+        userInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const backLink = document.getElementById('backLink');
+            if (backLink && id) {
+                backLink.href = `vergabeunterlagen.html?id=${encodeURIComponent(id)}`;
+            }
+        });
+    </script>
+    <footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
+        <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
+        <span style="flex:1;">
+            &copy; 2025 VergabeAssist |
+            <a href="impressum.html" target="_blank">Impressum</a> |
+            <a href="datenschutz.html" target="_blank">Datenschutz</a> |
+            <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
+            <a href="avv.html" target="_blank">AVV</a>
+        </span>
+    </footer>
+</body>
+</html>

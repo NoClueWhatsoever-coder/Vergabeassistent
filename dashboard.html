@@ -11,7 +11,8 @@
 </head>
 <body>
 <header>
-  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()">
+  <!-- Burger-Menü wird auf dem Dashboard nicht benötigt – ausgeblendet -->
+  <div id="burgerMenu" class="burger-menu" style="display:none;">
     <span></span><span></span><span></span>
   </div>
   <div class="header-center">
@@ -21,8 +22,13 @@
   </div>
 
   <button id="loginTopBtn" class="login-top-btn" style="display:none;">Login</button>
-  <div id="accountIcon" style="display:none;position:absolute;right:2rem;top:1.2rem;cursor:pointer;">
+  <!-- Account-Icon dauerhaft sichtbar auf dem Dashboard -->
+  <div id="accountIcon" style="position:absolute;right:2rem;top:1.2rem;cursor:pointer;">
     <span title="Account verwalten" style="font-size:2.1rem;">👤</span>
+  </div>
+  <!-- Vorlagen-Link als separates Icon -->
+  <div id="templatesIcon" style="position:absolute;right:4.8rem;top:1.2rem;cursor:pointer;">
+    <span title="Vorlagen" style="font-size:2.1rem;">📁</span>
   </div>
 </header>
 
@@ -126,11 +132,19 @@ document.addEventListener('click', e => {
 // Account-Icon
 function updateAccountIcon() {
   const icon = document.getElementById('accountIcon');
-  icon.style.display = 'block';
+  // Account-Icon ist dauerhaft sichtbar; weise Klick-Handler zu
+  icon.onclick = () => { window.location.href = 'account.html'; };
+  const templatesIcon = document.getElementById('templatesIcon');
+  if (templatesIcon) {
+    templatesIcon.onclick = () => { window.location.href = 'vorlagen.html'; };
+  }
 }
 window.updateAccountIcon = updateAccountIcon;
 // Login-Button oben ausblenden, wenn eingeloggt (hier optional)
 document.getElementById('loginTopBtn').style.display = 'none';
+
+// Initialisiere Account- und Vorlagen-Icons sofort
+updateAccountIcon();
 </script>
 </body>
 </html>

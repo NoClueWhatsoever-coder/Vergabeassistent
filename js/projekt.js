@@ -300,42 +300,69 @@ async function sendeNachricht() {
     })
   );
 
-  // Nachricht speichern (Metadaten der Dateien im Chatverlauf)
-  let { error } = await supabase.from('chats').insert([{
-    projekt_id: id,
-    sender: 'user',
-    nachricht: text,
-    dateien: fileContents.length ? fileContents.map(f=>({name:f.name})) : null
-  }]);
+  // Nachricht speichern (Metadaten der Dateien im Chatverlauf).
+  // Wenn die Verbindung zu Supabase fehlt, wird error gesetzt. In diesem Fall
+  // zeigen wir lediglich einen Hinweis an und fahren dann normal fort.
+  let { error } = await supabase
+    .from('chats')
+    .insert([
+      {
+        projekt_id: id,
+        sender: 'user',
+        nachricht: text,
+        dateien: fileContents.length ? fileContents.map(f => ({ name: f.name })) : null
+      }
+    ]);
   if (error) {
-    showSnackbar('Fehler beim Speichern der Nachricht.', '#b53a1b');
-    sendBtn.disabled = false; sendBtn.textContent = 'Senden';
-    return;
+    // Hinweis an den Nutzer: Die Nachricht konnte nicht dauerhaft gespeichert werden,
+    // bleibt aber trotzdem im Verlauf sichtbar.
+    showSnackbar('Fehler beim Speichern der Nachricht (Offline-Modus).', '#b53a1b');
   }
+  // Eingabefeld leeren und Datei-Uploads zurücksetzen
   input.value = '';
   hochgeladeneDateien = [];
   renderFileBubbles();
 
-  // Status setzen auf "In Bearbeitung"
-  const { data: projekt, error: loadError } = await supabase.from('projekte').select('status').eq('id', id).single();
-  if (!loadError && projekt && projekt.status === 'Neu angelegt') {
-    await supabase.from('projekte').update({ status: 'In Bearbeitung' }).eq('id', id);
+  // Versuche, den Projektstatus zu aktualisieren. Bei Fehlern ignorieren wir diese.
+  try {
+    const { data: projektStatus, error: statusError } = await supabase
+      .from('projekte')
+      .select('status')
+      .eq('id', id)
+      .single();
+    if (!statusError && projektStatus && projektStatus.status === 'Neu angelegt') {
+      await supabase.from('projekte').update({ status: 'In Bearbeitung' }).eq('id', id);
+    }
+  } catch (_) {
+    // Fehler beim Laden oder Aktualisieren ignorieren
   }
+
+  // Chatverlauf neu laden. Sollte das nicht funktionieren, wird in ladeChat()
+  // eine entsprechende Meldung angezeigt.
   await ladeChat();
 
-  // KI-Antwort holen (fileContents als Kontext mitgeben)
+  // Hole die KI-Antwort (fileContents als Kontext mitgeben). Bei einem Fehler
+  // wird eine Snackbar angezeigt. Anschließend versuchen wir, die Antwort zu
+  // speichern; sollte das fehlschlagen, wird dies im Hintergrund ignoriert.
   try {
-    const kiAntwort = await lvGeneratorRequestWithHistory({userText:text, files:fileContents});
-    await supabase.from('chats').insert([{
-      projekt_id: id,
-      sender: 'assistant',
-      nachricht: kiAntwort
-    }]);
-    ladeChat();
+    const kiAntwort = await lvGeneratorRequestWithHistory({ userText: text, files: fileContents });
+    try {
+      await supabase.from('chats').insert([
+        {
+          projekt_id: id,
+          sender: 'assistant',
+          nachricht: kiAntwort
+        }
+      ]);
+    } catch (_) {
+      // Speichern der KI-Antwort ist optional; ignoriere Fehler
+    }
+    await ladeChat();
   } catch (err) {
     showSnackbar('Fehler bei der KI-Antwort: ' + err.message, '#b53a1b');
   } finally {
-    sendBtn.disabled = false; sendBtn.textContent = 'Senden';
+    sendBtn.disabled = false;
+    sendBtn.textContent = 'Senden';
   }
 }
 

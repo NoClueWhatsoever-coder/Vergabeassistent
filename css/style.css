@@ -1223,16 +1223,17 @@ button:hover, .btn:hover {
   background: #fbfdff;
 }
 #chatInput {
-  flex:1;
-  min-width:220px;
-  min-height:2.8em;
-  font:inherit;
-  padding:1em;
-  font-size:1.09em;
-  border-radius:7px;
-  border:1.5px solid #e3e8f0;
-  resize:vertical;
-  background:#fafdfe;
+  flex: 1;
+  min-width: 220px;
+  /* increased default height for the chat input */
+  min-height: 6em;
+  font: inherit;
+  padding: 1em;
+  font-size: 1.09em;
+  border-radius: 7px;
+  border: 1.5px solid #e3e8f0;
+  resize: vertical;
+  background: #fafdfe;
   margin-left: 0.3em;
 }
 #chatInput:focus {
@@ -1503,9 +1504,17 @@ header {
 .upload-plus { font-size:1.3em; }
 .upload-label { font-weight:500; font-size:1.01em; margin-left:0.1em; }
 #chatInput {
-  flex:1; min-width:220px; min-height:2.8em; font:inherit; padding:1em;
-  font-size:1.09em; border-radius:7px; border:1.5px solid #e3e8f0; resize:vertical;
-  background:#fafdfe;
+  flex: 1;
+  min-width: 220px;
+  /* increased default height for the chat input */
+  min-height: 6em;
+  font: inherit;
+  padding: 1em;
+  font-size: 1.09em;
+  border-radius: 7px;
+  border: 1.5px solid #e3e8f0;
+  resize: vertical;
+  background: #fafdfe;
 }
 
 @media (max-width: 900px) {
@@ -1587,10 +1596,16 @@ header {
 .upload-plus { font-size:1.3em; }
 .upload-label { font-weight:500; font-size:1.01em; margin-left:0.13em; }
 #chatInput {
-  width: 100%; min-height: 3em; max-height: 9em;
-  font: inherit; font-size: 1.09em;
-  border-radius: 7px; border: 1.5px solid #e3e8f0;
-  padding: 1em; resize: vertical;
+  width: 100%;
+  /* increased default height and maximum height */
+  min-height: 6em;
+  max-height: 12em;
+  font: inherit;
+  font-size: 1.09em;
+  border-radius: 7px;
+  border: 1.5px solid #e3e8f0;
+  padding: 1em;
+  resize: vertical;
   background: #fafdfe;
   margin-top: 0.08em;
   box-sizing: border-box;

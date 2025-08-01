@@ -5,36 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vergabeunterlagen – Übersicht & Export</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
-        header { background: #003366; color: #fff; padding: 1rem; }
-        main { max-width: 1000px; margin: 2rem auto; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1.5rem; }
-        h2 { margin-top: 1.5rem; }
-        .section { margin-bottom: 2rem; }
-        .documents { list-style: none; padding: 0; }
-        .documents li { margin-bottom: 0.5rem; }
-        .export-buttons button { margin-right: 1rem; padding: 0.5rem 1rem; background: #003366; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-        .export-buttons button:disabled { opacity: 0.5; cursor: default; }
-        .template-list { margin-top: 0.5rem; }
-        .template-list select { padding: 0.4rem; }
-        nav a { margin-right: 1rem; color: #003366; text-decoration: none; }
-    </style>
+    <!-- Einbinden der globalen Styles und Schriftarten für ein konsistentes Design -->
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
+        <!-- Link zurück zum Projekt. Der href wird per Skript gesetzt, sobald die Projekt-ID bekannt ist. -->
+        <div style="display:flex;align-items:center;gap:1em;">
+            <a id="backLink" href="#" style="text-decoration:none;color:#0077b6;font-weight:700;font-size:1.2em;">
+                &#8592; Zurück zum Projekt
+            </a>
+        </div>
         <div class="header-center">
             <a href="index.html" tabindex="0">
                 <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
             </a>
         </div>
-
-        <h1>Vergabeunterlagen</h1>
-        <nav>
-            <a href="lv_generator.html">LV erstellen</a>
-            <a href="criteria_generator.html">Kriterien</a>
-            <a href="eigenerklaerungen_generator.html">Eigenerklärungen</a>
-            <a href="contracts_generator.html">Vertragsbedingungen</a>
-        </nav>
     </header>
     <main>
         <div class="breadcrumb-top">
@@ -47,24 +34,38 @@
         <section class="section" id="overview">
             <h2>Übersicht</h2>
             <p>Hier sehen Sie alle bisher generierten Dokumente Ihres Projekts. Sobald Sie ein Modul abschließen, erscheint das Dokument in der entsprechenden Liste.</p>
+            <!-- Leistungsverzeichnis -->
             <h3>Leistungsverzeichnis</h3>
             <ul class="documents" id="lvList">
                 <li>Noch kein LV erstellt.</li>
             </ul>
-            <h3>Kriterien (Eignung & Zuschlag)</h3>
-            <ul class="documents" id="criteriaList">
-                <li>Keine Kriterien generiert.</li>
+            <button id="createLvBtn" style="margin-bottom:1.2em;">LV erstellen</button>
+            <!-- Eignungskriterien -->
+            <h3>Eignungskriterien</h3>
+            <ul class="documents" id="eignungList">
+                <li>Noch keine Eignungskriterien generiert.</li>
             </ul>
+            <button id="createEignungBtn" style="margin-bottom:1.2em;">Eignungskriterien erstellen</button>
+            <!-- Zuschlagskriterien -->
+            <h3>Zuschlagskriterien</h3>
+            <ul class="documents" id="zuschlagList">
+                <li>Noch keine Zuschlagskriterien generiert.</li>
+            </ul>
+            <button id="createZuschlagBtn" style="margin-bottom:1.2em;">Zuschlagskriterien erstellen</button>
+            <!-- Eigenerklärungen -->
             <h3>Eigenerklärungen</h3>
-            <!-- Neuer Button für Formblatt 124 -->
+            <!-- Neuer Button für Formblatt 124 ist weiterhin vorhanden -->
             <button id="addFormblatt124Btn" style="margin-bottom:0.8em;">Formblatt 124 automatisch generieren & hinzufügen</button>
             <ul class="documents" id="declarationList">
                 <li>Keine Eigenerklärungen ausgewählt.</li>
             </ul>
+            <button id="createDeclarationBtn" style="margin-bottom:1.2em;">Eigenerklärungen auswählen</button>
+            <!-- Vertragsbedingungen -->
             <h3>Vertragsbedingungen</h3>
             <ul class="documents" id="contractList">
                 <li>Keine Vertragsbedingungen vorgeschlagen.</li>
             </ul>
+            <button id="createContractBtn" style="margin-bottom:1.2em;">Vertragsbedingungen auswählen</button>
         </section>
         <section class="section" id="templates">
             <h2>Vorlagen verwenden</h2>
@@ -112,7 +113,7 @@
             if (!value) return;
             let targetList;
             if (value.startsWith('lv')) targetList = document.getElementById('lvList');
-            else if (value.startsWith('criteria')) targetList = document.getElementById('criteriaList');
+            else if (value.startsWith('criteria')) targetList = document.getElementById('eignungList');
             else if (value.startsWith('declaration')) targetList = document.getElementById('declarationList');
             else if (value.startsWith('contract')) targetList = document.getElementById('contractList');
             else targetList = null;
@@ -129,6 +130,47 @@
         function exportDocs(format) {
             alert('Export als ' + format + ' ist noch nicht implementiert. Hier würde die Anwendung alle Dokumente zusammenstellen und zum Download bereitstellen.');
         }
+        // Neue Initialisierung für Breadcrumb und Erstellen-Buttons
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            // Backlink zum Projekt setzen
+            const backLink = document.getElementById('backLink');
+            if (backLink && id) {
+                backLink.href = `projekt.html?id=${encodeURIComponent(id)}`;
+            }
+            // Buttons für Erstellung weiterleiten
+            const createLvBtn = document.getElementById('createLvBtn');
+            if (createLvBtn && id) {
+                createLvBtn.onclick = () => {
+                    window.location.href = `lv_generator.html?id=${encodeURIComponent(id)}`;
+                };
+            }
+            const createEignungBtn = document.getElementById('createEignungBtn');
+            if (createEignungBtn && id) {
+                createEignungBtn.onclick = () => {
+                    window.location.href = `eignungskriterien_generator.html?id=${encodeURIComponent(id)}`;
+                };
+            }
+            const createZuschlagBtn = document.getElementById('createZuschlagBtn');
+            if (createZuschlagBtn && id) {
+                createZuschlagBtn.onclick = () => {
+                    window.location.href = `zuschlagskriterien_generator.html?id=${encodeURIComponent(id)}`;
+                };
+            }
+            const createDeclarationBtn = document.getElementById('createDeclarationBtn');
+            if (createDeclarationBtn && id) {
+                createDeclarationBtn.onclick = () => {
+                    window.location.href = `eigenerklaerungen_generator.html?id=${encodeURIComponent(id)}`;
+                };
+            }
+            const createContractBtn = document.getElementById('createContractBtn');
+            if (createContractBtn && id) {
+                createContractBtn.onclick = () => {
+                    window.location.href = `contracts_generator.html?id=${encodeURIComponent(id)}`;
+                };
+            }
+        });
     </script>
 </body>
 </html>

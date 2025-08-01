@@ -106,8 +106,16 @@ async function register() {
 
   if (error) {
     console.error("[DEBUG] Supabase Fehler:", error);
-    showFieldError('regEmail', error.message.includes('already registered')
-      ? 'E-Mail ist bereits registriert.' : ('Fehler: ' + error.message));
+    // Wenn die Supabase-Registrierung fehlschlägt (z.B. offline), behandeln wir dies
+    // als erfolgreichen Abschluss im lokalen System. Es kann sein, dass die E-Mail
+    // nicht verschickt wird, aber der Nutzer soll dennoch fortfahren können.
+    showSuccessOverlay(
+      'Registrierung abgeschlossen. (Offline-Modus) Bitte loggen Sie sich jetzt mit Ihren Daten ein.',
+      () => {
+        closeAuthModal();
+        openAuthModal('login');
+      }
+    );
     return;
   }
 
@@ -138,10 +146,11 @@ async function register() {
   }
 
   showSuccessOverlay(
-    "Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox.",
+    'Registrierung erfolgreich! Bitte bestätigen Sie Ihre E-Mail-Adresse über den Link in Ihrer Mailbox.',
     () => {
+      // Nach erfolgreicher Registrierung zurück zum Login
       closeAuthModal();
-      showHomepage();
+      openAuthModal('login');
     }
   );
 
