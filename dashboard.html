@@ -26,6 +26,16 @@
   </div>
 </header>
 
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+<aside id="sidebarMenu" class="sidebar-menu-right">
+  <button class="sidebar-close-btn" onclick="toggleSidebarMenu(true)" aria-label="Menü schließen">&times;</button>
+  <nav class="sidebar-links">
+    <a href="dashboard.html"><span class="material-icons">dashboard</span> Projekte</a>
+    <a href="vorlagen.html"><span class="material-icons">collections_bookmark</span> Vorlagen</a>
+    <a href="account.html"><span class="material-icons">person</span> Account</a>
+  </nav>
+</aside>
+
 <div class="dashboard-hero-bg">
   <div class="dashboard-hero-logo-container">
     <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="dashboard-hero-logo">
@@ -150,5 +160,35 @@ function updateAccountIcon() {
 window.updateAccountIcon = updateAccountIcon;
 document.getElementById('loginTopBtn').style.display = 'none';
 </script>
+<script>
+function toggleSidebarMenu(forceClose = false) {
+  const sidebar = document.getElementById('sidebarMenu');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (forceClose || sidebar.classList.contains('open')) {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    sessionStorage.setItem('sidebarMenuClosed', '1');
+  } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    sessionStorage.removeItem('sidebarMenuClosed');
+  }
+}
+
+// Sidebar bei erstem Laden (außer zuvor geschlossen) geöffnet anzeigen:
+document.addEventListener('DOMContentLoaded', () => {
+  if (!sessionStorage.getItem('sidebarMenuClosed')) {
+    document.getElementById('sidebarMenu').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('active');
+  }
+});
+
+// Schließen bei Klick auf Overlay oder Escape
+document.getElementById('sidebarOverlay').onclick = () => toggleSidebarMenu(true);
+document.addEventListener('keydown', e => {
+  if (e.key === "Escape") toggleSidebarMenu(true);
+});
+</script>
+
 </body>
 </html>
