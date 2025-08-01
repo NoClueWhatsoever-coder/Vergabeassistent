@@ -322,8 +322,7 @@ let { error } = await supabase
     projekt_id: id,
     sender: 'user',
     nachricht: text,
-    user_id: userObj?.id // oder userObj.user.id, je nach SDK-Version
-    // dateiname und datei_url falls benötigt
+    user_id: userObj?.user?.id 
   }]);
 if (error) {
   showSnackbar('Fehler beim Speichern der Nachricht (Offline-Modus).', '#b53a1b');
@@ -501,3 +500,6 @@ async function requestKIResponse({ prompt, chatHistory, metaFields, files }) {
     throw new Error(data.error || "Unbekannter Fehler bei der KI-Antwort");
   }
 }
+
+
+console.log("Supabase Insert Error:", error);
