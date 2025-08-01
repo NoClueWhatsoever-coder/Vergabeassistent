@@ -22,12 +22,6 @@
 </header>
 
 <main
-  <div class="breadcrumb-top">
-    <a href="index.html" class="breadcrumb-link">
-      <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
-      Zurück zur Startseite
-    </a>
-  </div>
 
   <!-- Projektdetails -->
   <section class="projekt-info" style="margin-bottom:2em;">
@@ -122,16 +116,29 @@
     </div>
   </div>
 
-<footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
-  <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
-  <span style="flex:1;">
-    &copy; 2025 VergabeAssist |
-    <a href="impressum.html" target="_blank">Impressum</a> |
-    <a href="datenschutz.html" target="_blank">Datenschutz</a> |
-    <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
-    <a href="avv.html" target="_blank">AVV</a>
-  </span>
+<footer class="footer-modern">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" class="footer-logo">
+      <span class="footer-app">VergabeAssist</span>
+    </div>
+    <nav class="footer-links">
+      <a href="impressum.html" target="_blank">Impressum</a>
+      <a href="datenschutz.html" target="_blank">Datenschutz</a>
+      <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
+      <a href="avv.html" target="_blank">AVV</a>
+    </nav>
+    <nav class="footer-breadcrumb breadcrumb-nav" id="dynamicFooterBreadcrumb">
+      <a href="index.html" class="breadcrumb-link">
+        <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
+        Zurück zur Startseite
+      </a>
+      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
+      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
+    </nav>
+  </div>
 </footer>
+
 
 <script src="js/projekt.js"></script>
 

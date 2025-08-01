@@ -313,19 +313,22 @@ Vergabenummer: ${document.getElementById('vergabeNrInput').value}
 `;
 
   // Nachricht zuerst in Supabase speichern
-  let { error } = await supabase
-    .from('chats')
-    .insert([
-      {
-        projekt_id: id,
-        sender: 'user',
-        nachricht: text,
-        dateien: fileContents.length ? fileContents.map(f => ({ name: f.name })) : null
-      }
-    ]);
-  if (error) {
-    showSnackbar('Fehler beim Speichern der Nachricht (Offline-Modus).', '#b53a1b');
-  }
+  // Vor dem Insert: User ermitteln (async!)
+const { data: userObj } = await supabase.auth.getUser();
+
+let { error } = await supabase
+  .from('chats')
+  .insert([{
+    projekt_id: id,
+    sender: 'user',
+    nachricht: text,
+    user_id: userObj?.id // oder userObj.user.id, je nach SDK-Version
+    // dateiname und datei_url falls benötigt
+  }]);
+if (error) {
+  showSnackbar('Fehler beim Speichern der Nachricht (Offline-Modus).', '#b53a1b');
+}
+
   input.value = '';
   hochgeladeneDateien = [];
   renderFileBubbles();
@@ -355,13 +358,12 @@ Vergabenummer: ${document.getElementById('vergabeNrInput').value}
       files: fileContents
     });
     // Antwort im Chat speichern
-    await supabase.from('chats').insert([
-      {
-        projekt_id: id,
-        sender: 'assistant',
-        nachricht: antwort
-      }
-    ]);
+    await supabase.from('chats').insert([{
+      projekt_id: id,
+      sender: 'assistant',         // <-- das ist wichtig!
+      nachricht: antwort,          // <-- das ist die KI-Antwort
+      user_id: userObj?.id         // du kannst auch user_id mitgeben, wenn deine Policy das verlangt
+    }]);
     await ladeChat();
   } catch (err) {
     showSnackbar('Fehler bei der KI-Antwort: ' + err.message, '#b53a1b');

@@ -1257,8 +1257,7 @@ button:hover, .btn:hover {
 .chat-upload-block {
   display: flex;
   align-items: center;
-  gap: 0.48em;
-  margin-bottom: 0.1em;
+  gap: 0.3em;
 }
 
 /* In deiner style.css ganz unten anfügen (oder anpassen): */
@@ -1587,7 +1586,11 @@ header {
   font-weight: 700;
   font-size: 1.18em;
 }
-.upload-label { font-weight:500; font-size:1.01em; margin-left:0.13em; }
+.upload-label {
+  font-size: 1.03em;
+  color: #31688e;
+  margin-left: 0.5em;
+}
 
 #chatInput:focus { border: 1.5px solid #0077b6; background: #f4fafe; }
 
@@ -1785,20 +1788,14 @@ main {
 .upload-btn input[type="file"] { display: none; }
 
 .upload-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e9f5ff;
+  background: #e9f4fc;
+  border-radius: 7px;
+  padding: 0.2em 0.9em;
   color: #0077b6;
-  border-radius: 50%;
-  border: none;
-  width: 2.2em;
-  height: 2.2em;
-  font-size: 1.7em;
+  font-size: 1.35em;
   cursor: pointer;
-  margin-top: 0.1em;
-  box-shadow: 0 1px 4px #0077b616;
-  transition: background 0.13s;
+  transition: background 0.15s;
+  display: flex; align-items: center; justify-content: center;
 }
 
 .upload-btn:hover {
@@ -1990,6 +1987,7 @@ input::placeholder {
   margin: 0 auto;
   padding: 1.4em 2vw 1.4em 2vw;
   gap: 1.2em;
+  width: 100%;
 }
 .footer-brand {
   display: flex;
