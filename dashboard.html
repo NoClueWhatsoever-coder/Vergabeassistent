@@ -45,12 +45,14 @@
   </div>
 </div>
 <main>
-  <div class="breadcrumb-top">
-    <a href="index.html" class="breadcrumb-link">
-      <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
-      Zurück zur Startseite
-    </a>
+  <div class="breadcrumb-bottomright">
+  <!-- Beispiel für eine Breadcrumb. Ersetze nach Bedarf oder lasse leer! -->
+    <nav class="breadcrumb-nav">
+      <!-- Hier kannst du bei Bedarf weitere Breadcrumb-Elemente einfügen -->
+      <span class="breadcrumb-current">Dashboard</span>
+    </nav>
   </div>
+
 
   <section id="dashboard" style="max-width:1000px;margin:2rem auto 2rem auto;">
     <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
@@ -108,15 +110,20 @@
     </div>
   </div>
 </div>
-<footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
-  <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
-  <span style="flex:1;">
-    &copy; 2025 VergabeAssist |
-    <a href="impressum.html" target="_blank">Impressum</a> |
-    <a href="datenschutz.html" target="_blank">Datenschutz</a> |
-    <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
-    <a href="avv.html" target="_blank">AVV</a>
-  </span>
+<footer id="kontakt" class="footer-modern">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" class="footer-logo">
+      <span class="footer-app">VergabeAssist</span>
+    </div>
+    <nav class="footer-links">
+      <a href="impressum.html" target="_blank">Impressum</a>
+      <a href="datenschutz.html" target="_blank">Datenschutz</a>
+      <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
+      <a href="avv.html" target="_blank">AVV</a>
+    </nav>
+    <span class="footer-copyright">&copy; 2025 GovDisrupt AI</span>
+  </div>
 </footer>
 
 <!-- Sidebar Overlay und Logik -->
