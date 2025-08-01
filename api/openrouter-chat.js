@@ -25,9 +25,9 @@ export default async function handler(req, res) {
     fullPrompt += `Bitte fasse alle bisherigen Infos prägnant zusammen und stelle 3-5 Rückfragen, um den Bedarf iterativ zu präzisieren.`;
 
     const payload = {
-      model: "openai/gpt-4o",
+      model: "openrouter/horizon-alpha",
       messages: [
-        { role: "system", content: "Du bist ein Assistent für die Bedarfsanalyse in der öffentlichen Beschaffung." },
+        { role: "system", content: "Du bist ein Assistent für die Bedarfsanalyse in der öffentlichen Beschaffung. Deine Zusammenfassung des Nutzerbedarfs dient zur Vorbereitung einer automatisierten Erstellung eines Leistungsverzeichnis. Fasse die folgende Bedarfsbeschreibung nach deinem Verständnis zusammen und stelle 3-5 Rückfragen, um genau zu verstehen, welche Leistung beschafft werden soll." },
         { role: "user", content: fullPrompt }
       ]
     };

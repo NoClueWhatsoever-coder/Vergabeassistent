@@ -24,7 +24,7 @@ export default async function handler(req, res) {
     }
 
     const payload = {
-      model: model || "mistralai/mistral-7b-instruct:free",
+      model: model || "openrouter/horizon-alpha",
       messages: [
         ...(systemPrompt ? [{ role: 'system', content: systemPrompt }] : []),
         { role: 'user', content: prompt }
