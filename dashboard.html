@@ -11,8 +11,8 @@
 </head>
 <body>
 <header>
-  <!-- Burger-Menü wird auf dem Dashboard nicht benötigt – ausgeblendet -->
-  <div id="burgerMenu" class="burger-menu" style="display:none;">
+  <!-- Burger-Menü nach rechts -->
+  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()" style="position:absolute;right:2rem;top:1.4rem;">
     <span></span><span></span><span></span>
   </div>
   <div class="header-center">
@@ -20,15 +20,9 @@
       <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
     </a>
   </div>
-
   <button id="loginTopBtn" class="login-top-btn" style="display:none;">Login</button>
-  <!-- Account-Icon dauerhaft sichtbar auf dem Dashboard -->
-  <div id="accountIcon" style="position:absolute;right:2rem;top:1.2rem;cursor:pointer;">
+  <div id="accountIcon" style="display:none;position:absolute;right:4.8rem;top:1.2rem;cursor:pointer;">
     <span title="Account verwalten" style="font-size:2.1rem;">👤</span>
-  </div>
-  <!-- Vorlagen-Link als separates Icon -->
-  <div id="templatesIcon" style="position:absolute;right:4.8rem;top:1.2rem;cursor:pointer;">
-    <span title="Vorlagen" style="font-size:2.1rem;">📁</span>
   </div>
 </header>
 
@@ -112,39 +106,49 @@
   </span>
 </footer>
 <!-- Burger-Menü-Sidebar -->
-<div id="sidebarMenu" class="sidebar-menu" style="display:none;">
-  <button class="sidebar-close-btn" onclick="toggleSidebarMenu()" aria-label="Menü schließen">&times;</button>
+<div id="sidebarMenu" class="sidebar-menu" style="display:flex; flex-direction:column; position:fixed; top:0; right:0; height:100vh; width:260px; background:#fff; box-shadow:-4px 0 24px #003c7b18; z-index:1111; transition:right 0.22s; padding-top:2.5em;">
+  <button class="sidebar-close-btn" onclick="toggleSidebarMenu()" aria-label="Menü schließen" style="align-self:flex-end;margin:0.3em 0.7em 1.4em 0;">&times;</button>
   <a href="dashboard.html">Beschaffungsvorhaben</a>
   <a href="vorlagen.html">Vorlagen</a>
   <a href="account.html">Account</a>
 </div>
+
 <script src="js/utils.js"></script>
 <script src="js/dashboard.js"></script>
 <script>
-window.toggleSidebarMenu = function() {
+/* --- Burger-Menü: rechts und ausgeklappt --- */
+window.toggleSidebarMenu = function(forceClose = false) {
   const sb = document.getElementById('sidebarMenu');
-  sb.style.display = (sb.style.display === 'none' || !sb.style.display) ? 'flex' : 'none';
+  // Status merken (Session, damit es beim Reload bleibt)
+  if (forceClose || sb.style.display === 'flex') {
+    sb.style.display = 'none';
+    sessionStorage.setItem('sidebarMenuClosed', '1');
+  } else {
+    sb.style.display = 'flex';
+    sessionStorage.removeItem('sidebarMenuClosed');
+  }
 };
-document.addEventListener('click', e => {
-  if (e.target.closest('.sidebar-menu') || e.target.closest('.burger-menu')) return;
-  document.getElementById('sidebarMenu').style.display = 'none';
+// Beim Laden: ausgeklappt, außer vom Nutzer geschlossen
+document.addEventListener('DOMContentLoaded', () => {
+  if (!sessionStorage.getItem('sidebarMenuClosed')) {
+    document.getElementById('sidebarMenu').style.display = 'flex';
+  }
 });
-// Account-Icon
+// Schließen bei Klick außerhalb
+document.addEventListener('click', e => {
+  const sb = document.getElementById('sidebarMenu');
+  if (!sb.contains(e.target) && !e.target.closest('.burger-menu')) {
+    sb.style.display = 'none';
+    sessionStorage.setItem('sidebarMenuClosed', '1');
+  }
+});
+// Account-Icon sichtbar
 function updateAccountIcon() {
   const icon = document.getElementById('accountIcon');
-  // Account-Icon ist dauerhaft sichtbar; weise Klick-Handler zu
-  icon.onclick = () => { window.location.href = 'account.html'; };
-  const templatesIcon = document.getElementById('templatesIcon');
-  if (templatesIcon) {
-    templatesIcon.onclick = () => { window.location.href = 'vorlagen.html'; };
-  }
+  icon.style.display = 'block';
 }
 window.updateAccountIcon = updateAccountIcon;
-// Login-Button oben ausblenden, wenn eingeloggt (hier optional)
 document.getElementById('loginTopBtn').style.display = 'none';
-
-// Initialisiere Account- und Vorlagen-Icons sofort
-updateAccountIcon();
 </script>
 </body>
 </html>

@@ -1882,3 +1882,60 @@ input::placeholder {
   opacity: 1;
 }
 
+.burger-menu {
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  background: #f7fafc;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px #00336612;
+}
+.burger-menu span {
+  display: block;
+  width: 22px;
+  height: 3px;
+  background: #0077b6;
+  margin: 3px 0;
+  border-radius: 3px;
+  transition: 0.2s;
+}
+.sidebar-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 260px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -4px 0 24px #003c7b18;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 2.5em;
+  z-index: 1111;
+  transition: right 0.22s;
+}
+.sidebar-menu a {
+  color: #194c7b;
+  text-decoration: none;
+  font-size: 1.09em;
+  padding: 1em 2em;
+  width: 100%;
+  transition: background 0.13s;
+}
+.sidebar-menu a:hover {
+  background: #f4f8fc;
+}
+.sidebar-close-btn {
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #2b3b51;
+  cursor: pointer;
+  margin-bottom: 1.4em;
+}
+
