@@ -361,7 +361,7 @@ if (error) {
       projekt_id: id,
       sender: 'assistant',         // <-- das ist wichtig!
       nachricht: antwort,          // <-- das ist die KI-Antwort
-      user_id: userObj?.id         // du kannst auch user_id mitgeben, wenn deine Policy das verlangt
+      user_id: userObj?.user?.id   // du kannst auch user_id mitgeben, wenn deine Policy das verlangt
     }]);
     await ladeChat();
   } catch (err) {
