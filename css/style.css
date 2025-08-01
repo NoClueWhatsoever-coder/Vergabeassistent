@@ -1995,6 +1995,81 @@ input::placeholder {
 
 /* --- MODERNER, STICKY FOOTER --- */
 .footer-modern {
+  flex-shrink: 0;
+  width: 100vw;  /* Über gesamte Breite! */
+  min-width: 100vw;
+  background: #f8fafc;
+  border-top: 1.5px solid #e4e9f0;
+  color: #254361;
+  font-size: 1.04em;
+  margin-left: calc(50% - 50vw);  /* Footer an linken Rand ziehen, bei zentriertem Main */
+  box-shadow: 0 -1px 10px #0033660c;
+  position: relative;
+  padding-bottom: 2.2em; /* Platz für Breadcrumb */
+}
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.4em 2.5vw 1.4em 2.5vw;
+  gap: 1.5em;
+  position: relative;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.footer-logo {
+  height: 36px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 8px #c3d2e522;
+}
+.footer-app {
+  font-weight: 700;
+  color: #0077b6;
+  letter-spacing: 0.01em;
+  font-size: 1.14em;
+}
+.footer-links {
+  display: flex;
+  gap: 1.4em;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  color: #2d5a88;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.15em 0.18em;
+  border-radius: 4px;
+  transition: background 0.13s, color 0.13s;
+}
+.footer-links a:hover {
+  color: #0077b6;
+  background: #e8f1fa;
+}
+.footer-copyright {
+  font-size: 0.98em;
+  opacity: 0.69;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 800px) {
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7em;
+    padding: 1.1em 4vw;
+  }
+  .footer-links { gap: 0.8em; }
+}
+
+
+.footer-modern {
   width: 100vw;
   background: #f8fafc;
   border-top: 1.5px solid #e4e9f0;
