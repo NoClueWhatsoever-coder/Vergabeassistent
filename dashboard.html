@@ -11,8 +11,8 @@
 </head>
 <body>
 <header>
-  <!-- Burger-Menü nach rechts -->
-  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()" style="position:absolute;right:2rem;top:1.4rem;">
+  <!-- Burger-Menü links im Header -->
+  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()" style="position:absolute;left:2rem;top:1.4rem;">
     <span></span><span></span><span></span>
   </div>
   <div class="header-center">
@@ -20,15 +20,18 @@
       <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
     </a>
   </div>
+  <!-- Account-Icon rechts oben -->
   <button id="loginTopBtn" class="login-top-btn" style="display:none;">Login</button>
-  <div id="accountIcon" style="display:none;position:absolute;right:4.8rem;top:1.2rem;cursor:pointer;">
+  <div id="accountIcon" style="display:block;position:absolute;right:2rem;top:1.2rem;cursor:pointer;">
     <span title="Account verwalten" style="font-size:2.1rem;">👤</span>
   </div>
 </header>
 
+<!-- Overlay für Sidebar -->
 <div id="sidebarOverlay" class="sidebar-overlay"></div>
-<aside id="sidebarMenu" class="sidebar-menu-right">
-  <button class="sidebar-close-btn" onclick="toggleSidebarMenu(true)" aria-label="Menü schließen">&times;</button>
+
+<!-- Sidebar beginnt unterhalb des Headers -->
+<aside id="sidebarMenu" class="sidebar-menu-left">
   <nav class="sidebar-links">
     <a href="dashboard.html"><span class="material-icons">dashboard</span> Projekte</a>
     <a href="vorlagen.html"><span class="material-icons">collections_bookmark</span> Vorlagen</a>
@@ -115,56 +118,17 @@
     <a href="avv.html" target="_blank">AVV</a>
   </span>
 </footer>
-<!-- Burger-Menü-Sidebar -->
-<div id="sidebarMenu" class="sidebar-menu" style="display:flex; flex-direction:column; position:fixed; top:0; right:0; height:100vh; width:260px; background:#fff; box-shadow:-4px 0 24px #003c7b18; z-index:1111; transition:right 0.22s; padding-top:2.5em;">
-  <button class="sidebar-close-btn" onclick="toggleSidebarMenu()" aria-label="Menü schließen" style="align-self:flex-end;margin:0.3em 0.7em 1.4em 0;">&times;</button>
-  <a href="dashboard.html">Beschaffungsvorhaben</a>
-  <a href="vorlagen.html">Vorlagen</a>
-  <a href="account.html">Account</a>
-</div>
 
+<!-- Sidebar Overlay und Logik -->
 <script src="js/utils.js"></script>
 <script src="js/dashboard.js"></script>
 <script>
-/* --- Burger-Menü: rechts und ausgeklappt --- */
-window.toggleSidebarMenu = function(forceClose = false) {
-  const sb = document.getElementById('sidebarMenu');
-  // Status merken (Session, damit es beim Reload bleibt)
-  if (forceClose || sb.style.display === 'flex') {
-    sb.style.display = 'none';
-    sessionStorage.setItem('sidebarMenuClosed', '1');
-  } else {
-    sb.style.display = 'flex';
-    sessionStorage.removeItem('sidebarMenuClosed');
-  }
-};
-// Beim Laden: ausgeklappt, außer vom Nutzer geschlossen
-document.addEventListener('DOMContentLoaded', () => {
-  if (!sessionStorage.getItem('sidebarMenuClosed')) {
-    document.getElementById('sidebarMenu').style.display = 'flex';
-  }
-});
-// Schließen bei Klick außerhalb
-document.addEventListener('click', e => {
-  const sb = document.getElementById('sidebarMenu');
-  if (!sb.contains(e.target) && !e.target.closest('.burger-menu')) {
-    sb.style.display = 'none';
-    sessionStorage.setItem('sidebarMenuClosed', '1');
-  }
-});
-// Account-Icon sichtbar
-function updateAccountIcon() {
-  const icon = document.getElementById('accountIcon');
-  icon.style.display = 'block';
-}
-window.updateAccountIcon = updateAccountIcon;
-document.getElementById('loginTopBtn').style.display = 'none';
-</script>
-<script>
-function toggleSidebarMenu(forceClose = false) {
+function toggleSidebarMenu(force = false) {
   const sidebar = document.getElementById('sidebarMenu');
   const overlay = document.getElementById('sidebarOverlay');
-  if (forceClose || sidebar.classList.contains('open')) {
+  // Wenn offen, schließe immer; wenn geschlossen: öffne nur, falls nicht erzwungen zu schließen
+  const isOpen = sidebar.classList.contains('open');
+  if (isOpen || force) {
     sidebar.classList.remove('open');
     overlay.classList.remove('active');
     sessionStorage.setItem('sidebarMenuClosed', '1');
@@ -172,23 +136,26 @@ function toggleSidebarMenu(forceClose = false) {
     sidebar.classList.add('open');
     overlay.classList.add('active');
     sessionStorage.removeItem('sidebarMenuClosed');
+    // Optional: Fokussiere Sidebar für Barrierefreiheit
+    setTimeout(() => sidebar.focus && sidebar.focus(), 120);
   }
 }
-
-// Sidebar bei erstem Laden (außer zuvor geschlossen) geöffnet anzeigen:
+// Sidebar bei erstem Laden ausgeklappt
 document.addEventListener('DOMContentLoaded', () => {
   if (!sessionStorage.getItem('sidebarMenuClosed')) {
     document.getElementById('sidebarMenu').classList.add('open');
     document.getElementById('sidebarOverlay').classList.add('active');
   }
+  // Account-Icon immer sichtbar und klickbar
+  const accountIcon = document.getElementById('accountIcon');
+  accountIcon.style.display = 'block';
+  accountIcon.onclick = () => window.location.href = "account.html";
 });
-
 // Schließen bei Klick auf Overlay oder Escape
 document.getElementById('sidebarOverlay').onclick = () => toggleSidebarMenu(true);
 document.addEventListener('keydown', e => {
   if (e.key === "Escape") toggleSidebarMenu(true);
 });
 </script>
-
 </body>
 </html>
