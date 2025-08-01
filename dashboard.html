@@ -21,10 +21,11 @@
     </a>
   </div>
   <!-- Account-Icon rechts oben -->
-  <button id="loginTopBtn" class="login-top-btn" style="display:none;">Login</button>
-  <div id="accountIcon" style="display:block;position:absolute;right:2rem;top:1.2rem;cursor:pointer;">
-    <span title="Account verwalten" style="font-size:2.1rem;">👤</span>
-  </div>
+  <button id="loginTopBtn" class="login-top-btn" onclick="window.location.href='account.html'" aria-label="Account"
+    style="display:block;position:absolute;right:2rem;top:1.2rem;">
+    <span class="material-icons" style="font-size:1.9em;vertical-align:middle;">account_circle</span>
+    <span style="font-size:1em;margin-left:0.35em;">Account</span>
+  </button>
 </header>
 
 <!-- Overlay für Sidebar -->
@@ -45,17 +46,6 @@
   </div>
 </div>
 <main>
-  <div class="breadcrumb-bottomright">
-    <nav class="breadcrumb-nav" id="dynamicBreadcrumb">
-      <a href="index.html" class="breadcrumb-link">
-        <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
-        Zurück zur Startseite
-      </a>
-      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
-      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
-    </nav>
-  </div>
-
 
   <section id="dashboard" style="max-width:1000px;margin:2rem auto 2rem auto;">
     <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
@@ -125,9 +115,17 @@
       <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
       <a href="avv.html" target="_blank">AVV</a>
     </nav>
-    <span class="footer-copyright">&copy; 2025 GovDisrupt AI</span>
+    <nav class="footer-breadcrumb breadcrumb-nav" id="dynamicFooterBreadcrumb">
+      <a href="index.html" class="breadcrumb-link">
+        <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
+        Zurück zur Startseite
+      </a>
+      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
+      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
+    </nav>
   </div>
 </footer>
+
 
 <!-- Sidebar Overlay und Logik -->
 <script src="js/utils.js"></script>
@@ -180,7 +178,6 @@ document.addEventListener('keydown', e => {
   // auch später per JS document.getElementById('breadcrumbCurrent').textContent = 'Projekt XY';
 })();
 </script>
-
 
 </body>
 </html>
