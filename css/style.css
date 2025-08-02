@@ -325,8 +325,8 @@ header nav a:hover {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: stretch;
-  gap: 2vw;
+  align-items: center;
+  gap: 3vw;
   padding: 0 3vw;
   z-index: 2;
 }
@@ -338,36 +338,6 @@ header nav a:hover {
 .vorteil-icon {
   font-size: 2.3rem;
   margin-bottom: 0.6em;
-}
-
-/* Vereinheitlichte Karten für Vorteile – gleicher Platz für jede Karte */
-.vorteil-kachel {
-  flex: 1 1 0;
-  max-width: 320px;
-  min-width: 260px;
-  background: rgba(255,255,255,0.94);
-  border-radius: 18px;
-  padding: 1.6em 1.4em;
-  box-shadow: 0 4px 24px #0077b620;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.vorteil-kachel h3 {
-  margin-top: 0.6em;
-  margin-bottom: 0.45em;
-  font-size: 1.2rem;
-  color: #0077b6;
-  font-weight: 700;
-  text-align: center;
-}
-.vorteil-kachel p {
-  color: #222b38;
-  font-size: 1rem;
-  text-align: center;
-  line-height: 1.4;
 }
 .vorteil-kachel h3 {
   margin: 0 0 0.45em 0;
@@ -414,9 +384,8 @@ header nav a:hover {
 
 
 #dashboard {
-  max-width: none;
-  width: calc(100% - 2rem);
-  margin: 3.5rem 1rem 2rem 1rem;
+  max-width: 1000px;
+  margin: 3.5rem auto 2rem auto;
   background: #fff;
   border-radius: 22px;
   box-shadow: 0 4px 30px #0077b62a;
@@ -455,7 +424,6 @@ header nav a:hover {
   border-radius: 15px;
   overflow: hidden;
   font-size: 1.05em;
-  table-layout: auto;
 }
 .dashboard-table th, .dashboard-table td {
   padding: 1em 0.6em;
@@ -466,7 +434,6 @@ header nav a:hover {
   background: #f7fafc;
   color: #222b38;
   font-weight: 700;
-  white-space: nowrap;
 }
 .dashboard-table tbody tr:last-child td {
   border-bottom: none;
@@ -474,14 +441,6 @@ header nav a:hover {
 .dashboard-table tr:hover {
   background: #f0f8fd;
   transition: background 0.13s;
-}
-
-/* Streifen für eine bessere Lesbarkeit und modernes Aussehen */
-.dashboard-table tbody tr:nth-child(even) {
-  background: #f9fbfe;
-}
-.dashboard-table tbody tr:nth-child(odd) {
-  background: #ffffff;
 }
 @media (max-width: 700px) {
   #dashboard { padding: 1.1rem 0.3rem; }
@@ -1000,23 +959,20 @@ button:hover, .btn:hover {
 }
 
 /* ========== Chat-Container & Verlauf ========== */
-/* Allgemeiner Chat‑Container, immer mit schmalem Außenrand */
 .chat-container {
   max-width: none;
-  width: auto;
+  width: 100%;
   background: #fcfdfe;
   border-radius: 20px;
   box-shadow: 0 3px 42px #0077b612;
-  /* schmaler Rand links und rechts, damit der Container fast über die gesamte Seitenbreite geht */
-  margin: 0 1rem 3em 1rem;
-  /* einheitliche horizontale Innenabstände */
-  padding: 2.2em 2rem 2em 2rem;
+  margin: 0 auto 3em auto;
+  padding: 2.2em 3vw 2em 3vw;
   display: flex;
   flex-direction: column;
   min-height: 480px;
 }
 @media (max-width: 900px) {
-  .chat-container { padding: 1.2em 1rem; margin-left: 0.5rem; margin-right: 0.5rem; }
+  .chat-container { padding: 1.2em 1vw; }
 }
 .chat-header {
   background: #f7f7f7;
@@ -1045,8 +1001,7 @@ button:hover, .btn:hover {
   overflow-y: auto;
   background: #fafdfe;
   font-size: 1.06em;
-  /* identische horizontale Abstände wie der Chat‑Container */
-  padding: 1em 1rem 1em 1rem;
+  padding: 1em 0.5em 1em 0.5em;
   margin-bottom: 0.6em;
   border-radius: 7px;
 }
@@ -1070,16 +1025,6 @@ button:hover, .btn:hover {
   align-self: flex-start;
   margin-right: auto;
   color: #334455;
-}
-
-/* Verbesserte Darstellung von Listen in KI‑Antworten */
-.message.assistant ul {
-  list-style: disc;
-  margin: 0.4em 0;
-  padding-left: 1.4em;
-}
-.message.assistant li {
-  margin-bottom: 0.4em;
 }
 .chat-hint {
   color: #8da2b7;
@@ -1115,30 +1060,10 @@ button:hover, .btn:hover {
 
 .chat-input-bar {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1em;
-  margin-top: 0.8em;
-}
-
-/* Zeile für Datei‑Upload und Senden‑Button unten */
-.chat-input-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+  align-items: flex-end;
   gap: 1.3em;
-}
-/* Datei‑Uploadblock links unten */
-.chat-upload-block {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  margin-bottom: 0;
-}
-/* Text „Datei auswählen“ ausblenden, nur das Plus‑Icon bleibt */
-.chat-upload-block .upload-label {
-  display: none;
+  margin-top: 0.8em;
+  flex-wrap: wrap;
 }
 .chat-upload-block {
   display: flex;
@@ -1355,24 +1280,6 @@ header {
   cursor: pointer; margin-left: 0.35em; margin-right: -0.2em;
 }
 .file-remove:hover { color: #b8060e; }
-
-/* Dezenter Kopieren‑Button in Chatnachrichten */
-.copy-btn {
-  background: none;
-  border: none;
-  color: #0077b6;
-  font-size: 1.1em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 0.2em;
-}
-.copy-btn .material-icons {
-  font-size: 1.1em;
-}
-.copy-btn:hover {
-  color: #005f8d;
-}
 .upload-btn { position: relative; }
 
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
@@ -1550,98 +1457,6 @@ header {
   display: none;
 }
 
-/*
- * === Design‑Verbesserungen und finale Overrides ===
- * Diese Regeln überschreiben frühere Definitionen und vereinheitlichen das Erscheinungsbild
- * der Chatkomponenten, des Info-Buttons, des Dashboards und des Footers.
- */
-
-/* Vereinfachter Info‑Button: kein runder Hintergrund mehr, dezenter Farbton */
-.info-icon {
-  background: none !important;
-  border: none !important;
-  color: #176fa6;
-  font-size: 1.35em;
-  margin-left: 0.5em;
-  width: auto;
-  height: auto;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: color 0.15s;
-}
-.info-icon:hover,
-.info-icon:focus {
-  color: #0077b6;
-}
-
-/* Chat-Container über die gesamte Seite mit einheitlichen Innenabständen */
-.chat-container {
-  max-width: none !important;
-  width: calc(100% - 2rem);
-  margin-left: 1rem;
-  margin-right: 1rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
-
-/* Chat-Messages und Eingabeleiste nicht begrenzen, immer volle Breite des Containers */
-.chat-container .chat-messages,
-.chat-container .chat-input-bar {
-  max-width: none !important;
-  width: 100% !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
-/* Eingabebereich: vertikale Anordnung für Mobilgeräte bleibt, aber Volle Breite */
-.chat-input-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.chat-input-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Verstecke die Beschriftung neben dem Upload-Button dauerhaft */
-.chat-upload-block .upload-label {
-  display: none !important;
-}
-
-/* Vereinheitlichte Buttons im Chat: gleitender Farbverlauf und Hover-Farbe */
-#sendBtn,
-#guestSendBtn {
-  background: linear-gradient(90deg, #169cd9 0%, #2bd7b1 100%) !important;
-  color: #fff;
-  border: none;
-  border-radius: 9px;
-  font-size: 1.13em;
-  font-weight: 600;
-  box-shadow: 0 2px 10px #2bd7b131;
-  transition: background 0.15s;
-}
-#sendBtn:hover,
-#guestSendBtn:hover {
-  background: #0077b6 !important;
-}
-
-/* Dashboard-Container soll die volle Breite ausnutzen */
-#dashboard {
-  max-width: none !important;
-  width: calc(100% - 2rem) !important;
-  margin: 3.5rem 1rem 2rem 1rem !important;
-}
-
-/* Footer über komplette Breite (Standard in footer-modern) */
-.footer-modern {
-  width: 100% !important;
-}
-
 footer {
   justify-content: center;
   flex-wrap: wrap;
@@ -1802,61 +1617,6 @@ main {
   .chat-container { max-width: 99vw; }
 }
 
-/* ========== Anpassungen für den Demo-Chat auf der Startseite ========== */
-/* Vertikale Anordnung des Eingabefeldes mit dem Button darunter */
-.guest-chat-input {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  align-items: flex-end;
-  margin-top: 1rem;
-}
-.guest-chat-input input {
-  width: 100%;
-  border: 1.4px solid #e5eaf0;
-  border-radius: 13px;
-  font-size: 1.14em;
-  padding: 1.1em;
-  background: #f8fbfe;
-  transition: border 0.14s;
-  box-shadow: 0 1.5px 9px #8ec7e519;
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-}
-.guest-chat-input input:focus {
-  border-color: #0077b6;
-  background: #f0f7fc;
-  outline: none;
-}
-.guest-chat-input button {
-  align-self: flex-end;
-  padding: 0.77em 2.1em;
-  font-size: 1.13em;
-  background: linear-gradient(90deg, #169cd9 0%, #2bd7b1 100%);
-  color: #fff;
-  border: none;
-  border-radius: 9px;
-  font-weight: 600;
-  box-shadow: 0 2px 10px #2bd7b131;
-  cursor: pointer;
-  transition: background 0.16s;
-}
-.guest-chat-input button:hover {
-  background: #0077b6;
-}
-
-/* Ladeanimation für die Senden‑Buttons im Chat (Startseite und Projektseite) */
-@keyframes blinkDots {
-  0%, 20% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
-}
-#sendBtn.loading::after,
-#guestSendBtn.loading::after {
-  content: '...';
-  margin-left: 0.4em;
-  animation: blinkDots 1.2s infinite;
-}
-
 
 input.error { border-color: #b53a1b; }
 input[type="checkbox"].error { outline: 2px solid #b53a1b; }
@@ -1953,14 +1713,12 @@ input::placeholder {
 
 /* Sidebar links unterhalb des Headers */
 .sidebar-menu-left {
-  /* statt fixed nun sticky, damit die Sidebar beim Scrollen nicht über den Footer hinausragt */
-  position: sticky;
-  top: 72px; /* Höhe des Headers */
+  position: fixed;
+  top: 72px; /* Headerhöhe ggf. anpassen! */
   left: 0;
   width: 280px;
   max-width: 93vw;
-  height: auto;
-  max-height: calc(100vh - 72px - 80px); /* lässt Platz für den Footer */
+  height: calc(100vh - 72px);
   background: #fff;
   z-index: 1502;
   box-shadow: 8px 0 32px #00336616, 0 1px 0 #e7eef6;
@@ -1969,7 +1727,6 @@ input::placeholder {
   padding: 1.5em 0 0 0;
   border-radius: 0 2.1em 2.1em 0;
   transform: translateX(-100%);
-  overflow-y: auto;
   transition: transform 0.25s cubic-bezier(.64,.05,.36,1), box-shadow 0.18s;
 }
 .sidebar-menu-left.open {
@@ -2023,24 +1780,23 @@ input::placeholder {
 
 
 
-/* Modernes Footer‑Layout: über gesamte Breite, Inhalt links und Breadcrumb rechts */
 .footer-modern {
-  width: 100%;
+  width: 100vw;
   background: #f8fafc;
   border-top: 1.5px solid #e4e9f0;
   color: #254361;
   font-size: 1.04em;
+  margin-left: calc(50% - 50vw);
   box-shadow: 0 -1px 10px #0033660c;
   position: relative;
 }
 .footer-inner {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1.4em 2rem;
+  padding: 1.4em 2vw 1.4em 2vw;
   gap: 1.2em;
   width: 100%;
 }
@@ -2103,13 +1859,13 @@ input::placeholder {
   background: rgba(248, 252, 255, 0.97);
   border-radius: 13px;
   box-shadow: 0 2px 8px #8ec7e522;
-  padding: 0.35em 0.9em;
-  font-size: 0.95em;
+  padding: 0.38em 1.1em;
+  font-size: 1.03em;
   color: #2275b6;
-  min-width: 160px;
-  gap: 0.6em;
+  min-width: 180px;
+  gap: 0.7em;
   white-space: nowrap;
-  margin-left: auto;
+  margin-left: auto; /* ganz rechts */
 }
 
 .footer-breadcrumb a {
@@ -2933,22 +2689,16 @@ header nav a:hover {
   padding: 2.2em 2em 1.5em 2em;
   color: #222b38;
 }
-/* Wenn der Chat aktiv ist (Fokus im Eingabefeld), vergrößert sich die Box über fast die ganze Breite.
-   Die Hover‑Variante wurde entfernt, damit das breite Layout nur bei aktiver Benutzung erscheint. */
+.hero-chatbox:hover,
 .hero-chatbox:focus-within {
-  max-width: none;
-  width: calc(100% - 2rem);
-  margin-left: 1rem;
-  margin-right: 1rem;
+  max-width: 1000px;
   box-shadow: 0 8px 38px #0077b66c;
   background: #fff;
 }
 
 @media (max-width: 1100px) {
-  .hero-chatbox:focus-within {
-    width: calc(100% - 1rem);
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+  .hero-chatbox:hover, .hero-chatbox:focus-within {
+    max-width: 98vw;
   }
 }
 
@@ -3025,6 +2775,200 @@ header nav a:hover {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+}
+
+/*
+ * === Final Layout Overrides ===
+ * Diese Regeln sorgen dafür, dass die neuen Anforderungen umgesetzt werden.
+ */
+
+/* Gleiche Mindesthöhe für die drei Vorteil-Kacheln auf der Startseite */
+.vorteile-kacheln-container .vorteil-kachel {
+  min-height: 280px;
+}
+
+/* Demo‑Chat‑Eingabe (Startseite): ordnet Input und Button untereinander und füllt die volle Breite aus */
+.guest-chat-input {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 1rem;
+}
+.guest-chat-input input[type="text"] {
+  width: 100%;
+  margin: 0 0 0.6rem 0;
+}
+.guest-chat-input button {
+  align-self: flex-end;
+  margin: 0;
+}
+
+/* Sidebar: über die volle Höhe von Kopf bis Fuß scrollen */
+.sidebar-menu-left {
+  /* Fixiere die Sidebar zwischen Header (72px) und unterem Rand. 
+     Keine feste Höhe, damit sie den verfügbaren Raum nutzt und bis zum Footer reicht. */
+  position: fixed !important;
+  top: 72px;
+  bottom: 0;
+  overflow-y: auto;
+}
+
+/* Breadcrumbs im oberen Bereich des Main-Containers */
+.breadcrumb-nav-top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  font-size: 0.85em;
+  color: #425d79;
+  margin: 0.4rem 0 1rem 0;
+}
+.breadcrumb-nav-top a {
+  color: #2576ba;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.12s;
+}
+.breadcrumb-nav-top a:hover {
+  color: #006398;
+}
+.breadcrumb-nav-top .breadcrumb-sep {
+  color: #b8c3d6;
+}
+
+/* ----- Zusätzliche Layout-Korrekturen ----- */
+
+/* Dehne die Kacheln der Vorteil‑Sektion gleichmäßig in der Höhe, um identische Größen zu gewährleisten */
+.vorteile-kacheln-container {
+  align-items: stretch !important;
+}
+
+/* Zentriere den Demo‑Chatcontainer und nutze die volle Breite */
+#guestChatContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin: 0 auto;
+}
+#guestChatContainer .chat-messages {
+  margin-bottom: 0.8rem;
+}
+/* Entferne rechten Rand vom Textfeld im Gast‑Chat, damit der Senden‑Button bündig abschließt */
+#guestChatContainer input[type="text"] {
+  margin-right: 0;
+}
+
+/* Chatcontainer auf Projekt‑ und Eigenerklärungsseiten: volle Breite mit kleinen Außenabständen */
+.chat-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 1.5rem 2rem !important;
+}
+
+/* Ordne Upload‑Icon und Senden‑Button in einer Zeile an und verteile Platz */
+.chat-input-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.6rem;
+}
+.chat-upload-block {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+/* Verberge den Text „Datei auswählen“ – das Plus‑Icon reicht als Indikator */
+.chat-upload-block .upload-label {
+  display: none;
+}
+
+/* Korrigiere Demo‑Chat‑Button‑Layout: Senden‑Button nicht neben dem Input, sondern darunter rechts */
+#guestSendBtn {
+  /* Überschreibe Vorgaben aus der hero‑Chatbox */
+  margin-left: 0 !important;
+  display: block !important;
+}
+/* Eingabefeld im Demo‑Chat voll breit und ohne rechten Rand */
+#guestChatContainer input[type="text"] {
+  flex: none !important;
+  width: 100% !important;
+  margin-right: 0 !important;
+}
+
+/*
+ * === Zusätzliche final overrides (Version 2) ===
+ * Hier definierte Regeln gleichen die Kachelgrößen an,
+ * sorgen für durchgängige Seitenbreite auf Dashboard‑, Projekt‑ und Eigenerklärungsseiten,
+ * strecken die Sidebar bis zum unteren Rand und richten die Chat‑Elemente sauber aus.
+ */
+
+/* Gleiche Breite und Höhe für die drei Vorteil‑Kacheln auf der Startseite */
+.vorteile-kacheln-container .vorteil-kachel {
+  /* Jede Kachel erhält den gleichen Flex‑Faktor für identische Breite */
+  flex: 1 1 0 !important;
+  /* Erzwinge eine einheitliche Mindesthöhe, damit unterschiedlich lange Texte die Größe nicht verändern */
+  min-height: 320px !important;
+}
+
+/* Sidebar: strecke auf die gesamte verbleibende Höhe (zwischen Header und unterem Rand) */
+.sidebar-menu-left {
+  height: calc(100vh - 72px) !important;
+}
+
+/* Breitformatige Hauptbereiche: Dashboard‑, Projekt‑ und Eigenerklärungsseiten sollen sich über die gesamte Seite erstrecken */
+.dashboard-main,
+.project-main,
+.eigenerklaerungen-main {
+  /* Überlagere die standardmäßige 1000px-Begrenzung von <main> vollständig */
+  max-width: none !important;
+  width: 100% !important;
+  /* Einheitlicher Außenabstand: 2rem oben/unten, 1.5rem links/rechts */
+  margin: 2rem 1.5rem !important;
+  padding: 0 !important;
+}
+
+/* Hero‑Chat: Chat‑Nachrichten und Eingabecontainer sollen die volle Breite nutzen */
+.hero-chatbox .chat-messages,
+.hero-chatbox .guest-chat-input {
+  width: 100% !important;
+}
+/* Sende‑Button im Demo‑Chat korrekt rechtsbündig unter dem Eingabefeld ausrichten */
+.hero-chatbox .guest-chat-input button {
+  align-self: flex-end !important;
+}
+
+/* Projekt‑ und Eigenerklärungs‑Chat: Upload‑Icon links und Senden rechts nebeneinander anordnen */
+.chat-input-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  /* Elemente am unteren Rand ausrichten, damit Plus‑Icon und Senden‑Button auf einer Höhe stehen */
+  align-items: flex-end !important;
+}
+.chat-upload-block {
+  margin-right: auto !important;
+}
+
+/* Überschreibe Standard‑Chatcontainer, um die volle Breite zu nutzen und Seitenabstand zu minimieren */
+.chat-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 0 2.5rem 0 !important;
+  padding: 2rem 1.5rem !important;
+}
+
+/* Dashboard‑Karte: entferne Max‑Width, damit der Inhalt fast bis zum Seitenrand reicht */
+/* Dashboard‑Container: Entferne Hintergrundkarte und lasse das Element den vollen Platz nutzen */
+#dashboard {
+  background: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 

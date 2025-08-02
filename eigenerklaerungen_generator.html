@@ -4,10 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Eigenerklärungen generieren – VergabeAssist</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Supabase‑Client für Datenabruf und -speicherung -->
+  <script src="supabaseClient.js"></script>
+  <!-- Skript zur Verwaltung der zusätzlichen Angaben (Laden, Speichern, Einklappen) -->
+  <script src="js/eigenerklaerungen_generator.js"></script>
 </head>
 <body>
 <header>
@@ -33,10 +37,55 @@
   </nav>
 </aside>
 
-<main>
+<!-- Hauptbereich mit voller Breite für Eigenerklärungen -->
+<main class="eigenerklaerungen-main">
   <section>
     <h1>Eigenerklärungen generieren</h1>
     <p>Standardformulare ausfüllen und bereitstellen</p>
+
+    <!-- Breadcrumb ganz oben im Main‑Bereich -->
+    <nav class="breadcrumb-nav-top" style="margin-bottom:1.5rem;">
+      <a href="index.html"><span class="material-icons" style="vertical-align:-0.25em;font-size:1.1em;">home</span> Startseite</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="dashboard.html">Dashboard</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="projekt.html">Projekt</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Eigenerklärungen</span>
+    </nav>
+
+    <!-- Zusätzliche Angaben zum Projekt (optional) -->
+    <section class="projekt-formularexport" style="margin-bottom:2em;">
+      <div class="collapsible-head" style="display:flex;align-items:center;gap:0.8em;cursor:pointer;">
+        <h3 id="formExtraHead" style="margin:0;">Zusätzliche Angaben zum Projekt</h3>
+        <span id="collapser" class="material-icons" style="transition:transform 0.19s;font-size:1.5em;user-select:none;">expand_less</span>
+      </div>
+      <div class="collapsible-content" id="formExtraContent" style="background:#eaf4fb;padding:1em 1.3em;border-radius:8px;margin-top:1em;">
+        <label>
+          <b>Baumaßnahme / Projekt:</b><br>
+          <input type="text" id="baumaßnahmeInput" placeholder="z.B. Sanierung Turnhalle" style="width:80%;">
+        </label>
+        <br>
+        <label>
+          <b>Maßnahmenummer:</b><br>
+          <input type="text" id="maßnahmeNrInput" placeholder="z.B. 2024-001" style="width:60%;">
+        </label>
+        <br>
+        <label>
+          <b>Vergabenummer:</b><br>
+          <input type="text" id="vergabeNrInput" placeholder="z.B. 24-0112-03" style="width:60%;">
+        </label>
+        <div style="color:#4183a4;margin-top:0.7em;">
+          <small>Hinweis: Diese Angaben werden später für Formblätter (z.B. VHB 124) und die automatische Formularbefüllung genutzt.<br>Sie sind <b>optional</b>, aber sehr empfohlen.</small>
+        </div>
+        <div style="margin-top:0.8em;">
+          <button id="saveFormularFieldsBtn" style="padding:0.4em 1.3em;">Speichern</button>
+          <span id="formularSaveStatus" style="color:#2a8826;font-size:1em;"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chat‑Bereich für Eigenerklärungen -->
     <section class="chat-container">
       <div class="chat-header" style="justify-content:flex-end;">
         <span class="material-icons info-icon" title="Fragen Sie nach benötigten Eigenerklärungen oder laden Sie Unterlagen hoch, um ausgefüllte Formulare zu erhalten.">info</span>
@@ -60,24 +109,15 @@
   </section>
 </main>
 
-<footer class="footer-modern">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" class="footer-logo" />
-      <span class="footer-app">VergabeAssist</span>
-    </div>
-    <nav class="footer-links">
-      <a href="impressum.html" target="_blank">Impressum</a>
-      <a href="datenschutz.html" target="_blank">Datenschutz</a>
-      <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
-      <a href="avv.html" target="_blank">AVV</a>
-    </nav>
-    <nav class="footer-breadcrumb breadcrumb-nav">
-      <a href="index.html" class="breadcrumb-link"><span style="font-size:1.3em;vertical-align:middle;">🏠</span> Zurück zur Startseite</a>
-      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
-      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
-    </nav>
-  </div>
+<footer style="display:flex;align-items:center;gap:1.4em;">
+  <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
+  <span style="flex:1;">
+    &copy; 2025 VergabeAssistent |
+    <a href="impressum.html" target="_blank">Impressum</a> |
+    <a href="datenschutz.html" target="_blank">Datenschutz</a> |
+    <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
+    <a href="avv.html" target="_blank">AVV</a>
+  </span>
 </footer>
 
 <script>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard – VergabeAssist</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -45,10 +45,17 @@
     <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="dashboard-hero-logo">
   </div>
 </div>
-<main>
+<!-- Füge eine Klasse hinzu, um die volle Breite per CSS zu steuern -->
+<main class="dashboard-main">
+  <!-- Breadcrumb ganz oben im Main‑Bereich -->
+  <nav class="breadcrumb-nav-top">
+    <a href="index.html"><span class="material-icons" style="vertical-align:-0.25em;font-size:1.1em;">home</span> Startseite</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">Dashboard</span>
+  </nav>
 
-  <!-- Dashboard über volle Breite, die Breite wird über die Styles gesteuert -->
-  <section id="dashboard">
+  <!-- Dashboard‑Bereich: nutzt die volle Breite innerhalb des Hauptbereichs -->
+  <section id="dashboard" style="margin:2rem 0; width:100%;">
     <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
       <h2>Meine Beschaffungsvorhaben</h2>
       <button id="addProjectBtn" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
@@ -104,27 +111,15 @@
     </div>
   </div>
 </div>
-<footer class="footer-modern">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" class="footer-logo">
-      <span class="footer-app">VergabeAssist</span>
-    </div>
-    <nav class="footer-links">
-      <a href="impressum.html" target="_blank">Impressum</a>
-      <a href="datenschutz.html" target="_blank">Datenschutz</a>
-      <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
-      <a href="avv.html" target="_blank">AVV</a>
-    </nav>
-    <nav class="footer-breadcrumb breadcrumb-nav" id="dynamicFooterBreadcrumb">
-      <a href="index.html" class="breadcrumb-link">
-        <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
-        Zurück zur Startseite
-      </a>
-      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
-      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
-    </nav>
-  </div>
+<footer style="display:flex;align-items:center;gap:1.4em;">
+  <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
+  <span style="flex:1;">
+    &copy; 2025 VergabeAssistent |
+    <a href="impressum.html" target="_blank">Impressum</a> |
+    <a href="datenschutz.html" target="_blank">Datenschutz</a> |
+    <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
+    <a href="avv.html" target="_blank">AVV</a>
+  </span>
 </footer>
 
 <!-- Sidebar Overlay und Logik -->
@@ -166,18 +161,7 @@ document.addEventListener('keydown', e => {
 });
 </script>
 
-<script>
-(function() {
-  // Automatisch den aktuellen Seitentitel holen (ohne „– VergabeAssist“)
-  let title = document.title || '';
-  // Optional: Trenne z.B. "Dashboard – VergabeAssist" => "Dashboard"
-  if(title.indexOf('–') > 0) title = title.split('–')[0].trim();
-  document.getElementById('breadcrumbCurrent').textContent = title;
-
-  // Optional: Wenn du dynamisch umschaltest (z.B. bei Projekten mit JS), kannst du
-  // auch später per JS document.getElementById('breadcrumbCurrent').textContent = 'Projekt XY';
-})();
-</script>
+<!-- Breadcrumb-Skript entfällt auf dieser Seite, da die Breadcrumb oben eingefügt wird -->
 
 </body>
 </html>

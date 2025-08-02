@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Beschaffungsvorhaben – VergabeAssist</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Supabase JS laden -->
@@ -11,17 +11,45 @@
 </head>
 <body>
 <header>
-  <div style="display:flex;align-items:center;gap:1em;">
-    <a href="dashboard.html" style="text-decoration:none;color:#0077b6;font-weight:700;font-size:1.2em;">&#8592; Zurück zum Dashboard</a>
+  <!-- Burger-Menü links im Header -->
+  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()" style="position:absolute;left:2rem;top:1.4rem;">
+    <span></span><span></span><span></span>
   </div>
   <div class="header-center">
     <a href="index.html" tabindex="0">
       <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
     </a>
   </div>
+  <!-- Account-Icon rechts oben -->
+  <button id="loginTopBtn" class="login-top-btn" onclick="window.location.href='account.html'" aria-label="Account"
+    style="display:block;position:absolute;right:2rem;top:1.2rem;">
+    <span class="material-icons" style="font-size:1.9em;vertical-align:middle;">account_circle</span>
+    <span style="font-size:1em;margin-left:0.35em;">Account</span>
+  </button>
 </header>
 
-<main
+<!-- Overlay für Sidebar -->
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+<!-- Sidebar-Menü wie auf dem Dashboard -->
+<aside id="sidebarMenu" class="sidebar-menu-left">
+  <nav class="sidebar-links">
+    <a href="dashboard.html"><span class="material-icons">dashboard</span> Projekte</a>
+    <a href="vorlagen.html"><span class="material-icons">collections_bookmark</span> Vorlagen</a>
+    <a href="account.html"><span class="material-icons">person</span> Account</a>
+  </nav>
+</aside>
+
+<!-- Hauptbereich: volle Breite mit Projekt‑Klasse -->
+<main class="project-main">
+
+  <!-- Breadcrumb ganz oben im Main-Bereich -->
+  <nav class="breadcrumb-nav-top">
+    <a href="index.html"><span class="material-icons" style="vertical-align:-0.25em;font-size:1.1em;">home</span> Startseite</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="dashboard.html">Dashboard</a>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-current">Projekt</span>
+  </nav>
 
   <!-- Projektdetails -->
   <section class="projekt-info" style="margin-bottom:2em;">
@@ -37,44 +65,17 @@
     </div>
   </section>
 
-  <section class="projekt-formularexport" style="margin-bottom:2em;">
-    <div class="collapsible-head" style="display:flex;align-items:center;gap:0.8em;cursor:pointer;">
-      <h3 id="formExtraHead" style="margin:0;">Zusätzliche Angaben zum Projekt</h3>
-      <span id="collapser" class="material-icons" style="transition:transform 0.19s;font-size:1.5em;user-select:none;">expand_less</span>
-    </div>
-    <div class="collapsible-content" id="formExtraContent" style="background:#eaf4fb;padding:1em 1.3em;border-radius:8px; margin-top:1em;">
-      <!-- Deine Eingabefelder und Button wie gehabt... -->
-      <label>
-        <b>Baumaßnahme / Projekt:</b><br>
-        <input type="text" id="baumaßnahmeInput" placeholder="z.B. Sanierung Turnhalle" style="width:80%;">
-      </label>
-      <br>
-      <label>
-        <b>Maßnahmenummer:</b><br>
-        <input type="text" id="maßnahmeNrInput" placeholder="z.B. 2024-001" style="width:60%;">
-      </label>
-      <br>
-      <label>
-        <b>Vergabenummer:</b><br>
-        <input type="text" id="vergabeNrInput" placeholder="z.B. 24-0112-03" style="width:60%;">
-      </label>
-      <div style="color:#4183a4;margin-top:0.7em;">
-        <small>Hinweis: Diese Angaben werden später für Formblätter (z.B. VHB 124) und die automatische Formularbefüllung genutzt.<br>Sie sind <b>optional</b>, aber sehr empfohlen.</small>
-      </div>
-      <div style="margin-top:0.8em;">
-        <button id="saveFormularFieldsBtn" style="padding:0.4em 1.3em;">Speichern</button>
-        <span id="formularSaveStatus" style="color:#2a8826;font-size:1em;"></span>
-      </div>
-    </div>
-  </section>
+  <!-- Hinweis: Die zusätzlichen Angaben wurden auf die Seite "Eigenerklärungen" verschoben -->
 
 
   <!-- Chatbereich -->
   <section class="chat-container">
     <div class="chat-header">
       <h3 style="display:inline;">Bedarfsbeschreibung</h3>
-      <!-- Moderner Info-Button ohne runden Hintergrund, das Styling kommt aus style.css -->
-      <span class="material-icons info-icon" title="Bitte beschreibe deinen Bedarf so detailliert wie möglich oder lade eine Datei hoch.">info</span>
+      <span class="material-icons info-icon" style="margin-left:0.5em;font-size:1.38em;vertical-align:-0.12em;cursor:help;color:#2777b6;"
+            title="Bitte beschreibe deinen Bedarf so detailliert wie möglich oder lade eine Datei hoch.">
+        info
+      </span>
     </div>
     <div id="fileBubbleRow" class="filebubble-row"></div>
     <div id="chatMessages" class="chat-messages"></div>
@@ -87,6 +88,7 @@
             <span class="upload-plus">+</span>
             <input type="file" id="fileUpload" accept=".txt,.docx,.pdf,.json,.xml,.x83,.xlsx,.csv" multiple />
           </label>
+          <span class="upload-label">Datei auswählen</span>
         </div>
         <!-- Senden rechts unten -->
         <button id="sendBtn">Senden</button>
@@ -99,7 +101,7 @@
     <h3>Nächste Schritte im Projekt</h3>
     <div style="display:flex;flex-wrap:wrap;gap:1.3em;justify-content:center;">
       <button id="btnVergabeUnterlagen" style="padding:1.1em 2.2em;font-size:1.1em;border-radius:12px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 10px #0077b63b;cursor:pointer;">
-        📄 Vergabeunterlagen erstellen
+        📄 Leistungsverzeichnis erstellen
       </button>
       <button id="btnMarkterkundung" style="padding:1.1em 2.2em;font-size:1.1em;border-radius:12px;border:none;background:#4e80bb;color:#fff;font-weight:600;box-shadow:0 2px 10px #0077b63b;cursor:pointer;">
         🔍 Markterkundung (bald)
@@ -113,56 +115,53 @@
     </div>
   </div>
 
-<footer class="footer-modern">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" class="footer-logo">
-      <span class="footer-app">VergabeAssist</span>
-    </div>
-    <nav class="footer-links">
-      <a href="impressum.html" target="_blank">Impressum</a>
-      <a href="datenschutz.html" target="_blank">Datenschutz</a>
-      <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
-      <a href="avv.html" target="_blank">AVV</a>
-    </nav>
-    <nav class="footer-breadcrumb breadcrumb-nav" id="dynamicFooterBreadcrumb">
-      <a href="index.html" class="breadcrumb-link">
-        <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
-        Zurück zur Startseite
-      </a>
-      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
-      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
-    </nav>
-  </div>
+  <!-- Schließe den Main‑Bereich vor dem Footer -->
+  </main>
+
+<footer style="display:flex;align-items:center;gap:1.4em;">
+  <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
+  <span style="flex:1;">
+    &copy; 2025 VergabeAssistent |
+    <a href="impressum.html" target="_blank">Impressum</a> |
+    <a href="datenschutz.html" target="_blank">Datenschutz</a> |
+    <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
+    <a href="avv.html" target="_blank">AVV</a>
+  </span>
 </footer>
 
 
 <script src="js/projekt.js"></script>
 
+<!-- Sidebar‑Logik wie auf dem Dashboard -->
 <script>
-document.addEventListener("DOMContentLoaded", function(){
-  const head = document.querySelector('.collapsible-head');
-  const content = document.getElementById('formExtraContent');
-  const collapser = document.getElementById('collapser');
-  let collapsed = false;
-  function setCollapsed(state) {
-    collapsed = state;
-    if (collapsed) {
-      content.classList.add('collapsed');
-      collapser.classList.add('rotate');
-    } else {
-      content.classList.remove('collapsed');
-      collapser.classList.remove('rotate');
-    }
+function toggleSidebarMenu(force = false) {
+  const sidebar = document.getElementById('sidebarMenu');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.contains('open');
+  if (isOpen || force) {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    sessionStorage.setItem('sidebarMenuClosed', '1');
+  } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    sessionStorage.removeItem('sidebarMenuClosed');
+    setTimeout(() => sidebar.focus && sidebar.focus(), 120);
   }
-  head.onclick = () => setCollapsed(!collapsed);
-  // Nach Speichern automatisch einklappen:
-  const saveBtn = document.getElementById('saveFormularFieldsBtn');
-  saveBtn && saveBtn.addEventListener('click', function(){
-    setTimeout(() => setCollapsed(true), 600);
-  });
+}
+document.addEventListener('DOMContentLoaded', () => {
+  if (!sessionStorage.getItem('sidebarMenuClosed')) {
+    document.getElementById('sidebarMenu').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('active');
+  }
+});
+document.getElementById('sidebarOverlay').onclick = () => toggleSidebarMenu(true);
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleSidebarMenu(true);
 });
 </script>
+
+<!-- Die Projektseite benötigt keine eigene Kollaps‑Logik mehr; die zusätzlichen Angaben befinden sich jetzt auf einer anderen Seite. -->
 
 </body>
 </html>
