@@ -141,3 +141,185 @@ document.addEventListener('keydown', e => {
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – VergabeAssist</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header>
+  <!-- Burger-Menü links im Header -->
+  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()" style="position:absolute;left:2rem;top:1.4rem;">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="header-center">
+    <a href="index.html" tabindex="0">
+      <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
+    </a>
+  </div>
+  <!-- Account-Icon rechts oben -->
+  <button id="loginTopBtn" class="login-top-btn" onclick="window.location.href='account.html'" aria-label="Account"
+    style="display:block;position:absolute;right:2rem;top:1.2rem;">
+    <span class="material-icons" style="font-size:1.9em;vertical-align:middle;">account_circle</span>
+    <span style="font-size:1em;margin-left:0.35em;">Account</span>
+  </button>
+</header>
+
+<!-- Overlay für Sidebar -->
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<!-- Sidebar beginnt unterhalb des Headers -->
+<aside id="sidebarMenu" class="sidebar-menu-left">
+  <nav class="sidebar-links">
+    <a href="dashboard.html"><span class="material-icons">dashboard</span> Projekte</a>
+    <a href="vorlagen.html"><span class="material-icons">collections_bookmark</span> Vorlagen</a>
+    <a href="account.html"><span class="material-icons">person</span> Account</a>
+  </nav>
+</aside>
+
+<div class="dashboard-hero-bg">
+  <div class="dashboard-hero-logo-container">
+    <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="dashboard-hero-logo">
+  </div>
+</div>
+<main>
+
+  <section id="dashboard" style="max-width:1000px;margin:2rem auto 2rem auto;">
+    <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
+      <h2>Meine Beschaffungsvorhaben</h2>
+      <button id="addProjectBtn" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="dashboard-table" style="width:100%;border-collapse:collapse;background:#fff;box-shadow:0 3px 32px #0077b610;border-radius:15px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f7fafc;color:#222b38;font-size:1.07em;">
+            <th>Name</th>
+            <th>Art der Leistung</th>
+            <th>Status</th>
+            <th>Erstellt am</th>
+            <th>Zuletzt aktualisiert</th>
+            <th style="min-width:150px;">Aktion</th>
+          </tr>
+        </thead>
+        <tbody id="dashboardTableBody">
+          <tr>
+            <td colspan="6" style="padding:2.3em 0;text-align:center;color:#777;font-size:1.1em;">Noch keine Beschaffungsvorhaben angelegt.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<!-- Modal für Neues Projekt -->
+<div id="newProjectModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Neues Beschaffungsvorhaben</h2>
+      <span id="closeModalBtn" class="close-btn">&times;</span>
+    </div>
+    <div class="modal-body">
+      <form id="projectForm">
+        <label>Titel der Beschaffung:</label>
+        <input type="text" id="beschaffungTitel" required />
+        <label>Art der Beschaffung:</label>
+        <select id="beschaffungArt" required>
+          <option value="" disabled selected>Bitte auswählen</option>
+          <option value="Bauleistung">Bauleistung</option>
+          <option value="Lieferleistung">Lieferleistung</option>
+          <option value="Dienstleistung">Dienstleistung</option>
+        </select>
+        <label>Liefertermin / Ausführungsfrist:</label>
+        <input type="text" id="beschaffungFrist" placeholder="z.B. 30.06.2024 oder 6 Wochen ab Auftrag" />
+        <label>Schätzwert (optional):</label>
+        <input type="number" id="beschaffungSchaetzwert" placeholder="in EUR" />
+        <label>CPV-Code (optional):</label>
+        <input type="text" id="beschaffungCPV" placeholder="z.B. 45233100-0" />
+        <button type="submit" style="margin-top:1em;">Projekt anlegen</button>
+      </form>
+    </div>
+  </div>
+</div>
+<footer class="footer-modern">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" class="footer-logo">
+      <span class="footer-app">VergabeAssist</span>
+    </div>
+    <nav class="footer-links">
+      <a href="impressum.html" target="_blank">Impressum</a>
+      <a href="datenschutz.html" target="_blank">Datenschutz</a>
+      <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
+      <a href="avv.html" target="_blank">AVV</a>
+    </nav>
+    <nav class="footer-breadcrumb breadcrumb-nav" id="dynamicFooterBreadcrumb">
+      <a href="index.html" class="breadcrumb-link">
+        <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
+        Zurück zur Startseite
+      </a>
+      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
+      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
+    </nav>
+  </div>
+</footer>
+
+<!-- Sidebar Overlay und Logik -->
+<script src="js/utils.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+function toggleSidebarMenu(force = false) {
+  const sidebar = document.getElementById('sidebarMenu');
+  const overlay = document.getElementById('sidebarOverlay');
+  // Wenn offen, schließe immer; wenn geschlossen: öffne nur, falls nicht erzwungen zu schließen
+  const isOpen = sidebar.classList.contains('open');
+  if (isOpen || force) {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    sessionStorage.setItem('sidebarMenuClosed', '1');
+  } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    sessionStorage.removeItem('sidebarMenuClosed');
+    // Optional: Fokussiere Sidebar für Barrierefreiheit
+    setTimeout(() => sidebar.focus && sidebar.focus(), 120);
+  }
+}
+// Sidebar bei erstem Laden ausgeklappt
+document.addEventListener('DOMContentLoaded', () => {
+  if (!sessionStorage.getItem('sidebarMenuClosed')) {
+    document.getElementById('sidebarMenu').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('active');
+  }
+  // Account-Icon immer sichtbar und klickbar
+  const accountIcon = document.getElementById('accountIcon');
+  accountIcon.style.display = 'block';
+  accountIcon.onclick = () => window.location.href = "account.html";
+});
+// Schließen bei Klick auf Overlay oder Escape
+document.getElementById('sidebarOverlay').onclick = () => toggleSidebarMenu(true);
+document.addEventListener('keydown', e => {
+  if (e.key === "Escape") toggleSidebarMenu(true);
+});
+</script>
+
+<script>
+(function() {
+  // Automatisch den aktuellen Seitentitel holen (ohne „– VergabeAssist“)
+  let title = document.title || '';
+  // Optional: Trenne z.B. "Dashboard – VergabeAssist" => "Dashboard"
+  if(title.indexOf('–') > 0) title = title.split('–')[0].trim();
+  document.getElementById('breadcrumbCurrent').textContent = title;
+
+  // Optional: Wenn du dynamisch umschaltest (z.B. bei Projekten mit JS), kannst du
+  // auch später per JS document.getElementById('breadcrumbCurrent').textContent = 'Projekt XY';
+})();
+</script>
+
+</body>
+</html>

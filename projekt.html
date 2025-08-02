@@ -2,12 +2,11 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Beschaffungsvorhaben – VergabeAssist</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <!-- Supabase JS laden (für Datenbankabfragen, etc.) -->
+  <!-- Supabase JS laden -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -17,12 +16,13 @@
   </div>
   <div class="header-center">
     <a href="index.html" tabindex="0">
-      <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo">
+      <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
     </a>
   </div>
 </header>
 
-<main>
+<main
+
   <!-- Projektdetails -->
   <section class="projekt-info" style="margin-bottom:2em;">
     <h2 id="projektTitel">Lädt...</h2>
@@ -42,8 +42,8 @@
       <h3 id="formExtraHead" style="margin:0;">Zusätzliche Angaben zum Projekt</h3>
       <span id="collapser" class="material-icons" style="transition:transform 0.19s;font-size:1.5em;user-select:none;">expand_less</span>
     </div>
-    <div class="collapsible-content" id="formExtraContent" style="background:#eaf4fb;padding:1em 1.3em;border-radius:8px;margin-top:1em;">
-      <!-- Weitere Eingabefelder -->
+    <div class="collapsible-content" id="formExtraContent" style="background:#eaf4fb;padding:1em 1.3em;border-radius:8px; margin-top:1em;">
+      <!-- Deine Eingabefelder und Button wie gehabt... -->
       <label>
         <b>Baumaßnahme / Projekt:</b><br>
         <input type="text" id="baumaßnahmeInput" placeholder="z.B. Sanierung Turnhalle" style="width:80%;">
@@ -68,11 +68,12 @@
     </div>
   </section>
 
-  <!-- Chatbereich (Bedarfsbeschreibung) -->
+
+  <!-- Chatbereich -->
   <section class="chat-container">
     <div class="chat-header">
       <h3 style="display:inline;">Bedarfsbeschreibung</h3>
-      <span class="material-icons info-icon" style="margin-left:0.5em;vertical-align:-0.12em;cursor:help;color:#2777b6;"
+      <span class="material-icons info-icon" style="margin-left:0.5em;font-size:1.38em;vertical-align:-0.12em;cursor:help;color:#2777b6;"
             title="Bitte beschreibe deinen Bedarf so detailliert wie möglich oder lade eine Datei hoch.">
         info
       </span>
@@ -82,7 +83,7 @@
     <div class="chat-input-bar">
       <textarea id="chatInput" placeholder="Beschreibung eingeben..." autocomplete="off"></textarea>
       <div class="chat-input-row">
-        <!-- Datei-Upload-Block links unten -->
+        <!-- Datei-Uploadblock LINKS unter dem Textfeld -->
         <div class="chat-upload-block">
           <label class="upload-btn" title="Datei hinzufügen">
             <span class="upload-plus">+</span>
@@ -90,13 +91,13 @@
           </label>
           <span class="upload-label">Datei auswählen</span>
         </div>
-        <!-- Senden-Button rechts unten -->
+        <!-- Senden rechts unten -->
         <button id="sendBtn">Senden</button>
       </div>
     </div>
   </section>
 
-  <!-- Aktionen: Nächste Schritte im Projekt -->
+  <!-- Aktionen: Nächste Schritte -->
   <div style="margin:2.2em 0 1em 0; text-align:center;">
     <h3>Nächste Schritte im Projekt</h3>
     <div style="display:flex;flex-wrap:wrap;gap:1.3em;justify-content:center;">
@@ -114,7 +115,6 @@
       Wählen Sie die nächste Aktion für dieses Projekt.
     </div>
   </div>
-</main>
 
 <footer class="footer-modern">
   <div class="footer-inner">
@@ -139,11 +139,11 @@
   </div>
 </footer>
 
+
 <script src="js/projekt.js"></script>
 
-<!-- Akkordeon-Verhalten für zusätzliche Angaben (ein-/ausklappen) -->
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function(){
   const head = document.querySelector('.collapsible-head');
   const content = document.getElementById('formExtraContent');
   const collapser = document.getElementById('collapser');
@@ -166,5 +166,6 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 </script>
+
 </body>
 </html>
