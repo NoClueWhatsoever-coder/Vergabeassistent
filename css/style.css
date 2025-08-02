@@ -99,7 +99,8 @@ header nav a:hover {
 /* Hero-Bereich und weitere Komponenten */
 .hero-video-bg {
   position: relative;
-  width: 100%;
+  width: 100vw;
+  min-width: 100vw;
   margin: 0 auto;
   min-height: 500px;
   overflow: hidden;
@@ -281,7 +282,8 @@ header nav a:hover {
 }
 /* Vorteile-Bildsektion: Hintergrundbild + Kacheln */
 .vorteile-bildsektion {
-  width: 100%;
+  width: 100vw;
+  min-width: 100vw;
   height: auto;
   margin-left: auto;
   margin-right: auto;
@@ -833,17 +835,6 @@ header nav a:hover {
   }
 }
 
-/* Breite und Abstand für hero-video-bg, Registerbox und Vorteile-Bildsektion */
-.hero-video-bg,
-.vorteile-bildsektion {
-  width: 100vw;
-  min-width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-  position: relative;
-  left: 0; right: 0;
-  box-sizing: border-box;
-}
 .hero-registerbox {
   margin-top: 3.1rem;
   margin-bottom: 3.1rem;
