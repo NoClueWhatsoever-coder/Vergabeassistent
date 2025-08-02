@@ -3219,8 +3219,8 @@ header nav a:hover {
   top: 72px;
   width: 260px;
   max-width: 96vw;
-  height: calc(100vh - 72px);
-  min-height: 300px;
+  height: 100%;
+  min-height: calc(100vh - 72px);
   z-index: 2102;
   background: #fff;
   box-shadow: 8px 0 32px #00336616, 0 1px 0 #e7eef6;
@@ -3261,6 +3261,41 @@ header nav a:hover {
     max-width: 99vw;
     border-radius: 0 1.2em 1.2em 0;
   }
+}
+
+
+.dashboard-hero-logo-container {
+  position: relative;
+  width: 100%;
+  min-height: 72px;
+}
+
+.logo-center-helper {
+  width: 100%;
+  text-align: center;
+}
+
+.dashboard-hero-logo {
+  height: 54px;
+  max-width: 98vw;
+  object-fit: contain;
+  display: inline-block;
+  /* kein margin-left/right! */
+}
+
+.breadcrumb-nav-top {
+  position: absolute;
+  top: 50%;
+  right: 2.2em;
+  transform: translateY(-50%);
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.7em;
+  font-size: 1em;
+  color: #425d79;
+  margin: 0;
 }
 
 
