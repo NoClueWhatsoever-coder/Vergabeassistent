@@ -2070,11 +2070,6 @@ header nav a:hover {
   margin-bottom: 0.7em;
 }
 
-/* Passe optional den Chatbox-Bereich an, damit er nie unten rauswächst */
-.hero-chatbox {
-  max-height: 55vh; /* begrenzt die Höhe des Chatcontainers */
-  overflow-y: auto;
-}
 
 .hero-textblock {
   margin-bottom: 2.4em;
@@ -2292,7 +2287,7 @@ header nav a:hover {
   box-shadow: 0 8px 38px #0077b633;
 }
 .vorteil-icon {
-  font-size: 2.3rem;
+  font-size: 3.2rem;
   margin-bottom: 0.6em;
 }
 .vorteil-kachel h3 {
