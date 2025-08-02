@@ -154,8 +154,16 @@ async function sendChatMessage() {
   if (!isLoggedIn()) {
     const count = getGuestChatCount();
     if (count >= guestChatLimit) {
-      alert('Sie haben Ihr Tageslimit für den Demo-Chat erreicht. Bitte registrieren Sie sich, um unbegrenzt weiterzufragen.');
-      input.value = '';
+      // Pop-Up Snackbar anzeigen (z.B. #snackbar), kannst du auch mit einem eigenen Toast machen
+      zeigeSnackbar("Bitte registrieren Sie sich für einen unbegrenzten Zugang zum VergabeAssistent.");
+      
+      // Modal öffnen oder auf Registrierung weiterleiten:
+      if (typeof openAuthModal === "function") {
+        openAuthModal('register');
+      } else {
+        // Alternativ auf Registrierungsseite weiterleiten
+        window.location.href = "registrieren.html";
+      }
       return;
     }
   }
@@ -203,6 +211,35 @@ function handleChatEnter(event) {
     sendChatMessage();
   }
 }
+
+
+function zeigeSnackbar(msg) {
+  let snackbar = document.getElementById('snackbar');
+  if (!snackbar) {
+    snackbar = document.createElement('div');
+    snackbar.id = 'snackbar';
+    snackbar.style.position = 'fixed';
+    snackbar.style.left = '50%';
+    snackbar.style.bottom = '34px';
+    snackbar.style.transform = 'translateX(-50%)';
+    snackbar.style.background = '#234f73';
+    snackbar.style.color = '#fff';
+    snackbar.style.padding = '1em 1.9em';
+    snackbar.style.fontSize = '1.07em';
+    snackbar.style.borderRadius = '11px';
+    snackbar.style.boxShadow = '0 2px 22px #234f7336';
+    snackbar.style.zIndex = 2999;
+    snackbar.style.opacity = 0;
+    snackbar.style.transition = 'opacity 0.26s';
+    document.body.appendChild(snackbar);
+  }
+  snackbar.textContent = msg;
+  snackbar.style.opacity = 1;
+  setTimeout(() => {
+    snackbar.style.opacity = 0;
+  }, 3400);
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
   updateGuestChatCounter();

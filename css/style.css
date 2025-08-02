@@ -1710,24 +1710,6 @@ input::placeholder {
   opacity: 1; pointer-events: all;
 }
 
-/* Sidebar links unterhalb des Headers */
-.sidebar-menu-left {
-  position: fixed;
-  top: 72px; /* Headerhöhe ggf. anpassen! */
-  left: 0;
-  width: 280px;
-  max-width: 93vw;
-  height: calc(100vh - 72px);
-  background: #fff;
-  z-index: 1502;
-  box-shadow: 8px 0 32px #00336616, 0 1px 0 #e7eef6;
-  display: flex;
-  flex-direction: column;
-  padding: 1.5em 0 0 0;
-  border-radius: 0 2.1em 2.1em 0;
-  transform: translateX(-100%);
-  transition: transform 0.25s cubic-bezier(.64,.05,.36,1), box-shadow 0.18s;
-}
 .sidebar-menu-left.open {
   transform: translateX(0);
 }
@@ -2846,14 +2828,22 @@ header nav a:hover {
   margin: 0;
 }
 
-/* Sidebar: über die volle Höhe von Kopf bis Fuß scrollen */
+/* Fixiere die Sidebar zwischen Header (72px) und Footer. 
+Keine feste Höhe, damit sie den verfügbaren Raum nutzt und bis zum Footer reicht. */
 .sidebar-menu-left {
-  /* Fixiere die Sidebar zwischen Header (72px) und unterem Rand. 
-     Keine feste Höhe, damit sie den verfügbaren Raum nutzt und bis zum Footer reicht. */
-  position: fixed !important;
+  position: sticky;
   top: 72px;
-  bottom: 0;
-  overflow-y: auto;
+  width: 280px;
+  max-width: 93vw;
+  background: #fff;
+  z-index: 1502;
+  box-shadow: 8px 0 32px #00336616, 0 1px 0 #e7eef6;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em 0 0 0;
+  border-radius: 0 2.1em 2.1em 0;
+  transition: box-shadow 0.18s;
+  height: auto;
 }
 
 /* Breadcrumbs im oberen Bereich des Main-Containers */
@@ -2956,21 +2946,18 @@ header nav a:hover {
   min-height: 280px !important;
 }
 
-/* Sidebar: strecke auf die gesamte verbleibende Höhe (zwischen Header und unterem Rand) */
-.sidebar-menu-left {
-  height: calc(100vh - 72px) !important;
-}
 
 /* Breitformatige Hauptbereiche: Dashboard‑, Projekt‑ und Eigenerklärungsseiten sollen sich über die gesamte Seite erstrecken */
 .dashboard-main,
 .project-main,
 .eigenerklaerungen-main {
   /* Überlagere die standardmäßige 1000px-Begrenzung von <main> vollständig */
-  max-width: none !important;
+  max-width: 1040px !important;
   width: 100% !important;
   /* Einheitlicher Außenabstand: 2rem oben/unten, 1.5rem links/rechts */
-  margin: 2rem 1.5rem !important;
-  padding: 0 !important;
+  margin: 2.2rem auto 2.2rem auto !important;
+  padding: 0 1.8vw !important;
+  background: none;
 }
 
 /* Hero‑Chat: Chat‑Nachrichten und Eingabecontainer sollen die volle Breite nutzen */
@@ -3008,7 +2995,7 @@ header nav a:hover {
   background: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
-  max-width: none !important;
+  max-width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
 }
@@ -3070,6 +3057,20 @@ header nav a:hover {
   word-break: break-word;
   line-height: 1.6;
   padding-right: 0.2em;
+}
+
+
+/* Main-Bereich springt nach rechts, wenn Sidebar offen ist (nur auf großen Screens) */
+@media (min-width: 900px) {
+  body.sidebar-open .dashboard-main {
+    margin-left: 280px;
+    transition: margin 0.2s;
+  }
+  .sidebar-menu-left {
+    position: sticky;
+    top: 72px;
+    height: calc(100vh - 72px);
+  }
 }
 
 

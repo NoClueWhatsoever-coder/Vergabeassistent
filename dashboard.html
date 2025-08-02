@@ -129,31 +129,28 @@
 function toggleSidebarMenu(force = false) {
   const sidebar = document.getElementById('sidebarMenu');
   const overlay = document.getElementById('sidebarOverlay');
-  // Wenn offen, schließe immer; wenn geschlossen: öffne nur, falls nicht erzwungen zu schließen
   const isOpen = sidebar.classList.contains('open');
   if (isOpen || force) {
     sidebar.classList.remove('open');
     overlay.classList.remove('active');
+    document.body.classList.remove('sidebar-open');
     sessionStorage.setItem('sidebarMenuClosed', '1');
   } else {
     sidebar.classList.add('open');
     overlay.classList.add('active');
+    document.body.classList.add('sidebar-open');
     sessionStorage.removeItem('sidebarMenuClosed');
-    // Optional: Fokussiere Sidebar für Barrierefreiheit
     setTimeout(() => sidebar.focus && sidebar.focus(), 120);
   }
 }
 // Sidebar bei erstem Laden ausgeklappt
 document.addEventListener('DOMContentLoaded', () => {
-  if (!sessionStorage.getItem('sidebarMenuClosed')) {
-    document.getElementById('sidebarMenu').classList.add('open');
-    document.getElementById('sidebarOverlay').classList.add('active');
-  }
   // Account-Icon immer sichtbar und klickbar
   const accountIcon = document.getElementById('accountIcon');
   accountIcon.style.display = 'block';
   accountIcon.onclick = () => window.location.href = "account.html";
 });
+
 // Schließen bei Klick auf Overlay oder Escape
 document.getElementById('sidebarOverlay').onclick = () => toggleSidebarMenu(true);
 document.addEventListener('keydown', e => {
