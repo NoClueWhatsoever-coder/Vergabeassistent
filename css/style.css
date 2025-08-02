@@ -1473,7 +1473,6 @@ footer {
 
 
 .hero-video-bg,
-.hero-registerbox,
 .vorteile-bildsektion {
   width: 100vw;
   min-width: 100vw;
@@ -2015,17 +2014,18 @@ header nav a:hover {
 .hero-video-bg {
   position: relative;
   width: 100%;
+  min-height: 630px; 
   margin: 0 auto;
-  min-height: 500px;
   overflow: hidden;
   background: #0077b6;
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  box-sizing: border-box;
 }
 .hero-video {
   width: 100%;
-  height: auto;
+  height: 540px;
   object-fit: cover;
   object-position: center 30%;
   position: absolute;
@@ -2033,14 +2033,26 @@ header nav a:hover {
   top: 0;
   z-index: 1;
   background: #0077b6;
+  opacity: 0.92; /* leicht transparenter! */
+  pointer-events: none;
 }
+
+.hero-video-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.10) 80%);
+  /* sorgt für einen ganz leichten Milchglas-Effekt */
+  pointer-events: none;
+}
+
 .hero-overlay {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
   max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   box-sizing: border-box;
   text-align: center;
   color: #fff;
@@ -2049,9 +2061,21 @@ header nav a:hover {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 48px;
-  gap: 1.4rem;
+  padding-top: 34px;
+  gap: 1.1rem;
 }
+
+/* Logo bleibt oben im Overlay, evtl. weniger padding-top hier */
+.hero-overlay .logo-wrapper {
+  margin-bottom: 0.7em;
+}
+
+/* Passe optional den Chatbox-Bereich an, damit er nie unten rauswächst */
+.hero-chatbox {
+  max-height: 55vh; /* begrenzt die Höhe des Chatcontainers */
+  overflow-y: auto;
+}
+
 .hero-textblock {
   margin-bottom: 2.4em;
   max-width: 580px;
@@ -2496,23 +2520,46 @@ header nav a:hover {
   opacity: 0.6;
   cursor: not-allowed;
 }
-.copy-btn {
-  position: absolute;
-  top: 0.4em;
-  right: -1.8em;
-  background: none;
-  border: none;
-  color: #777;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s;
+.message-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end; /* sorgt für Button rechts */
+  gap: 0.6em;
+  margin-bottom: 0.6em;
+  position: relative;
 }
-.message.assistant:hover .copy-btn {
-  opacity: 0.7;
+
+.message.assistant {
+  flex: 1 1 auto;
+  background: #f8fcfe;
+  border-radius: 16px;
+  padding: 1.1em 1.4em;
+  box-shadow: 0 2px 14px #0077b62e;
+  color: #234;
+  position: relative;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.copy-btn {
+  align-self: flex-start;
+  margin-top: 0.1em;
+  margin-right: 0.1em;
+  border: none;
+  background: #fff;
+  border-radius: 50%;
+  padding: 0.42em 0.53em;
+  font-size: 1.15em;
+  color: #0077b6;
+  box-shadow: 0 1px 7px #006aad17;
+  cursor: pointer;
+  transition: background 0.17s, color 0.17s;
 }
 .copy-btn:hover {
-  opacity: 1;
+  background: #eaf6fb;
+  color: #184e8b;
 }
+
 /* Datei-Bubble (Anzeige hochgeladener Dateien) */
 .file-bubble {
   display: flex;
@@ -2689,9 +2736,9 @@ header nav a:hover {
   padding: 2.2em 2em 1.5em 2em;
   color: #222b38;
 }
-.hero-chatbox:hover,
+
 .hero-chatbox:focus-within {
-  max-width: 1000px;
+  max-width: 1200px;
   box-shadow: 0 8px 38px #0077b66c;
   background: #fff;
 }
@@ -2970,5 +3017,4 @@ header nav a:hover {
   margin: 0 !important;
   padding: 0 !important;
 }
-
 
