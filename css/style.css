@@ -761,3 +761,105 @@ header nav a:hover {
   transform: rotate(-90deg);
   color: #0077b6;
 }
+
+/* --- Chatbox Startseite: Anfangs schmal, auf Hover/Fokus breite Ansicht --- */
+.hero-chatbox {
+  transition: max-width 0.38s cubic-bezier(.7,0,.3,1), box-shadow 0.16s;
+  max-width: 430px;
+  width: 100%;
+  margin: 0 auto 2.5em auto;
+  background: rgba(255,255,255,0.94);
+  border-radius: 22px;
+  box-shadow: 0 6px 32px #0002;
+  padding: 2.2em 2em 1.5em 2em;
+  color: #222b38;
+}
+.hero-chatbox:hover,
+.hero-chatbox:focus-within {
+  max-width: 1000px;
+  box-shadow: 0 8px 38px #0077b66c;
+  background: #fff;
+}
+
+@media (max-width: 1100px) {
+  .hero-chatbox:hover, .hero-chatbox:focus-within {
+    max-width: 98vw;
+  }
+}
+
+/* Senden-Button wie auf projekt.html */
+.hero-chatbox button,
+#guestChatContainer button {
+  background: linear-gradient(90deg, #169cd9 0%, #2bd7b1 100%);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 1.13em;
+  padding: 0.77em 2.1em;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 2px 10px #2bd7b131;
+  transition: background 0.16s;
+  align-self: flex-end;
+  margin-left: auto;
+  margin-right: 0;
+  display: inline-block;
+}
+.hero-chatbox button:hover,
+#guestChatContainer button:hover {
+  background: #0077b6;
+}
+#guestChatContainer input[type="text"] {
+  border: 1.4px solid #e5eaf0;
+  border-radius: 13px;
+  font-size: 1.14em;
+  padding: 1.1em;
+  background: #f8fbfe;
+  flex: 1;
+  margin-right: 1em;
+  transition: border 0.14s;
+  box-shadow: 0 1.5px 9px #8ec7e519;
+}
+#guestChatContainer input[type="text"]:focus {
+  border: 1.4px solid #0077b6;
+  outline: none;
+  background: #f0f7fc;
+}
+
+@media (max-width: 700px) {
+  .hero-chatbox, .hero-chatbox:hover, .hero-chatbox:focus-within {
+    max-width: 98vw;
+    padding: 1.1em 0.4em;
+  }
+}
+
+/* Breite und Abstand für hero-video-bg, Registerbox und Vorteile-Bildsektion */
+.hero-video-bg,
+.hero-registerbox,
+.vorteile-bildsektion {
+  width: 100vw;
+  min-width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  position: relative;
+  left: 0; right: 0;
+  box-sizing: border-box;
+}
+.hero-registerbox {
+  margin-top: 3.1rem;
+  margin-bottom: 3.1rem;
+}
+
+/* Abstand zwischen Video, Registerbox und Vorteile */
+.section-gap-alt {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  background: #f0f4f8;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
