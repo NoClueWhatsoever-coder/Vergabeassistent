@@ -418,6 +418,7 @@ header nav a:hover {
 }
 .dashboard-table {
   width: 100%;
+  min-width: 900px;
   border-collapse: collapse;
   background: #fff;
   box-shadow: 0 3px 32px #0077b610;
@@ -2935,11 +2936,11 @@ header nav a:hover {
 .project-main,
 .eigenerklaerungen-main {
   /* Überlagere die standardmäßige 1000px-Begrenzung von <main> vollständig */
-  max-width: 1040px !important;
+  max-width: 1280px !important;
   width: 100% !important;
   /* Einheitlicher Außenabstand: 2rem oben/unten, 1.5rem links/rechts */
   margin: 2.2rem auto 2.2rem auto !important;
-  padding: 0 1.8vw !important;
+  padding: 0 1vw !important;
   background: none;
 }
 
