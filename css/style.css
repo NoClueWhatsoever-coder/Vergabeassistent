@@ -2268,7 +2268,7 @@ header nav a:hover {
   background: rgba(240, 240, 240, 0.96);
   border-radius: 24px;
   box-shadow: 0 4px 32px #0002;
-  padding: 2.2em 2em 1.6em 2em;
+  padding: 1em 1em 1em 1em;  /* vorher 2.2em 2em 1.6em 2em */
   max-width: 380px;
   min-width: 280px;
   width: 100%;
@@ -2543,8 +2543,8 @@ header nav a:hover {
   border: none;
   background: #fff;
   border-radius: 50%;
-  padding: 0.42em 0.53em;
-  font-size: 1.15em;
+  padding: 0.12em 0.17em;
+  font-size: 0,88em;
   color: #0077b6;
   box-shadow: 0 1px 7px #006aad17;
   cursor: pointer;
@@ -2953,7 +2953,7 @@ header nav a:hover {
   /* Jede Kachel erhält den gleichen Flex‑Faktor für identische Breite */
   flex: 1 1 0 !important;
   /* Erzwinge eine einheitliche Mindesthöhe, damit unterschiedlich lange Texte die Größe nicht verändern */
-  min-height: 320px !important;
+  min-height: 280px !important;
 }
 
 /* Sidebar: strecke auf die gesamte verbleibende Höhe (zwischen Header und unterem Rand) */
@@ -3043,14 +3043,21 @@ header nav a:hover {
   background: #fff;
   border-radius: 50%;
   border: none;
-  padding: 0.25em 0.38em;
-  font-size: 0.98em;
-  color: #0077b6;
+  padding: 0.12em 0.17em !important;
+  font-size: 0.88em !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  line-height: 1 !important;
   box-shadow: 0 1px 7px #006aad17;
   cursor: pointer;
+  margin-left: 1em;
+  margin-right: -0.1em;
   transition: background 0.16s, color 0.16s;
-  margin-left: 1.1em;
-  margin-right: -0.2em;
+}
+.copy-btn .material-icons {
+  font-size: 1.1em !important;
 }
 .copy-btn:hover {
   background: #eaf6fb;
