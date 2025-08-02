@@ -1,0 +1,28 @@
+<section class="chat-container">
+  <!-- Überschrift und Info-Icon -->
+  <div class="chat-header">
+    <h3 style="display:inline;">Titel oder Kontext</h3>
+    <span class="material-icons info-icon" title="Hilfetext oder Eingabe-Hinweis ...">info</span>
+  </div>
+
+  <!-- Container für Dateianhänge (optional, bleibt leer wenn keine Dateien hochgeladen wurden) -->
+  <div id="fileBubbleRow" class="filebubble-row"></div>
+
+  <!-- Nachrichtenverlauf -->
+  <div id="chatMessages" class="chat-messages"></div>
+
+  <!-- Eingabebereich mit Textfeld, Datei-Upload und Senden-Button -->
+  <div class="chat-input-bar">
+    <textarea id="chatInput" placeholder="Ihre Nachricht..." autocomplete="off"></textarea>
+    <div class="chat-input-row">
+      <div class="chat-upload-block">
+        <label class="upload-btn" title="Datei hinzufügen">
+          <span class="upload-plus">+</span>
+          <input type="file" id="fileUpload" multiple />
+        </label>
+        <span class="upload-label">Datei auswählen</span>
+      </div>
+      <button id="sendBtn">Senden</button>
+    </div>
+  </div>
+</section>
