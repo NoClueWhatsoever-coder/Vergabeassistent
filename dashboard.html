@@ -12,7 +12,7 @@
 <body>
 <header>
   <!-- Burger-Menü links im Header -->
-  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()" style="position:absolute;left:2rem;top:1.4rem;">
+  <div id="burgerMenu" class="burger-menu" style="position:absolute;left:2rem;top:1.4rem;">
     <span></span><span></span><span></span>
   </div>
   <div class="header-center">
@@ -32,55 +32,56 @@
 <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
 <!-- Sidebar beginnt unterhalb des Headers -->
-<aside id="sidebarMenu" class="sidebar-menu-left">
-  <nav class="sidebar-links">
-    <a href="dashboard.html"><span class="material-icons">dashboard</span> Projekte</a>
-    <a href="vorlagen.html"><span class="material-icons">collections_bookmark</span> Vorlagen</a>
-    <a href="account.html"><span class="material-icons">person</span> Account</a>
-  </nav>
-</aside>
+<div class="dashboard-content-wrapper"></div>
+  <aside id="sidebarMenu" class="sidebar-menu-left">
+    <nav class="sidebar-links">
+      <a href="dashboard.html"><span class="material-icons">dashboard</span> Projekte</a>
+      <a href="vorlagen.html"><span class="material-icons">collections_bookmark</span> Vorlagen</a>
+      <a href="account.html"><span class="material-icons">person</span> Account</a>
+    </nav>
+  </aside>
 
-<div class="dashboard-hero-bg">
-  <div class="dashboard-hero-logo-container">
-    <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="dashboard-hero-logo">
+  <div class="dashboard-content">
+    <div class="dashboard-hero-bg">
+      <div class="dashboard-hero-logo-container">
+        <img src="img/logo_clean_1.png" alt="VergabeAssist Logo" class="dashboard-hero-logo">
+        <!-- Breadcrumb gleich hier rechts ergänzen! -->
+        <nav class="breadcrumb-nav-top">
+          <a href="index.html"><span class="material-icons" style="vertical-align:-0.25em;font-size:1.1em;">home</span> Startseite</a>
+          <span class="breadcrumb-sep">›</span>
+          <span class="breadcrumb-current">Dashboard</span>
+        </nav>
+      </div>
+    </div>
+    <main class="dashboard-main">
+      <section id="dashboard" style="margin:2rem 0; width:100%;">
+        <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
+          <h2>Meine Beschaffungsvorhaben</h2>
+          <button id="addProjectBtn" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="dashboard-table" style="width:100%;border-collapse:collapse;background:#fff;box-shadow:0 3px 32px #0077b610;border-radius:15px;overflow:hidden;">
+            <thead>
+              <tr style="background:#f7fafc;color:#222b38;font-size:1.07em;">
+                <th>Name</th>
+                <th>Art der Leistung</th>
+                <th>Status</th>
+                <th>Erstellt am</th>
+                <th>Zuletzt aktualisiert</th>
+                <th style="min-width:150px;">Aktion</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardTableBody">
+              <tr>
+                <td colspan="6" style="padding:2.3em 0;text-align:center;color:#777;font-size:1.1em;">Noch keine Beschaffungsvorhaben angelegt.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
   </div>
 </div>
-<!-- Füge eine Klasse hinzu, um die volle Breite per CSS zu steuern -->
-<main class="dashboard-main">
-  <!-- Breadcrumb ganz oben im Main‑Bereich -->
-  <nav class="breadcrumb-nav-top">
-    <a href="index.html"><span class="material-icons" style="vertical-align:-0.25em;font-size:1.1em;">home</span> Startseite</a>
-    <span class="breadcrumb-sep">›</span>
-    <span class="breadcrumb-current">Dashboard</span>
-  </nav>
-
-  <!-- Dashboard‑Bereich: nutzt die volle Breite innerhalb des Hauptbereichs -->
-  <section id="dashboard" style="margin:2rem 0; width:100%;">
-    <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
-      <h2>Meine Beschaffungsvorhaben</h2>
-      <button id="addProjectBtn" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
-    </div>
-    <div style="overflow-x:auto;">
-      <table class="dashboard-table" style="width:100%;border-collapse:collapse;background:#fff;box-shadow:0 3px 32px #0077b610;border-radius:15px;overflow:hidden;">
-        <thead>
-          <tr style="background:#f7fafc;color:#222b38;font-size:1.07em;">
-            <th>Name</th>
-            <th>Art der Leistung</th>
-            <th>Status</th>
-            <th>Erstellt am</th>
-            <th>Zuletzt aktualisiert</th>
-            <th style="min-width:150px;">Aktion</th>
-          </tr>
-        </thead>
-        <tbody id="dashboardTableBody">
-          <tr>
-            <td colspan="6" style="padding:2.3em 0;text-align:center;color:#777;font-size:1.1em;">Noch keine Beschaffungsvorhaben angelegt.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-</main>
 
 <!-- Modal für Neues Projekt -->
 <div id="newProjectModal" class="modal" style="display:none;">
@@ -111,6 +112,7 @@
     </div>
   </div>
 </div>
+
 <footer style="display:flex;align-items:center;gap:1.4em;">
   <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
   <span style="flex:1;">
@@ -126,11 +128,12 @@
 <script src="js/utils.js"></script>
 <script src="js/dashboard.js"></script>
 <script>
-function toggleSidebarMenu(force = false) {
+function toggleSidebarMenu(forceClose = false) {
   const sidebar = document.getElementById('sidebarMenu');
   const overlay = document.getElementById('sidebarOverlay');
   const isOpen = sidebar.classList.contains('open');
-  if (isOpen || force) {
+
+  if (isOpen || forceClose) {
     sidebar.classList.remove('open');
     overlay.classList.remove('active');
     document.body.classList.remove('sidebar-open');
@@ -143,12 +146,26 @@ function toggleSidebarMenu(force = false) {
     setTimeout(() => sidebar.focus && sidebar.focus(), 120);
   }
 }
-// Sidebar bei erstem Laden ausgeklappt
+
+// Klick auf das Burger-Menü-Icon toggelt die Sidebar:
 document.addEventListener('DOMContentLoaded', () => {
+  // Sidebar beim ersten Laden standardmäßig geschlossen (eingeklappt)
+  document.getElementById('sidebarMenu').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+  document.getElementById('sidebarOverlay').classList.remove('active');
+
+  // Burger-Menü-Icon (id="burgerMenu" muss gesetzt sein!)
+  const burgerBtn = document.getElementById('burgerMenu');
+  if (burgerBtn) {
+    burgerBtn.onclick = () => toggleSidebarMenu();
+  }
+
   // Account-Icon immer sichtbar und klickbar
   const accountIcon = document.getElementById('accountIcon');
-  accountIcon.style.display = 'block';
-  accountIcon.onclick = () => window.location.href = "account.html";
+  if (accountIcon) {
+    accountIcon.style.display = 'block';
+    accountIcon.onclick = () => window.location.href = "account.html";
+  }
 });
 
 // Schließen bei Klick auf Overlay oder Escape
@@ -157,8 +174,6 @@ document.addEventListener('keydown', e => {
   if (e.key === "Escape") toggleSidebarMenu(true);
 });
 </script>
-
-<!-- Breadcrumb-Skript entfällt auf dieser Seite, da die Breadcrumb oben eingefügt wird -->
 
 </body>
 </html>

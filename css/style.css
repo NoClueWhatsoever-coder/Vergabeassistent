@@ -2828,23 +2828,6 @@ header nav a:hover {
   margin: 0;
 }
 
-/* Fixiere die Sidebar zwischen Header (72px) und Footer. 
-Keine feste Höhe, damit sie den verfügbaren Raum nutzt und bis zum Footer reicht. */
-.sidebar-menu-left {
-  position: sticky;
-  top: 72px;
-  width: 280px;
-  max-width: 93vw;
-  background: #fff;
-  z-index: 1502;
-  box-shadow: 8px 0 32px #00336616, 0 1px 0 #e7eef6;
-  display: flex;
-  flex-direction: column;
-  padding: 1.5em 0 0 0;
-  border-radius: 0 2.1em 2.1em 0;
-  transition: box-shadow 0.18s;
-  height: auto;
-}
 
 /* Breadcrumbs im oberen Bereich des Main-Containers */
 .breadcrumb-nav-top {
@@ -3071,6 +3054,125 @@ Keine feste Höhe, damit sie den verfügbaren Raum nutzt und bis zum Footer reic
     top: 72px;
     height: calc(100vh - 72px);
   }
+}
+
+
+.dashboard-content-wrapper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: calc(100vh - 72px); /* 72px = Headerhöhe */
+}
+
+.sidebar-menu-left {
+  position: sticky;
+  top: 72px;
+  align-self: flex-start;
+  height: auto; /* wichtig: keine 100vh! */
+  min-height: 400px;
+  width: 240px;
+  max-width: 93vw;
+  background: #fff;
+  z-index: 1502;
+  box-shadow: 8px 0 32px #00336616, 0 1px 0 #e7eef6;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em 0 0 0;
+  border-radius: 0 2.1em 2.1em 0;
+  transition: box-shadow 0.18s;
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+.dashboard-content {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dashboard-hero-bg {
+  width: 100%;
+  background: #fff;
+  padding-top: 1.2rem;
+  padding-bottom: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 14px #e2eaf750;
+  min-height: 60px;
+  position: relative;
+}
+
+.dashboard-hero-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-right: 2.2em;
+  padding-left: 1.6em;
+}
+
+.dashboard-hero-logo {
+  height: 54px;
+  max-width: 98vw;
+  object-fit: contain;
+  display: block;
+}
+
+.breadcrumb-nav-top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.7em;
+  font-size: 1em;
+  color: #425d79;
+  margin: 0;
+  margin-left: auto;
+  min-width: 240px;
+  padding-left: 2em;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-content-wrapper {
+    flex-direction: column;
+  }
+  .sidebar-menu-left {
+    width: 93vw;
+    max-width: 99vw;
+    border-radius: 0 1.2em 1.2em 0;
+    position: static;
+    box-shadow: 0 3px 22px #0001;
+  }
+  .dashboard-hero-bg,
+  .dashboard-hero-logo-container {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.6em 1em;
+  }
+  .breadcrumb-nav-top {
+    padding-left: 0;
+    margin: 0.5em 0 0.7em 0;
+  }
+}
+
+.dashboard-main {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2vw;
+  background: none;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+}
+
+#dashboard {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 
