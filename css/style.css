@@ -99,8 +99,7 @@ header nav a:hover {
 /* Hero-Bereich und weitere Komponenten */
 .hero-video-bg {
   position: relative;
-  width: 100vw;
-  min-width: 100vw;
+  width: 100%;
   margin: 0 auto;
   min-height: 500px;
   overflow: hidden;
@@ -282,8 +281,7 @@ header nav a:hover {
 }
 /* Vorteile-Bildsektion: Hintergrundbild + Kacheln */
 .vorteile-bildsektion {
-  width: 100vw;
-  min-width: 100vw;
+  width: 100%;
   height: auto;
   margin-left: auto;
   margin-right: auto;
@@ -332,24 +330,7 @@ header nav a:hover {
   padding: 0 3vw;
   z-index: 2;
 }
-.vorteil-kachel {
-  background: rgba(240, 240, 240, 0.96);
-  border-radius: 24px;
-  box-shadow: 0 4px 32px #0002;
-  padding: 2.2em 2em 1.6em 2em;
-  max-width: 380px;
-  min-width: 280px;
-  width: 100%;
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  transition: transform 0.18s;
-  border: 1px solid #e6e6e6;
-  margin: 0;
-}
+
 .vorteil-kachel:hover {
   transform: translateY(-6px) scale(1.04);
   box-shadow: 0 8px 38px #0077b633;
@@ -835,10 +816,41 @@ header nav a:hover {
   }
 }
 
+/* Breite und Abstand für hero-video-bg, Registerbox und Vorteile-Bildsektion */
+.hero-video-bg,
+.vorteile-bildsektion {
+  width: 100vw;
+  min-width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  position: relative;
+  left: 0; right: 0;
+  box-sizing: border-box;
+}
 .hero-registerbox {
   margin-top: 3.1rem;
   margin-bottom: 3.1rem;
 }
+
+.vorteil-kachel {
+  background: rgba(240, 240, 240, 0.96);
+  border-radius: 24px;
+  box-shadow: 0 4px 32px #0002;
+  padding: 2.2em 2em 1.6em 2em;
+  max-width: 380px;
+  min-width: 280px;
+  width: 100%;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: transform 0.18s;
+  border: 1px solid #e6e6e6;
+  margin: 0;
+}
+
 
 /* Abstand zwischen Video, Registerbox und Vorteile */
 .section-gap-alt {
