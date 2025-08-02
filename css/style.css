@@ -1699,6 +1699,7 @@ input::placeholder {
 
 /* Sidebar Overlay (dunkelt Seite ab) */
 .sidebar-overlay {
+  display: none;
   position: fixed;
   z-index: 1501;
   left: 0; top: 0;
@@ -3087,7 +3088,7 @@ header nav a:hover {
 }
 
 .sidebar-menu-left {
-  position: sticky;
+  position: fixed;
   top: 72px;
   align-self: flex-start;
   height: 100%; /* wichtig: keine 100vh! */
@@ -3184,8 +3185,11 @@ header nav a:hover {
   position: relative;
   }
   .breadcrumb-nav-top {
-    padding-left: 0;
-    margin: 0.5em 0 0.7em 0;
+  position: absolute;
+  right: 2.2em;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 200px;
   }
 }
 
