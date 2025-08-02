@@ -73,10 +73,8 @@
   <section class="chat-container">
     <div class="chat-header">
       <h3 style="display:inline;">Bedarfsbeschreibung</h3>
-      <span class="material-icons info-icon" style="margin-left:0.5em;font-size:1.38em;vertical-align:-0.12em;cursor:help;color:#2777b6;"
-            title="Bitte beschreibe deinen Bedarf so detailliert wie möglich oder lade eine Datei hoch.">
-        info
-      </span>
+      <!-- Moderner Info-Button ohne runden Hintergrund, das Styling kommt aus style.css -->
+      <span class="material-icons info-icon" title="Bitte beschreibe deinen Bedarf so detailliert wie möglich oder lade eine Datei hoch.">info</span>
     </div>
     <div id="fileBubbleRow" class="filebubble-row"></div>
     <div id="chatMessages" class="chat-messages"></div>
@@ -89,7 +87,6 @@
             <span class="upload-plus">+</span>
             <input type="file" id="fileUpload" accept=".txt,.docx,.pdf,.json,.xml,.x83,.xlsx,.csv" multiple />
           </label>
-          <span class="upload-label">Datei auswählen</span>
         </div>
         <!-- Senden rechts unten -->
         <button id="sendBtn">Senden</button>

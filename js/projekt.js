@@ -10,6 +10,26 @@ let hochgeladeneDateien = [];
 const MAX_FILES = 3;
 const MAX_FILESIZE = 10 * 1024 * 1024; // 10 MB
 
+// Hilfsfunktion, um Textnachrichten (besonders von der KI) schön zu formatieren.
+// Aufzählungspunkte werden erkannt und in eine Liste umgewandelt, Zeilenumbrüche werden zu <br>.
+function formatNachricht(text) {
+  if (!text) return '';
+  let html = text;
+  // Ersetze Bullet‑Points („- “ am Zeilenanfang) durch Listenpunkte
+  let hasList = false;
+  html = html.replace(/(?:^|\n)\s*\-\s+(.*)(?=\n|$)/g, function(_, item) {
+    hasList = true;
+    return `<li>${item.trim()}</li>`;
+  });
+  // Wenn mindestens ein Listenelement gefunden wurde, wickle alles in eine Liste
+  if (hasList) {
+    html = '<ul>' + html + '</ul>';
+  }
+  // Zeilenumbrüche, die keine Liste sind, zu <br>
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
 
 
 // Snackbar
@@ -249,12 +269,21 @@ async function ladeFormularfelder() {
 // Senden mit Datei-Parsing im Hintergrund
 async function sendeNachricht() {
   const sendBtn = document.getElementById('sendBtn');
-  sendBtn.disabled = true; sendBtn.textContent = '...';
+  // Ladeanzeige: Button sperren und animiertes "Analysiere..." anzeigen
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Analysiere';
+    sendBtn.classList.add('loading');
+  }
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text && hochgeladeneDateien.length === 0) {
     showSnackbar('Bitte gib eine Nachricht oder eine Datei ein!', '#b53a1b');
-    sendBtn.disabled = false; sendBtn.textContent = 'Senden';
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.classList.remove('loading');
+      sendBtn.textContent = 'Senden';
+    }
     return;
   }
   const id = getProjektId();
@@ -367,8 +396,11 @@ if (error) {
   } catch (err) {
     showSnackbar('Fehler bei der KI-Antwort: ' + err.message, '#b53a1b');
   } finally {
-    sendBtn.disabled = false;
-    sendBtn.textContent = 'Senden';
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.classList.remove('loading');
+      sendBtn.textContent = 'Senden';
+    }
   }
 }
 
@@ -451,15 +483,19 @@ async function ladeChat() {
     const div = document.createElement('div');
     div.classList.add('message', msg.sender === 'user' ? 'user' : 'assistant');
     if (msg.sender === 'assistant') {
+      // KI‑Antwort: Name anpassen und Kopier‑Icon nutzen, Text formatieren
+      const formatted = formatNachricht(msg.nachricht || '');
       div.innerHTML = `
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <span><b>KI:</b></span>
-          <button class="copy-btn" title="Text kopieren" data-msg-idx="${idx}">⧉ Kopieren</button>
+        <div class="msg-header" style="display:flex;align-items:center;justify-content:space-between;">
+          <span class="assistant-name" style="font-weight:600; color:#166ca8;">VergabeAssistent</span>
+          <button class="copy-btn" title="Antwort kopieren" data-msg-idx="${idx}"><span class="material-icons" style="font-size:1.1em;">content_copy</span></button>
         </div>
-        <div class="msg-body">${(msg.nachricht || '').replace(/\n/g, "<br>")}</div>
+        <div class="msg-body">${formatted}</div>
       `;
     } else {
-      div.innerHTML = `<b>Du:</b> ${(msg.nachricht || '').replace(/\n/g, "<br>")}`;
+      // Benutzer‑Nachricht
+      const userFormatted = (msg.nachricht || '').replace(/\n/g, '<br>');
+      div.innerHTML = `<b>Du:</b> ${userFormatted}`;
     }
     chatBox.appendChild(div);
   });

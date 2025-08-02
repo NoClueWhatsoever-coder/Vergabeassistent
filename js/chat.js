@@ -88,19 +88,59 @@ function parseMarkdown(text) {
   }
 }
 
+// Hilfsfunktion, um Listen in Antworten der KI schöner zu rendern
+function formatNachricht(text) {
+  if (!text) return '';
+  let html = text;
+  let hasList = false;
+  // Ersetze Bullet‑Points („- “ am Zeilenanfang) durch Listenelemente
+  html = html.replace(/(?:^|\n)\s*\-\s+(.*)(?=\n|$)/g, function(_, item) {
+    hasList = true;
+    return `<li>${item.trim()}</li>`;
+  });
+  if (hasList) {
+    html = '<ul>' + html + '</ul>';
+  }
+  // Normale Zeilenumbrüche
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
+
+// Neue Anzeige der Nachrichten im Chat: passt zu projekt.html
 function appendMessage(text, sender = 'ai') {
   const chatMessages = document.getElementById('chatMessages');
-  const bubble = document.createElement('div');
-  bubble.className = 'chat-bubble ' + sender;
-
-  // Avatar-Icon (🤖 für KI, 👤 für User)
-  let avatarHtml = '';
-  if (sender === 'ai') avatarHtml = '<span class="chat-avatar">🤖</span>';
-  if (sender === 'user') avatarHtml = '<span class="chat-avatar">👤</span>';
-
-  // Text als HTML (Markdown falls möglich)
-  bubble.innerHTML = avatarHtml + `<span>${parseMarkdown(text)}</span>`;
-  chatMessages.appendChild(bubble);
+  const div = document.createElement('div');
+  div.classList.add('message', sender === 'user' ? 'user' : 'assistant');
+  if (sender === 'ai') {
+    // KI-Antwort hübsch formatieren und mit Kopier-Icon versehen
+    const formatted = formatNachricht(text);
+    div.innerHTML = `
+      <div class="msg-header" style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="assistant-name" style="font-weight:600;color:#166ca8;">VergabeAssistent</span>
+        <button class="copy-btn" title="Antwort kopieren"><span class="material-icons" style="font-size:1.1em;">content_copy</span></button>
+      </div>
+      <div class="msg-body">${formatted}</div>
+    `;
+    // Kopier-Button Event
+    setTimeout(() => {
+      const btn = div.querySelector('.copy-btn');
+      if (btn) {
+        btn.onclick = function() {
+          navigator.clipboard.writeText(text).then(() => {
+            btn.innerHTML = '✔️';
+            setTimeout(() => {
+              btn.innerHTML = '<span class="material-icons" style="font-size:1.1em;">content_copy</span>';
+            }, 1300);
+          });
+        };
+      }
+    }, 0);
+  } else {
+    // Benutzer-Nachricht
+    const formattedUser = text.replace(/\n/g, '<br>');
+    div.innerHTML = `<b>Du:</b> ${formattedUser}`;
+  }
+  chatMessages.appendChild(div);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
@@ -108,7 +148,8 @@ async function sendChatMessage() {
   const input = document.getElementById('chatInput');
   const message = input.value.trim();
   if (!message) return;
-
+  // Referenz auf den Senden-Button (Demo-Chat)
+  const sendBtn = document.getElementById('guestSendBtn');
   // Limit für Gäste prüfen
   if (!isLoggedIn()) {
     const count = getGuestChatCount();
@@ -118,28 +159,27 @@ async function sendChatMessage() {
       return;
     }
   }
+  // Wenn eingeloggt: Credits prüfen
   if (isLoggedIn() && typeof pruefeCredits === "function" && !pruefeCredits(2)) return;
-
-  // User-Message anzeigen
+  // User-Nachricht anzeigen
   appendMessage(message, 'user');
   input.value = '';
-
-  // KI antwortet asynchron
-  appendMessage('<span style="opacity:0.7">Antwort wird geladen ...</span>', 'ai');
-
+  // Ladeindikator auf dem Button aktivieren
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.textContent = 'Analysiere';
+    sendBtn.classList.add('loading');
+  }
   try {
-    const chatMessages = document.getElementById('chatMessages');
-    // callAI aufrufen
+    // callAI aufrufen und auf Antwort warten
     const response = await callAI(
       message,
       "mistralai/mistral-7b-instruct:free",
       systemPrompt
     );
-    // Ladeanzeige entfernen
-    chatMessages.removeChild(chatMessages.lastChild);
-    // KI-Antwort anzeigen (mit Markdown)
+    // KI-Antwort anzeigen
     appendMessage(response, 'ai');
-
+    // Guest-Limit aktualisieren oder Credits verbrauchen
     if (!isLoggedIn()) {
       incrementGuestChatCount();
       updateGuestChatCounter();
@@ -147,10 +187,14 @@ async function sendChatMessage() {
       verwendeCredits(2);
     }
   } catch (err) {
-    // Ladeanzeige entfernen
-    const chatMessages = document.getElementById('chatMessages');
-    chatMessages.removeChild(chatMessages.lastChild);
     appendMessage(`<strong>Fehler:</strong> ${err.message}`, 'ai');
+  } finally {
+    // Ladeindikator zurücksetzen
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.classList.remove('loading');
+      sendBtn.textContent = 'Senden';
+    }
   }
 }
 

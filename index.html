@@ -47,14 +47,15 @@
       <div class="hero-chatbox" id="chat">
         <h2 style="color:#0077B6;">💬 Testen Sie den KI-Vergabe-Chat</h2>
         <p style="color:#444;margin-bottom:18px;">Stellen Sie bis zu <strong>5 Fragen täglich</strong> – kostenlos und ohne Registrierung.</p>
-        <div id="guestChatContainer">
-          <div id="chatMessages" class="chat-messages"></div>
-          <div style="display:flex;gap:0.5rem;margin-top:1rem;">
-            <input id="chatInput" type="text" placeholder="Frage eingeben …" onkeypress="handleChatEnter(event)">
-            <button onclick="sendChatMessage()">Senden</button>
+          <div id="guestChatContainer">
+            <div id="chatMessages" class="chat-messages"></div>
+            <!-- Eingabefeld jetzt in einer vertikalen Spalte, Button darunter rechtsbündig -->
+            <div class="guest-chat-input">
+              <input id="chatInput" type="text" placeholder="Frage eingeben …" onkeypress="handleChatEnter(event)">
+              <button id="guestSendBtn" onclick="sendChatMessage()">Senden</button>
+            </div>
+            <p id="guestChatCounter" style="margin-top:0.5rem;font-size:0.9rem;color:#666;"></p>
           </div>
-          <p id="guestChatCounter" style="margin-top:0.5rem;font-size:0.9rem;color:#666;"></p>
-        </div>
       </div>
     </div>
   </section>
@@ -117,7 +118,7 @@
   </div>
 
   <!-- Dashboard wie gehabt ... -->
-  <div id="dashboard" style="display:none;max-width:1000px;margin:3.5rem auto 2rem auto;">
+  <div id="dashboard" style="display:none;">
     <div class="dashboard-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.7rem;">
       <h2>Meine Beschaffungsvorhaben</h2>
       <button id="addProjectBtn" onclick="neueBeschaffung()" style="padding:0.7em 1.6em;font-size:1.08em;border-radius:9px;border:none;background:#0077b6;color:#fff;font-weight:600;box-shadow:0 2px 8px #0077b642;cursor:pointer;">+ Beschaffungsvorhaben anlegen</button>
@@ -143,16 +144,29 @@
   </div>
 </main>
 
-<footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
-  <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
-  <span style="flex:1;">
-    &copy; 2025 VergabeAssistent |
-    <a href="impressum.html" target="_blank">Impressum</a> |
-    <a href="datenschutz.html" target="_blank">Datenschutz</a> |
-    <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
-    <a href="avv.html" target="_blank">AVV</a>
-  </span>
-</footer>
+    <!-- Modernisierter Footer: über die volle Breite mit Links linksbündig und Breadcrumb rechtsbündig -->
+    <footer class="footer-modern">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" class="footer-logo">
+          <span class="footer-app">VergabeAssist</span>
+        </div>
+        <nav class="footer-links">
+          <a href="impressum.html" target="_blank">Impressum</a>
+          <a href="datenschutz.html" target="_blank">Datenschutz</a>
+          <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
+          <a href="avv.html" target="_blank">AVV</a>
+        </nav>
+        <nav class="footer-breadcrumb breadcrumb-nav" id="dynamicFooterBreadcrumb">
+          <a href="index.html" class="breadcrumb-link">
+            <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
+            Zurück zur Startseite
+          </a>
+          <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
+          <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
+        </nav>
+      </div>
+    </footer>
 
 <!-- Sidebar-Menü für Mobile -->
 <div id="sidebarMenu" class="sidebar-menu" style="display:none;">
@@ -326,6 +340,19 @@
       regEmailField?.focus();
     }, 100);
   };
+
+  // Setze den Breadcrumb-Titel für die aktuelle Seite (Startseite)
+  (function() {
+    var bc = document.getElementById('breadcrumbCurrent');
+    if (bc) {
+      // Nutze den Seitentitel ohne den Suffix „– VergabeAssist“, falls vorhanden
+      var title = document.title || '';
+      if (title.indexOf('–') > -1) {
+        title = title.split('–')[0].trim();
+      }
+      bc.textContent = title || 'Startseite';
+    }
+  })();
 </script>
 </body>
 </html>
