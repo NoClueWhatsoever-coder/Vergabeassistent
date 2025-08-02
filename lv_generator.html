@@ -1,172 +1,192 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leistungsverzeichnis generieren – VergabeAssist</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        header {
-            background-color: #003366;
-            color: white;
-            padding: 1rem;
-        }
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            height: 80vh;
-        }
-        .chat-area {
-            flex: 1;
-            padding: 1rem;
-            overflow-y: auto;
-            border-bottom: 1px solid #ddd;
-        }
-        .message {
-            margin-bottom: 1rem;
-        }
-        .message.user {
-            text-align: right;
-        }
-        .message.ai {
-            text-align: left;
-        }
-        .message .bubble {
-            display: inline-block;
-            padding: 0.5rem 0.75rem;
-            border-radius: 15px;
-            max-width: 70%;
-        }
-        .message.user .bubble {
-            background-color: #e0f7fa;
-            color: #004d40;
-        }
-        .message.ai .bubble {
-            background-color: #e8eaf6;
-            color: #1a237e;
-        }
-        .input-area {
-            display: flex;
-            padding: 1rem;
-        }
-        .input-area input[type="text"] {
-            flex: 1;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-right: 0.5rem;
-        }
-        .input-area button {
-            padding: 0.5rem 1rem;
-            background-color: #003366;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .input-area button:disabled {
-            opacity: 0.5;
-            cursor: default;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leistungsverzeichnis generieren – VergabeAssist</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <header>
-        <div class="header-center">
-            <a href="index.html" tabindex="0">
-                <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
-            </a>
-        </div>
+<header>
+  <div id="burgerMenu" class="burger-menu" onclick="toggleSidebarMenu()">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="header-center">
+    <a href="index.html" tabindex="0">
+      <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" />
+    </a>
+  </div>
+  <button id="loginTopBtn" class="login-top-btn" onclick="window.location.href='account.html'" aria-label="Account">
+    <span class="material-icons" style="font-size:1.9em;vertical-align:middle;">account_circle</span>
+    <span style="font-size:1em;margin-left:0.35em;">Account</span>
+  </button>
+</header>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+<aside id="sidebarMenu" class="sidebar-menu-left">
+  <nav class="sidebar-links">
+    <a href="dashboard.html"><span class="material-icons">dashboard</span> Projekte</a>
+    <a href="vorlagen.html"><span class="material-icons">collections_bookmark</span> Vorlagen</a>
+    <a href="account.html"><span class="material-icons">person</span> Account</a>
+  </nav>
+</aside>
 
-        <h1>Leistungsverzeichnis generieren</h1>
-    </header>
-    <div class="breadcrumb-top">
-        <a href="index.html" class="breadcrumb-link">
-            <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
-            Zurück zur Startseite
-        </a>
-    </div>
-
-    
-    <div class="container">
-        <div id="chatArea" class="chat-area"></div>
-        <div class="input-area">
-            <input type="text" id="userInput" placeholder="Geben Sie hier Ihre Anfrage oder Ihr Projektbriefing ein…">
-            <button id="sendBtn" onclick="sendMessage()">Senden</button>
+<main>
+  <section>
+    <h1>Leistungsverzeichnis generieren</h1>
+    <!-- Chat-Box -->
+    <section class="chat-container">
+      <div class="chat-header" style="justify-content:flex-end;">
+        <span class="material-icons info-icon" title="Geben Sie Ihr Projektbriefing ein oder laden Sie eine Datei hoch, um ein Leistungsverzeichnis zu generieren.">info</span>
+      </div>
+      <div id="fileBubbleRow" class="filebubble-row"></div>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input-bar">
+        <textarea id="chatInput" placeholder="Geben Sie hier Ihre Anfrage oder Ihr Projektbriefing ein…" autocomplete="off"></textarea>
+        <div class="chat-input-row">
+          <div class="chat-upload-block">
+            <label class="upload-btn" title="Datei hinzufügen">
+              <span class="upload-plus">+</span>
+              <input type="file" id="fileUpload" multiple />
+            </label>
+            <span class="upload-label">Datei auswählen</span>
+          </div>
+          <button id="sendBtn">Senden</button>
         </div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<footer class="footer-modern">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" class="footer-logo" />
+      <span class="footer-app">VergabeAssist</span>
     </div>
-    
-    <script>
-        const chatArea = document.getElementById('chatArea');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        
-        function appendMessage(sender, text) {
-            const msg = document.createElement('div');
-            msg.classList.add('message', sender);
-            const bubble = document.createElement('div');
-            bubble.classList.add('bubble');
-            bubble.textContent = text;
-            msg.appendChild(bubble);
-            chatArea.appendChild(msg);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-        
-        function sendMessage() {
-            const text = userInput.value.trim();
-            if (!text) return;
-            appendMessage('user', text);
-            userInput.value = '';
-            userInput.focus();
-            // Disable send button while waiting for response
-            sendBtn.disabled = true;
-            // Placeholder: replace with call to your backend or AI service
-            // Example fetch call:
-            /*
-            fetch('/api/lv', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: text })
-            }).then(res => res.json()).then(data => {
-                appendMessage('ai', data.response);
-                sendBtn.disabled = false;
-            });
-            */
-            // For now we simply echo back the input to demonstrate the UI
-            setTimeout(() => {
-                const reply = 'Die KI antwortet hier mit dem generierten Leistungsverzeichnis oder einer Rückfrage. (Demonstration)';
-                appendMessage('ai', reply);
-                sendBtn.disabled = false;
-            }, 1000);
-        }
-        
-        // Allow pressing Enter to send the message
-        userInput.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    </script>
-    <footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
-        <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
-        <span style="flex:1;">
-            &copy; 2025 VergabeAssist |
-            <a href="impressum.html" target="_blank">Impressum</a> |
-            <a href="datenschutz.html" target="_blank">Datenschutz</a> |
-            <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
-            <a href="avv.html" target="_blank">AVV</a>
-        </span>
-    </footer>
+    <nav class="footer-links">
+      <a href="impressum.html" target="_blank">Impressum</a>
+      <a href="datenschutz.html" target="_blank">Datenschutz</a>
+      <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
+      <a href="avv.html" target="_blank">AVV</a>
+    </nav>
+    <nav class="footer-breadcrumb breadcrumb-nav">
+      <a href="index.html" class="breadcrumb-link"><span style="font-size:1.3em;vertical-align:middle;">🏠</span> Zurück zur Startseite</a>
+      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
+      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
+    </nav>
+  </div>
+</footer>
+
+<script>
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const fileUpload = document.getElementById('fileUpload');
+const fileBubbleRow = document.getElementById('fileBubbleRow');
+function appendMessage(sender, text) {
+  const msg = document.createElement('div');
+  msg.classList.add('message', sender);
+  const bubble = document.createElement('div');
+  bubble.classList.add('bubble');
+  if (sender === 'assistant' && window.marked) {
+    bubble.innerHTML = marked.parse(text);
+  } else {
+    bubble.textContent = text;
+  }
+  msg.appendChild(bubble);
+  if (sender === 'assistant') {
+    const copyBtn = document.createElement('button');
+    copyBtn.classList.add('copy-btn');
+    copyBtn.innerHTML = '<span class="material-icons">content_copy</span>';
+    copyBtn.title = 'Antwort kopieren';
+    copyBtn.onclick = () => navigator.clipboard.writeText(bubble.innerText);
+    msg.appendChild(copyBtn);
+  }
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  appendMessage('user', text);
+  chatInput.value = '';
+  chatInput.focus();
+  sendBtn.disabled = true;
+  // Lade-Indikator anzeigen
+  const loadingMsg = document.createElement('div');
+  loadingMsg.classList.add('message', 'assistant');
+  const loadingBubble = document.createElement('div');
+  loadingBubble.classList.add('bubble');
+  loadingBubble.innerHTML = '<span class="chat-hint">Analysiere …</span>';
+  loadingMsg.appendChild(loadingBubble);
+  chatMessages.appendChild(loadingMsg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  // Simulierte KI-Antwort
+  setTimeout(() => {
+    loadingMsg.remove();
+    const reply = 'Der VergabeAssistent antwortet hier mit dem generierten Leistungsverzeichnis oder einer Rückfrage. (Demonstration)';
+    appendMessage('assistant', reply);
+    sendBtn.disabled = false;
+  }, 1000);
+}
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+fileUpload.addEventListener('change', () => {
+  fileBubbleRow.innerHTML = '';
+  for (const file of fileUpload.files) {
+    const fileBubble = document.createElement('div');
+    fileBubble.classList.add('file-bubble');
+    fileBubble.innerHTML =
+      '<span class="material-icons file-icon">attach_file</span>' +
+      '<span class="file-name">' + file.name + '</span>' +
+      '<span class="file-type">.' + file.name.split('.').pop() + '</span>' +
+      '<button type="button" class="file-remove">&times;</button>';
+    fileBubbleRow.appendChild(fileBubble);
+    fileBubble.querySelector('.file-remove').onclick = () => {
+      fileUpload.value = '';
+      fileBubbleRow.innerHTML = '';
+    };
+  }
+});
+function toggleSidebarMenu(force = false) {
+  const sidebar = document.getElementById('sidebarMenu');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.contains('open');
+  if (isOpen || force) {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+    document.body.classList.add('sidebar-closed');
+    sessionStorage.setItem('sidebarMenuClosed', '1');
+  } else {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+    document.body.classList.remove('sidebar-closed');
+    sessionStorage.removeItem('sidebarMenuClosed');
+    setTimeout(() => sidebar.focus && sidebar.focus(), 120);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  if (!sessionStorage.getItem('sidebarMenuClosed')) {
+    document.getElementById('sidebarMenu').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('active');
+  } else {
+    document.body.classList.add('sidebar-closed');
+  }
+});
+document.getElementById('sidebarOverlay').onclick = () => toggleSidebarMenu(true);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSidebarMenu(true); });
+(function() {
+  let title = document.title || '';
+  if (title.indexOf('–') > 0) title = title.split('–')[0].trim();
+  document.getElementById('breadcrumbCurrent').textContent = title;
+})();
+</script>
 </body>
 </html>

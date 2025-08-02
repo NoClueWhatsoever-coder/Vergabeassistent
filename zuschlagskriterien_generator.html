@@ -1,92 +1,159 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zuschlagskriterien generieren – VergabeAssist</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zuschlagskriterien generieren – VergabeAssist</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <header>
-        <div style="display:flex;align-items:center;gap:1em;">
-            <a id="backLink" href="#" style="text-decoration:none;color:#0077b6;font-weight:700;font-size:1.2em;">
-                &#8592; Zurück
-            </a>
+<header>
+  <div style="display:flex;align-items:center;gap:1em;">
+    <a id="backLink" href="#" style="text-decoration:none;color:#0077b6;font-weight:700;font-size:1.2em;">&#8592; Zurück</a>
+  </div>
+  <div class="header-center">
+    <a href="index.html" tabindex="0">
+      <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" />
+    </a>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h1>Zuschlagskriterien generieren</h1>
+    <p>Nutzen Sie dieses Modul, um passende Zuschlagskriterien für Ihr Vergabeverfahren vorschlagen zu lassen.</p>
+    <section class="chat-container">
+      <div class="chat-header" style="justify-content:flex-end;">
+        <span class="material-icons info-icon" title="Beschreiben Sie die Leistung oder fragen Sie nach geeigneten Zuschlagskriterien. Sie können auch relevante Dokumente hochladen.">info</span>
+      </div>
+      <div id="fileBubbleRow" class="filebubble-row"></div>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input-bar">
+        <textarea id="chatInput" placeholder="Beschreiben Sie die ausgeschriebene Leistung oder formulieren Sie Fragen zu Zuschlagskriterien…" autocomplete="off"></textarea>
+        <div class="chat-input-row">
+          <div class="chat-upload-block">
+            <label class="upload-btn" title="Datei hinzufügen">
+              <span class="upload-plus">+</span>
+              <input type="file" id="fileUpload" multiple />
+            </label>
+            <span class="upload-label">Datei auswählen</span>
+          </div>
+          <button id="sendBtn">Senden</button>
         </div>
-        <div class="header-center">
-            <a href="index.html" tabindex="0">
-                <img src="img/logo_govdisrupt_ai.png" alt="GovDisrupt AI Logo" class="header-firm-logo" style="cursor:pointer;">
-            </a>
-        </div>
-    </header>
-    <div class="breadcrumb-top">
-        <a href="index.html" class="breadcrumb-link">
-            <span style="font-size:1.3em;vertical-align:middle;">🏠</span>
-            Zurück zur Startseite
-        </a>
+      </div>
+    </section>
+  </section>
+</main>
+
+<footer class="footer-modern">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" class="footer-logo" />
+      <span class="footer-app">VergabeAssist</span>
     </div>
-    <main style="max-width:900px;margin:2em auto;padding:0 1em;">
-        <h1>Zuschlagskriterien generieren</h1>
-        <p>Nutzen Sie dieses Modul, um passende Zuschlagskriterien für Ihr Vergabeverfahren vorschlagen zu lassen.</p>
-        <div class="container" style="max-width:800px;margin:1.5rem auto;background:#fff;border-radius:6px;box-shadow:0 2px 4px rgba(0,0,0,0.1);display:flex;flex-direction:column;height:70vh;">
-            <div id="chatArea" class="chat-area" style="flex:1;padding:1rem;overflow-y:auto;border-bottom:1px solid #ddd;"></div>
-            <div class="input-area" style="display:flex;padding:1rem;">
-                <input type="text" id="userInput" placeholder="Beschreiben Sie die ausgeschriebene Leistung oder formulieren Sie Fragen zu Zuschlagskriterien…" style="flex:1;padding:0.5rem;border:1px solid #ccc;border-radius:4px;margin-right:0.5rem;">
-                <button id="sendBtn" onclick="sendMessage()" style="padding:0.5rem 1rem;background:#0077b6;color:#fff;border:none;border-radius:4px;cursor:pointer;">Senden</button>
-            </div>
-        </div>
-    </main>
-    <script>
-        const chatArea = document.getElementById('chatArea');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        function appendMessage(sender, text) {
-            const msg = document.createElement('div');
-            msg.classList.add('message', sender);
-            const bubble = document.createElement('div');
-            bubble.classList.add('bubble');
-            bubble.textContent = text;
-            msg.appendChild(bubble);
-            chatArea.appendChild(msg);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-        function sendMessage() {
-            const text = userInput.value.trim();
-            if (!text) return;
-            appendMessage('user', text);
-            userInput.value = '';
-            userInput.focus();
-            sendBtn.disabled = true;
-            // Placeholder für Backend-Aufruf zur Generierung von Zuschlagskriterien
-            setTimeout(() => {
-                const reply = 'Hier würden von der KI passende Zuschlagskriterien samt Gewichtung vorgeschlagen werden. (Demonstration)';
-                appendMessage('ai', reply);
-                sendBtn.disabled = false;
-            }, 1000);
-        }
-        userInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') sendMessage();
-        });
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const id = params.get('id');
-            const backLink = document.getElementById('backLink');
-            if (backLink && id) {
-                backLink.href = `vergabeunterlagen.html?id=${encodeURIComponent(id)}`;
-            }
-        });
-    </script>
-    <footer id="kontakt" style="display:flex;align-items:center;gap:1.4em;">
-        <img src="img/logo_govdisrupt_ai.png" alt="Firmenlogo" style="height:36px;margin-right:1.4em;">
-        <span style="flex:1;">
-            &copy; 2025 VergabeAssist |
-            <a href="impressum.html" target="_blank">Impressum</a> |
-            <a href="datenschutz.html" target="_blank">Datenschutz</a> |
-            <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a> |
-            <a href="avv.html" target="_blank">AVV</a>
-        </span>
-    </footer>
+    <nav class="footer-links">
+      <a href="impressum.html" target="_blank">Impressum</a>
+      <a href="datenschutz.html" target="_blank">Datenschutz</a>
+      <a href="nutzungsbedingungen.html" target="_blank">Nutzungsbedingungen</a>
+      <a href="avv.html" target="_blank">AVV</a>
+    </nav>
+    <nav class="footer-breadcrumb breadcrumb-nav">
+      <a href="index.html" class="breadcrumb-link"><span style="font-size:1.3em;vertical-align:middle;">🏠</span> Zurück zur Startseite</a>
+      <span class="breadcrumb-sep" style="margin:0 0.7em;color:#b8c3d6;">›</span>
+      <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
+    </nav>
+  </div>
+</footer>
+
+<script>
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const fileUpload = document.getElementById('fileUpload');
+const fileBubbleRow = document.getElementById('fileBubbleRow');
+function appendMessage(sender, text) {
+  const msg = document.createElement('div');
+  msg.classList.add('message', sender);
+  const bubble = document.createElement('div');
+  bubble.classList.add('bubble');
+  if (sender === 'assistant' && window.marked) {
+    bubble.innerHTML = marked.parse(text);
+  } else {
+    bubble.textContent = text;
+  }
+  msg.appendChild(bubble);
+  if (sender === 'assistant') {
+    const copyBtn = document.createElement('button');
+    copyBtn.classList.add('copy-btn');
+    copyBtn.innerHTML = '<span class="material-icons">content_copy</span>';
+    copyBtn.title = 'Antwort kopieren';
+    copyBtn.onclick = () => navigator.clipboard.writeText(bubble.innerText);
+    msg.appendChild(copyBtn);
+  }
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  appendMessage('user', text);
+  chatInput.value = '';
+  chatInput.focus();
+  sendBtn.disabled = true;
+  const loadingMsg = document.createElement('div');
+  loadingMsg.classList.add('message', 'assistant');
+  const loadingBubble = document.createElement('div');
+  loadingBubble.classList.add('bubble');
+  loadingBubble.innerHTML = '<span class="chat-hint">Analysiere …</span>';
+  loadingMsg.appendChild(loadingBubble);
+  chatMessages.appendChild(loadingMsg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  setTimeout(() => {
+    loadingMsg.remove();
+    const reply = 'Der VergabeAssistent schlägt passende Zuschlagskriterien samt Gewichtung vor. (Demonstration)';
+    appendMessage('assistant', reply);
+    sendBtn.disabled = false;
+  }, 1000);
+}
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+fileUpload.addEventListener('change', () => {
+  fileBubbleRow.innerHTML = '';
+  for (const file of fileUpload.files) {
+    const fileBubble = document.createElement('div');
+    fileBubble.classList.add('file-bubble');
+    fileBubble.innerHTML =
+      '<span class="material-icons file-icon">attach_file</span>' +
+      '<span class="file-name">' + file.name + '</span>' +
+      '<span class="file-type">.' + file.name.split('.').pop() + '</span>' +
+      '<button type="button" class="file-remove">&times;</button>';
+    fileBubbleRow.appendChild(fileBubble);
+    fileBubble.querySelector('.file-remove').onclick = () => {
+      fileUpload.value = '';
+      fileBubbleRow.innerHTML = '';
+    };
+  }
+});
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const backLink = document.getElementById('backLink');
+  if (backLink && id) {
+    backLink.href = `vergabeunterlagen.html?id=${encodeURIComponent(id)}`;
+  }
+});
+(function() {
+  let title = document.title || '';
+  if (title.indexOf('–') > 0) title = title.split('–')[0].trim();
+  document.getElementById('breadcrumbCurrent').textContent = title;
+})();
+</script>
 </body>
 </html>
