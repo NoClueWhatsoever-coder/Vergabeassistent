@@ -2733,7 +2733,7 @@ header nav a:hover {
 }
 
 .hero-chatbox:focus-within {
-  max-width: 1200px;
+  max-width: 90vw;
   box-shadow: 0 8px 38px #0077b66c;
   background: #fff;
 }
@@ -3012,4 +3012,57 @@ header nav a:hover {
   margin: 0 !important;
   padding: 0 !important;
 }
+
+
+/* Die gesamte Nachricht flex-column */
+.message.assistant {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-top: 0.9em;
+  padding-bottom: 1.1em;
+  padding-left: 1.3em;
+  padding-right: 1.3em;
+  background: #f8fcfe;
+  border-radius: 16px;
+  box-shadow: 0 2px 14px #0077b62e;
+  margin-bottom: 0.7em;
+  min-width: 0;
+}
+
+/* Header der Bubble: Abstand zum Text */
+.msg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.32em;
+  gap: 1.2em;
+}
+
+.copy-btn {
+  background: #fff;
+  border-radius: 50%;
+  border: none;
+  padding: 0.25em 0.38em;
+  font-size: 0.98em;
+  color: #0077b6;
+  box-shadow: 0 1px 7px #006aad17;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s;
+  margin-left: 1.1em;
+  margin-right: -0.2em;
+}
+.copy-btn:hover {
+  background: #eaf6fb;
+  color: #184e8b;
+}
+
+.msg-body {
+  font-size: 1.09em;
+  color: #234;
+  word-break: break-word;
+  line-height: 1.6;
+  padding-right: 0.2em;
+}
+
 
