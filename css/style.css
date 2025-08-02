@@ -382,61 +382,6 @@ header nav a:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
-/* Responsive Breakpoints */
-@media (max-width: 1100px) {
-  .hero-video-bg, .hero-video { height: 850px; min-height: 530px; }
-  .vorteile-bildsektion, .vorteile-img-wrapper, .vorteile-bg-img { min-height: 220px; height: 240px; max-height: 320px; }
-  .vorteile-kacheln-container { gap: 1.3vw; }
-  .vorteil-kachel { min-width: 140px; max-width: 340px; }
-}
-@media (max-width: 900px) {
-  .hero-video-bg, .hero-video { height: 340px; min-height: 200px; }
-  .hero-overlay h1 { font-size: 2rem; }
-  .hero-chatbox { max-width: 98vw; padding: 1em 0.5em; }
-  .vorteile-bildsektion, .vorteile-img-wrapper, .vorteile-bg-img { min-height: 110px; height: 130px; max-height: 200px; }
-  .vorteile-kacheln-container { flex-direction: column; gap: 1.4em; padding: 0 2vw; justify-content: flex-start; }
-  .vorteil-kachel { padding: 1.2em 0.7em 1em 0.7em; min-width: 60vw; max-width: 95vw; }
-}
-@media (max-width: 600px) {
-  .hero-video-bg, .hero-video { height: 180px; min-height: 60px; }
-  .hero-overlay h1 { font-size: 1.2rem; }
-  .hero-headline { font-size: 1rem; }
-  .hero-subline { font-size: 0.85rem; }
-  .hero-chatbox { font-size: 0.93rem; padding: 1em 0.2em; }
-  .vorteile-bildsektion, .vorteile-img-wrapper, .vorteile-bg-img { min-height: 50px; height: 70px; max-height: 130px; }
-  .vorteile-kacheln-container { gap: 1em; }
-  .vorteil-kachel { font-size: 0.98rem; padding: 0.6em 0.3em 0.6em 0.3em; min-width: 96vw; }
-}
-/* CTA-Formular auf der Hero */
-.cta {
-  margin-top: 2rem;
-}
-.cta input[type="email"] {
-  padding: 0.75rem;
-  width: 250px;
-  max-width: 80%;
-  border: none;
-  border-radius: 6px 0 0 6px;
-}
-.cta button {
-  padding: 0.75rem 1.5rem;
-  background: #1f2937;
-  color: white;
-  border: none;
-  border-radius: 0 6px 6px 0;
-  cursor: pointer;
-}
-@media (max-width: 600px) {
-  .cta input[type="email"], .cta button {
-    width: 100%;
-    display: block;
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
-  }
-  .cta button {
-    border-radius: 6px;
-  }
-}
 
 #dashboard {
   max-width: 1000px;
@@ -550,7 +495,6 @@ header nav a:hover {
   font-size: 1.6em;
   vertical-align: middle;
 }
-
 
 .main-logo {
   height: 52px;
@@ -1948,7 +1892,6 @@ input::placeholder {
     align-self: flex-start;
   }
 }
-
 
 
 .collapsible-head {
